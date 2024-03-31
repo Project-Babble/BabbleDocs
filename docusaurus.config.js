@@ -8,8 +8,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'Babble Docs',
+  tagline: 'Open-source and DIY friendly VR mouth tracking ecosystem.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -66,10 +66,11 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'My Site',
+        title: 'Babble Docs',
         logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          alt: 'Babble Logo',
+          src: 'svg/BabbleFinalLogoNoBGBlack.svg',
+          srcDark: 'svg/BabbleFinalLogoNoBGWhite.svg',
         },
         items: [
           {
@@ -80,7 +81,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/SummerSigh/ProjectBabble',
             label: 'GitHub',
             position: 'right',
           },
@@ -94,7 +95,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/intro',
+                to: '/docs/intro/intro',
               },
             ],
           },

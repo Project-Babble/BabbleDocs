@@ -2,88 +2,27 @@
 sidebar_position: 1
 ---
 
-# Introduction
+# Welcome to the Project Babble docs!
 
-Babble App is a program that takes an input from a camera and outputs the values of blendshapes. These values are then piped to either VRCFT or the game directly to drive the blendshapes of an avatar. 
+Hello! This site serves as a monorepo for all questions, tips and tricks dealing with the project's hardware, software, and troubleshooting. 
 
-# VRChat Overview
-1. Download and install the [Babble App](https://github.com/SummerSigh/ProjectBabble/releases)
-2. Follow the setup instructions for your hardware
-3. Download and install [VRCFaceTracking](https://docs.vrcft.io/) and install the Babble Module from the module registry. 
-4. Enable OSC in VRChat and change into a VRCFT compatible avatar. 
+Now, you're probably wondering:
 
-# Supported Camera Inputs
-* UVC (USB) Webcameras*
-* MJPEG Streams
-* OpenIris Serial
+## What is Project Babble?
 
-*Logitech Cameras are known to be problematic
+Project Babble is a <i>lower-face expression tracking</i> system, designed for use with VR headsets. It works by using image input from a camera and outputs corresponding facial expressions, which in turn can be used by external apps, such as VRCFaceTracking and this Resonite mod.
 
-# Detailed Setup guide
-### 0. Check Compatibility 
-If you can get a view of the mouth and pipe it into Babble, it can in theory work. 
+If you have any questions regarding the hardware, like what cameras you can use, you can read up on the hardware's documentation page here:
 
-### 1. Download and Install the Babble App 
-  Download the installer in the [releases](https://github.com/SummerSigh/ProjectBabble/releases) tab on github.
+Getting started with Project Babble is very easy! We've created the Babble App to manage your camera settings and more, you can get it here: 
 
-### 2. Set Camera Address
-  Insert the Camera IP address, COM (serial) port, or UVC (usb webcam) camera ID in the address slot and click save and restart tracking. What exactly you need to put is explained in the hardware page.  
+Once you've got it, head to the setup page here:
 
-### 3. Set Mouth Crop 
-  Enter cropping mode and crop the frame to your lower face. (Try to keep the crop as square as possible)
-
-### 4. Setup VRCFT 
-Install VRCFT and install the Babble module from the VRCFT Module Registry.
-<details>
-  <summary>How To Install From the VRCFT Module Registry</summary>
-
-  1. Go to the Module Registry Tab in VRCFaceTracking
-
-  2. Select the babble module
-
-  3. Click the "Install" button
-
-  ---
-  <div style={{
-    width: '90%',
-    height: 'auto',
-    margin: 'auto',
-    display: 'block'
-  }}>
-  </div>
-    <img src={require("@site/static/img/vrcft_module_install.png").default}/>
-</details>
-
-### 5. Enable OSC in VRChat
-To send OSC data to VRChat, OSC must be enabled in game. 
-<details>
-  <summary>How To Install From the VRCFT Module Registry</summary>
-
-  1. Go to the Module Registry Tab in VRCFaceTracking
-
-  2. Select the babble module
-
-  3. Click the "Install" button
-  ---
-  <div style={{
-    width: '90%',
-    height: 'auto',
-    margin: 'auto',
-    display: 'flex'
-  }}>
-  </div>
-    <img src={require("@site/static/img/vrc_osc_menu.png").default}/>
-</details>
-
-### 6. Test with a Public VRCFT Avatar
-At this time, VRChat does **not** have a native face tracking solution.
-Avatars must have been specifically set up for face tracking to work with VRCFaceTracking.
-
----
 ## Resources
 Join our [Discord](https://discord.com/invite/XAMZmjBktk) for the community, discussion, and support. 
 
 Visit the [GitHub](https://github.com/SummerSigh/ProjectBabble) to view the source code and download new releases.
+
 :::warning CAUTION
 Babble is constantly changing therefore some pages on this website might be out of date. 
 Some other information may still only be found in the [Discord](https://discord.com/invite/XAMZmjBktk). 

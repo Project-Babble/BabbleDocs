@@ -1,0 +1,63 @@
+---
+sidebar_position: 1
+---
+
+# VRChat
+Project Babble has a osc-based integration for VRChat. Please follow the setup instructions here
+
+### 1. Prerequisites 
+Ensure you have setup your hardware and software before proceeding to the next steps
+
+### 2. Install VRCFaceTracking
+Download and install [VRCFaceTracking](https://docs.vrcft.io/) and install the Babble Module from the module registry. 
+
+### 3. Setup VRCFT 
+Install VRCFT and install the Babble module from the VRCFT Module Registry.
+<details>
+  <summary>How To Install From the VRCFT Module Registry</summary>
+
+  1. Go to the Module Registry Tab in VRCFaceTracking
+  1. Select the babble module
+  1. Click the "Install" button
+
+  ---
+  <div style={{
+    width: '90%',
+    height: 'auto',
+    margin: 'auto',
+    display: 'block'
+  }}>
+  </div>
+    <img src={require("@site/static/img/vrcft_module_install.png").default}/>
+</details>
+
+### 4. Enable OSC in VRChat
+To send OSC data to VRChat, OSC must be enabled in game. 
+
+:::info
+For VRChat's official documentation, please [visit their site here.](https://docs.vrchat.com/docs/osc-overview)
+:::
+
+<details>
+  <summary>How To enable OSC in VRChat</summary>
+
+  1. Open your radial menu
+  1. Click the "Enabled" field to turn OSC on.
+  ---
+  <div style={{
+    width: '90%',
+    height: 'auto',
+    margin: 'auto',
+    display: 'flex'
+  }}>
+  </div>
+    <img src={require("@site/static/img/vrc_osc_menu.png").default}/>
+</details>
+
+### 6. Test with a Public VRCFT Avatar
+At this time, VRChat does **not** have a native face tracking solution. Avatars must have been specifically set up for face tracking to work with VRCFaceTracking.
+
+There are many worlds that have VRCFaceTracking ready avatars. [Jerry's Mod](https://vrchat.com/home/launch?worldId=wrld_b24fbb7c-9369-4cff-9242-32a35d44a8e8) is a great place to start.
+
+### 7. Profit!
+For more information, please defer to the [VRCFaceTracking Discord](https://discord.com/invite/vrcft) for custom avatar setup, help and feedback.

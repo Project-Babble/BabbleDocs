@@ -26,7 +26,8 @@ const FeatureList = [
     Svg: require('@site/static/svg/network-transmit-receive-symbolic.svg').default,
     description: (
       <>
-        Open platform and accessable with any Social VR game via the Open Sound Control protocol. 
+        Open platform and acces
+        sible with any Social VR game via the Open Sound Control protocol. 
       </>
     ),
   },

@@ -5,7 +5,8 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: 'Open Source',
-    Svg: require('@site/static/svg/BabbleFinalLogoNoBG+OpenSourceBlack.svg').default,
+    Svg: require('@site/static/svg/BabbleFinalLogoNoBGOpenSourceSeafoam.svg').default,
+
     description: (
       <>
         Fully open source and free to use. 
@@ -14,7 +15,7 @@ const FeatureList = [
   },
   {
     title: 'Headset Agnostic',
-    Svg: require('@site/static/svg/BabbleFinalLogoHeadsetAgnostic.svg').default,
+    Svg: require('@site/static/svg/BabbleFinalLogoHeadsetAgnosticSeafoam.svg').default,
     description: (
       <>
         Babble works with nearly all VR headsets.
@@ -23,7 +24,7 @@ const FeatureList = [
   },
   {
     title: 'Open Platform',
-    Svg: require('@site/static/svg/network-transmit-receive-symbolic.svg').default,
+    Svg: require('@site/static/svg/network-transmit-receive-symbolicSeafoam.svg').default,
     description: (
       <>
         Open platform and acces

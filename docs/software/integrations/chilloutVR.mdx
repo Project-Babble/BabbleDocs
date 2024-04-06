@@ -1,0 +1,90 @@
+---
+sidebar_position: 2
+---
+
+# ChilloutVR
+
+Project Babble has a *mod-based* integration for ChilloutVR.
+
+## Usage
+
+There are **two parts** to setting up the ChilloutVR mod: A **receiving** end and a **sending** end.
+
+:::info
+You will also need an avatar that is setup to be used with VRCFaceTracking/Project Babble.
+:::
+
+### Setting up the Receiver
+:::note
+For both steps, you will need to have MelonLoader installed for ChilloutVR prior to proceeding.
+:::
+
+<details>
+  <summary>MelonAssistant Method (recommend)</summary>
+
+    1. Install [MelonAssistant for ChilloutVR](https://github.com/knah/CVRMelonAssistant/)
+    1. Install Kafeijao's OSC Mod using MelonAssistant
+    1. Install UI Expansion Kit using MelonAssistant. *This is required to change mod settings in game.*
+  ---
+  <div style={{
+    width: '90%',
+    height: 'auto',
+    margin: 'auto',
+    display: 'flex'
+  }}>
+  </div>
+</details>
+
+<details>
+  <summary>Direct Method</summary>
+
+    1. Manually install Kafeijao's OSC Mod using MelonAssistant
+    1. Manually install UI Expansion Kit using MelonAssistant. *This is required to change mod settings in game.*
+  ---
+  <div style={{
+    width: '90%',
+    height: 'auto',
+    margin: 'auto',
+    display: 'flex'
+  }}>
+  </div>
+</details>
+
+### Setting up the Sender
+
+<details>
+  <summary>VRCFaceTracking Setup</summary>
+
+    1. In Kafeijao's OSC Mod settings, turn on "VRCFT Compatibility".  
+    ::warning
+    In doing this, any other OSC information being sent to CVR won't work.
+    :::
+
+  ---
+  <div style={{
+    width: '90%',
+    height: 'auto',
+    margin: 'auto',
+    display: 'flex'
+  }}>
+  </div>
+</details>
+
+<details>
+  <summary>Direct Method</summary>
+
+    1. In settings for Babble, set the OSC address port from its default `8888` to `9000`.
+    1. Make sure to set the location prefix to `/avatar/parameters`.
+  ---
+  <div style={{
+    width: '90%',
+    height: 'auto',
+    margin: 'auto',
+    display: 'flex'
+  }}>
+  </div>
+</details>
+
+### Setting up an Avatar
+
+Avatar setup is largely identical to how one sets up avatars in VRChat (Setting up parameters in the animator, creating animator logic to drive visemes/blendshapes and other expressions, etc.). Please consult [VRCFaceTracking's documentation](https://docs.vrcft.io/docs/category/avatar-setup) on how to do this.

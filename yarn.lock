@@ -1823,6 +1823,14 @@
   resolved "https://registry.npmjs.org/@sideway/pinpoint/-/pinpoint-2.0.0.tgz"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@simonwep/pickr@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.npmjs.org/@simonwep/pickr/-/pickr-1.9.0.tgz"
+  integrity sha512-oEYvv15PyfZzjoAzvXYt3UyNGwzsrpFxLaZKzkOSd0WYBVwLd19iJerePDONxC1iF6+DpcswPdLIM2KzCJuYFg==
+  dependencies:
+    core-js "3.32.2"
+    nanopop "2.3.0"
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz"
@@ -3219,6 +3227,11 @@ core-js@^3.31.1:
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.36.1.tgz"
   integrity sha512-BTvUrwxVBezj5SZ3f10ImnX2oRByMxql3EimVqMysepbC9EeMUOpLwdy6Eoili2x6E4kf+ZUB5k/+Jv55alPfA==
 
+core-js@3.32.2:
+  version "3.32.2"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-3.32.2.tgz"
+  integrity sha512-pxXSw1mYZPDGvTQqEc5vgIb83jGQKFGYWY76z4a7weZXUolw3G+OvpZqSRcfYOoOVUQJYEPsWeQK8pKEnUtWxQ==
+
 core-util-is@~1.0.0:
   version "1.0.3"
   resolved "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.3.tgz"
@@ -3659,6 +3672,11 @@ dot-prop@^6.0.1:
   dependencies:
     is-obj "^2.0.0"
 
+draco3d@1.5.6:
+  version "1.5.6"
+  resolved "https://registry.npmjs.org/draco3d/-/draco3d-1.5.6.tgz"
+  integrity sha512-+3NaRjWktb5r61ZFoDejlykPEFKT5N/LkbXsaddlw6xNSXBanUYpFc2AXXpbJDilPHazcSreU/DpQIaxfX0NfQ==
+
 duplexer@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz"
@@ -4017,6 +4035,11 @@ feed@^4.2.2:
   integrity sha512-u5/sxGfiMfZNtJ3OvQpXcvotFpYkL0n9u9mM2vkui2nGo8b4wvDkJ8gAkYqbA8QpGyFCv3RK0Z+Iv+9veCS9bQ==
   dependencies:
     xml-js "^1.6.11"
+
+fflate@0.8.1:
+  version "0.8.1"
+  resolved "https://registry.npmjs.org/fflate/-/fflate-0.8.1.tgz"
+  integrity sha512-/exOvEuc+/iaUm105QIiOt4LpBdMTWsXxqR0HDF35vx3fmaKzw7354gTilCh5rkzEt8WYyG//ku3h3nRmd7CHQ==
 
 file-loader@*, file-loader@^6.2.0:
   version "6.2.0"
@@ -6057,6 +6080,11 @@ nanoid@^3.3.7:
   resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.7.tgz"
   integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
 
+nanopop@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/nanopop/-/nanopop-2.3.0.tgz"
+  integrity sha512-fzN+T2K7/Ah25XU02MJkPZ5q4Tj5FpjmIYq4rvoHX4yb16HzFdCO6JxFFn5Y/oBhQ8no8fUZavnyIv9/+xkBBw==
+
 negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
@@ -6164,6 +6192,11 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.npmjs.org/obuf/-/obuf-1.1.2.tgz"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
+occt-import-js@0.0.21:
+  version "0.0.21"
+  resolved "https://registry.npmjs.org/occt-import-js/-/occt-import-js-0.0.21.tgz"
+  integrity sha512-na+clmW5OmkEeZDtEVKnQNG9l3GIdEZSCN36lYIt+yJ3OM2MM8t5BYYI9Lrqb7sDPLP/Dt6HkjCNGlEd5JKFgQ==
+
 on-finished@2.4.1:
   version "2.4.1"
   resolved "https://registry.npmjs.org/on-finished/-/on-finished-2.4.1.tgz"
@@ -6189,6 +6222,19 @@ onetime@^5.1.2:
   integrity sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==
   dependencies:
     mimic-fn "^2.1.0"
+
+online-3d-viewer@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.npmjs.org/online-3d-viewer/-/online-3d-viewer-0.12.0.tgz"
+  integrity sha512-Lx0rjzySyXJNDde/ApEnSGFSOj42WrUkl1oBSdeWga3hBdafrCmAJndZ1Uw826OeK4Di+6yXRPDHCzM9XQTG9A==
+  dependencies:
+    "@simonwep/pickr" "1.9.0"
+    draco3d "1.5.6"
+    fflate "0.8.1"
+    occt-import-js "0.0.21"
+    rhino3dm "8.0.1"
+    three "0.158.0"
+    web-ifc "0.0.44"
 
 open@^8.0.9, open@^8.4.0:
   version "8.4.2"
@@ -7283,6 +7329,11 @@ reusify@^1.0.4:
   resolved "https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
+rhino3dm@8.0.1:
+  version "8.0.1"
+  resolved "https://registry.npmjs.org/rhino3dm/-/rhino3dm-8.0.1.tgz"
+  integrity sha512-vGMzz9po59gNGuhwACnLVzawXPE45b5fNPz/ql/Q5Xub9I7UP+phg4J4QGvA/7YeBHIgJq8WY8Xv33thAgLgVQ==
+
 rimraf@^3.0.2:
   version "3.0.2"
   resolved "https://registry.npmjs.org/rimraf/-/rimraf-3.0.2.tgz"
@@ -7913,6 +7964,11 @@ text-table@^0.2.0:
   resolved "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz"
   integrity sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==
 
+three@0.158.0:
+  version "0.158.0"
+  resolved "https://registry.npmjs.org/three/-/three-0.158.0.tgz"
+  integrity sha512-TALj4EOpdDPF1henk2Q+s17K61uEAAWQ7TJB68nr7FKxqwyDr3msOt5IWdbGm4TaWKjrtWS8DJJWe9JnvsWOhQ==
+
 thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.npmjs.org/thunky/-/thunky-1.1.0.tgz"
@@ -8229,6 +8285,18 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
+
+web-ifc@^0.0.43:
+  version "0.0.43"
+  resolved "https://registry.npmjs.org/web-ifc/-/web-ifc-0.0.43.tgz"
+  integrity sha512-83rMzZTCZmlACjWYuZRci4GlaWh0hfoTJu/7VKSTOiTm+gAT06fLkIrAqyeOlZnZt/AyY4+IQkPm5RYs6PZPNA==
+
+web-ifc@0.0.44:
+  version "0.0.44"
+  resolved "https://registry.npmjs.org/web-ifc/-/web-ifc-0.0.44.tgz"
+  integrity sha512-1Iz0zeYFVReE3ca72wIqCQeMQX3406ohJGcZrpnS3IevtKjqh7kLXJ5SrSW4C0IyaLhuLIuyLOFsBc6TeD38TA==
+  dependencies:
+    web-ifc "^0.0.43"
 
 web-namespaces@^2.0.0:
   version "2.0.1"

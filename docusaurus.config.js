@@ -25,7 +25,6 @@ const config = {
 
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-  trailingSlash: false,
   deploymentBranch: 'deployment',
 
   // Even if you don't use internationalization, you can use this field to set

@@ -22,7 +22,7 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'ProjectBabble', // Usually your GitHub org/user name.
   projectName: 'ProjectBabble', // Usually your repo name.
-
+  
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   deploymentBranch: 'deployment',

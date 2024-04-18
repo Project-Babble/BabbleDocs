@@ -105,12 +105,12 @@ const config = {
             items: [
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                href: 'https://discord.gg/2nnx36uaE5',
               },
-              // {
-              //   label: 'Twitter',
-              //   href: 'https://twitter.com/docusaurus',
-              // },
+              {
+                 label: 'Twitter',
+                 href: 'https://twitter.com/projectBabbleVR',
+              },
             ],
           },
           {
@@ -122,7 +122,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/Project-Babble/ProjectBabble',
               },
             ],
           },

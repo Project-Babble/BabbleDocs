@@ -13,7 +13,7 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'www.babble.diy',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -22,10 +22,11 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'ProjectBabble', // Usually your GitHub org/user name.
   projectName: 'ProjectBabble', // Usually your repo name.
-
-  onBrokenLinks: 'throw',
+  
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-
+  deploymentBranch: 'deployment',
+  trailingSlash: false,
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".

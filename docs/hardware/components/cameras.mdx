@@ -1,7 +1,3 @@
----
-title: Cameras
----
-
 ## Cameras
 
 Although any camera can be used with Project Babble, the tracking quality can vary greatly depending on a variety of factors such as lighting, camera angle, camera framing, and field of view. If you decide to build something with your own components, please keep the following example of a “good image” in mind. 
@@ -15,23 +11,27 @@ Below is an example of a good image:
 
 We recommend esp32 based openiris trackers with 120-160 degree lenses. 
 
-The cameras that come with the boards can work, however they have an IR filter inside which will need to be removed if you use infrared lighting. Here's how to do it: [IR filter removal tutorial](https://www.youtube.com/watch?v=QYH-FWvDbDc)
+The cameras that come with the boards can work, they however have an IR filter inside which will need to be removed if you use infrared lighting. The filter can be removed, but doing so may break your cameras. Here's how to do it: [IR filter removal tutorial](https://www.youtube.com/watch?v=QYH-FWvDbDc)
 
-:::danger
-If you decide to remove the filter, wear eye protection while doing so! The filter **will** shatter during the removal process.
-:::
+**DANGER:** If you decide to remove the filter, wear eye protection while doing so, the removal of the filter will shatter it.
 
 ### Recommended Cameras:
 
 1. 1x OV2640 160° FOV IR / Night vers (850nm) (In firmware cropping recommended)
    - [AliExpress](https://www.aliexpress.com/)
    
-2. 1x OV2640 120° FOV **(Requires manual IR filter removal)**
+   **Alternatively:**
+   
+2. 1x OV2640 120° FOV (Requires manual IR filter removal)
    - [AliExpress](https://www.aliexpress.com/)
    
-3. 1x OV2640 130° FOV **(Requires manual IR filter removal)**
+   **Alternatively:**
+   
+3. 1x OV2640 130° FOV (Requires manual IR filter removal)
    - [AliExpress](https://www.aliexpress.com/)
 
-### Notes:
+   **Amazon alternative (note that you will have to manually remove the IR filter)**
 
-- Some mounts may use a camera with a longer connector than the standard short one. Keep that in mind when selecting a camera to order (Physics Dude's Index mount, for example).
+### Things worth noting:
+
+- Some mounts may use a camera with a longer connector than the standard short one. Keep that in mind when selecting a camera to order (Physics Dude's Index mount for example).

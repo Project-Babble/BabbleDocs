@@ -4,3 +4,63 @@ sidebar_position: 5
 
 # Troubleshooting and FAQ
 For most questions, we recommend joining our discord for up to date information, your question(s) may have already been answered there! The following are some common questions we get:
+
+### 1. **What is Babble and how does it work?**
+   **Answer:** Babble is a facial tracking software used in VR environments. It uses cameras, often mounted on VR headsets, to track facial movements and expressions.
+
+### 2. **What cameras are compatible with Babble?**
+   **Answer:** Babble works with various cameras, including generic USB webcams and specialized cameras like the PS3 Eye and ESP32CAM. Compatibility depends on the specific hardware setup and firmware used.
+
+### 3. **Why is my camera feed in Babble running at low FPS?**
+   **Answer:** This could be due to the camera defaulting to a lower FPS setting. Check the UVC settings in Babble and set the resolution and framerate to match your camera's capabilities.
+
+### 4. **Why is the camera feed in Babble “wobbly” or misaligned?**
+   **Answer:** This could be due to rolling shutter issues with your camera. Ensure that your camera settings are optimized for Babble, and try adjusting the resolution and framerate.
+
+### 5. **How do I connect and use multiple cameras with Babble?**
+   **Answer:** You can use multiple cameras by ensuring each one is recognized by your PC. They will usually be listed as different COM ports or UVC devices. Configure each camera individually in Babble's settings.
+
+### 6. **Can I use Babble with a wireless camera?**
+   **Answer:** Yes, Babble supports wireless cameras, including those using the ESP32CAM with the Openiris firmware. Ensure your camera and PC are connected to the same network.
+
+### 7. **How do I calibrate Babble for facial tracking?**
+   **Answer:** Calibration involves performing a series of facial expressions while the software records and analyzes the data. It may take a few minutes, and using the latest alpha version (e.g., 2.0.6) improves calibration accuracy.
+
+### 8. **Why isn’t my camera recognized in Babble after reconnecting it?**
+   **Answer:** This is a known issue. Try restarting Babble or re-selecting the camera in the UVC settings to refresh the connection.
+
+### 9. **How do I set up Babble for use with VRChat?**
+   **Answer:** Ensure Babble is configured to output data to the correct OSC port (default 9000 or 8888). Then, enable the VRCFT module in VRChat's settings to receive facial tracking data.
+
+### 10. **What battery should I use with an ESP32CAM for Babble?**
+   **Answer:** A 3.7V LiPo battery can be used, but ensure it has sufficient capacity (e.g., 2000mAh) and that your voltage regulator can handle the power requirements of both the camera and the LEDs.
+
+### 11. **How do I check if Babble is sending data correctly to VRChat?**
+   **Answer:** Use the OSC debug tab in VRChat to monitor incoming data. If Babble is sending data correctly, you should see values changing as your facial expressions change.
+
+### 12. **What is the default port for Babble’s OSC output?**
+   **Answer:** Babble typically uses port 9000 for OSC output. However, depending on your setup, it might also use port 8888.
+
+### 13. **How can I improve the performance of Babble with lower-resolution cameras?**
+   **Answer:** If lower resolutions result in poor performance, consider upgrading the camera or ensuring it’s correctly configured to avoid defaulting to low FPS settings. Using hardware that supports better framerates and resolution is recommended.
+
+### 14. **What should I do if Babble calibration is taking too long or gets stuck?**
+   **Answer:** Calibration might take some time, especially on older versions of Babble. Consider upgrading to the latest alpha version, as it improves calibration speed and accuracy.
+
+### 15. **Can I use the same camera for both EyeTrackVR and Babble?**
+   **Answer:** Yes, but ensure that the camera is not locked by one application when trying to use it with another. You might need to restart the application after changing settings.
+
+### 16. **Why does my webcam work fine in OBS but not in Babble?**
+   **Answer:** The issue might be related to UVC settings in Babble. Make sure the resolution and framerate settings match what works in OBS.
+
+### 17. **Why is my ESP32CAM camera not providing a stable feed in Babble?**
+   **Answer:** This could be due to insufficient power supply or incorrect firmware. Make sure your battery and voltage regulator are adequate, and consider using the Openiris firmware.
+
+### 18. **What do I do if I get an error that the COM port can’t be found?**
+   **Answer:** Ensure the correct COM port is selected in the Babble settings. If using multiple applications, make sure the COM port isn’t already in use.
+
+### 19. **How do I fix the issue where Babble’s CPU usage is very high?**
+   **Answer:** High CPU usage could be due to high-resolution settings or issues with the camera feed. Lowering the resolution or switching to a more efficient camera might help.
+
+### 20. **Is it possible to use Babble over Bluetooth?**
+   **Answer:** While theoretically possible, Bluetooth is generally not recommended due to high latency and reliability issues. Wi-Fi or USB connections are preferred for better performance.

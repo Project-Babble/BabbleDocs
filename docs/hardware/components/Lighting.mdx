@@ -1,31 +1,190 @@
-For Project Babble, you can use either Infrared or visible light. Each has its advantages and considerations:
+import ResistorCalculator from '@site/src/components/ResistorCalculator';
 
-- **Infrared Lighting:**
-  - Less distracting as the light is not visible to the naked eye.
-  - Susceptible to flicker from base stations if not sufficiently bright.
+# Lighting Setup for Project Babble
 
-- **Visible Lighting:**
-  - Immune to base station flicker.
-  - Potential for distraction if the headset doesn't block light effectively.
+## Overview
 
-Consider these factors when choosing the type of lighting for your setup
+Project Babble supports two lighting options, each with its own advantages:
 
-## Sourcing
+<div className="row">
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h3>Infrared Lighting</h3>
+      </div>
+      <div className="card__body">
+        <p>✅ Less distracting (invisible to naked eye)</p>
+        <p>⚠️ May be affected by base station flicker if not bright enough</p>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h3>Visible Lighting</h3>
+      </div>
+      <div className="card__body">
+        <p>✅ Immune to base station flicker</p>
+        <p>⚠️ Potentially distracting if not well-shielded</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-- **IR Emitters:**
-  - 2x Unfocused SMD IR emitters
-    - **Note:** The smaller ones can not be soldered at temps above 245°C or they will burn. Low-temp solder is recommended.
-    - *(Recommended)* [LCSC](https://www.lcsc.com/product-detail/Infrared-IR-LEDs_XINGLIGHT-XL-3216HIRC-850_C965891.html)
-    
-- **Resistors for IR Emitters:**
-  - 2x 80 ohm 1206 SMD resistors
-    - *(If not using PCBs for the emitters, regular through-hole resistors are acceptable.)*
-    - [Digikey - 357 ohm](https://www.digikey.com/en/products/detail/yageo/MFR-25FBF52-357R/12911)
+## Required Components
 
-### Visible Light Alternative:
-- 1x EAST16084WA1 White LED (Visible Light)
-  - [AliExpress](https://www.digikey.com/en/products/detail/everlight-electronics-co-ltd/EAST16084WA1/11200896)
+### IR emitters (Recommended)
+- 2x Unfocused SMD IR emitters.
+  - [LCSC: XL-3216HIRC-850](https://www.lcsc.com/product-detail/Infrared-IR-LEDs_XINGLIGHT-XL-3216HIRC-850_C965891.html).
+  - **Note:** Max soldering temperature: 245°C. Use low-temp solder.
 
-### Additional Components:
-- 1x Wire to power IR emitters (we recommended 34 AWG)
-  - [Digikey](https://www.digikey.com/en/products/detail/adafruit-industries-llc/4733/13280268)
+### Visible Light Alternative
+- 1x EAST16084WA1 White LED.
+  - [DigiKey: EAST16084WA1](https://www.digikey.com/en/products/detail/everlight-electronics-co-ltd/EAST16084WA1/11200896).
+
+### Additional Components
+- 1x Wire (34 AWG recommended).
+  - [DigiKey: 34 AWG Wire](https://www.digikey.com/en/products/detail/adafruit-industries-llc/4733/13280268).
+- 2x Resistors (value to be calculated).
+
+## Assembly Guide
+
+### 1. Determine LED Specifications
+
+1. Consult your LED's datasheet for:
+   - Forward Voltage (Vf): Typically 1.8V - 3.3V (IR), 2.8V - 3.4V (white)
+   - Maximum Forward Current (If): Usually 20mA - 50mA
+
+2. Note these values for resistor calculation.
+
+### 2. Calculate Resistor Value
+
+Use the calculator below to determine the correct resistor:
+
+<ResistorCalculator />
+
+:::caution
+Calculate and use a separate resistor for each LED. Do not connect LEDs in series.
+:::
+
+### 3. Power Considerations
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>USB Power (5V)</h4>
+      </div>
+      <div className="card__body">
+        <p>USB 2.0: Up to 500mA</p>
+        <p>USB 3.0: Up to 900mA</p>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>Battery Power (3.3V)</h4>
+      </div>
+      <div className="card__body">
+        <p>Typical for battery-powered solutions</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+:::tip
+Ensure your power source can handle the total current draw of all components.
+:::
+
+### 4. Check LED Polarity
+
+Correct LED polarity is crucial for proper function and to prevent damage. Here are several methods to determine LED polarity:
+
+1. **Physical Indicators:** 
+   - Longer lead is usually the anode (+)
+   - Shorter lead is typically the cathode (-)
+
+2. **Flat Side or Notch:** 
+   - The side with a flat edge or notch on the LED's plastic casing usually indicates the cathode (-)
+
+3. **Internal Electrode Size:**
+   - Looking inside the LED, the larger electrode is typically the cathode (-)
+   - The smaller electrode is usually the anode (+)
+
+4. **Multimeter Method:**
+   - Set multimeter to diode test mode
+   - Connect red probe to anode, black to cathode
+   - If LED lights up, polarity is correct; if not, reverse probes
+
+5. **Datasheet Reference:**
+   - Always consult the LED's datasheet for definitive polarity information
+   - Look for diagrams or pinout information
+
+6. **SMD LED Markings:**
+   - For SMD LEDs, look for a small triangle or L-shaped marking
+   - The cathode (-) is usually on the side the triangle points to or at the base of the 'L'
+
+7. **Color-Coded Wires (for pre-wired LEDs):**
+   - Red wire typically indicates anode (+)
+   - Black or blue wire usually indicates cathode (-)
+
+:::info
+For SMD LEDs, the datasheet method is most reliable. Always double-check polarity before soldering.
+:::
+
+:::caution
+Reverse polarity can damage LEDs or prevent them from functioning. Take extra care with IR LEDs, as you can't visually confirm they're lit when powered.
+:::
+
+### 5. Solder the LEDs
+
+1. Set soldering iron to appropriate temperature (max 245°C for small IR LEDs)
+2. For each LED:
+   - Solder wire from power source to LED anode (+)
+   - Solder resistor to LED cathode (-)
+   - Solder wire from resistor to ground
+
+<div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'}}>
+  <div style={{width: '48%'}}>
+    <img src="/img/single-led-wiring-diagram.png" alt="Single LED Wiring" style={{width: '100%'}} />
+    <p style={{textAlign: 'center', fontSize: '0.9em'}}><em>Figure 1: Single LED wiring</em></p>
+  </div>
+  <div style={{width: '48%'}}>
+    <img src="/img/multiple-led-wiring-diagram.png" alt="Multiple LED Wiring" style={{width: '100%'}} />
+    <p style={{textAlign: 'center', fontSize: '0.9em'}}><em>Figure 2: Multiple LED wiring</em></p>
+  </div>
+</div>
+
+:::caution
+Ensure the resistor is placed after the LED in the circuit (LED cathode to resistor). This configuration protects the LED and ensures proper current limiting.
+:::
+
+:::tip
+For multiple LEDs, connect them in parallel, with each LED having its own resistor. This ensures consistent brightness across all LEDs.
+:::
+
+### 6. Test and Install
+
+1. Test each LED-resistor pair before final installation
+2. Mount LEDs securely on the headset
+3. Insulate all connections
+4. Perform a final check before powering on
+
+:::tip Light Scattering
+If LED light is too focused, gently sand the top with fine-grit sandpaper for better diffusion.
+:::
+
+### Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| LED not lighting | Check polarity, connections, resistor value |
+| Inconsistent tracking | Ensure sufficient and consistent LED brightness |
+| Overheating | Verify resistor calculations, check for shorts |
+
+### Regular Maintenance
+
+- Inspect for loose connections, damaged wires, or dimming LEDs
+- Clean LED surfaces gently with a microfiber cloth
+- Test in various lighting conditions to ensure consistent performance

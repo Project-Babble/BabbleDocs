@@ -49,85 +49,155 @@ Project Babble supports two lighting options, each with its own advantages:
 
 ## Assembly Guide
 
-### 1. Determine LED Specifications
+### 1. Determine LED and Power Specifications
 
 1. Consult your LED's datasheet for:
    - Forward Voltage (Vf): Typically 1.8V - 3.3V (IR), 2.8V - 3.4V (white)
    - Maximum Forward Current (If): Usually 20mA - 50mA
 
-2. Note these values for resistor calculation.
+2. Identify your power source:
+   - USB Power (5V):
+     - USB 2.0: Up to 500mA available
+     - USB 3.0: Up to 900mA available
+   - Battery Power: Typically 3.3V for battery-powered solutions
 
-### 2. Calculate Resistor Value
-
-Use the calculator below to determine the correct resistor:
-
-<ResistorCalculator />
-
-:::caution
-Calculate and use a separate resistor for each LED. Do not connect LEDs in series.
-:::
-
-### 3. Power Considerations
-
-<div className="row">
-  <div className="col col--6">
-    <div className="card">
-      <div className="card__header">
-        <h4>USB Power (5V)</h4>
-      </div>
-      <div className="card__body">
-        <p>USB 2.0: Up to 500mA</p>
-        <p>USB 3.0: Up to 900mA</p>
-      </div>
-    </div>
-  </div>
-  <div className="col col--6">
-    <div className="card">
-      <div className="card__header">
-        <h4>Battery Power (3.3V)</h4>
-      </div>
-      <div className="card__body">
-        <p>Typical for battery-powered solutions</p>
-      </div>
-    </div>
-  </div>
-</div>
+3. Note these values for resistor calculation and power management.
 
 :::tip
 Ensure your power source can handle the total current draw of all components.
 :::
 
-### 4. Check LED Polarity
+### 2. Calculate Resistor Value
+
+Use the calculator below to determine the correct resistor value:
+
+<ResistorCalculator />
+
+After calculating, consider these important factors:
+
+1. **Power Rating**:
+   - Choose a resistor with a power rating at least 2x the calculated power.
+   - Example: If calculated power is 0.1W, use a 1/4W (0.25W) or higher rated resistor.
+
+2. **Voltage Considerations**:
+   - Ensure the resistor can handle the voltage across it (usually not an issue for low-voltage LED circuits).
+
+3. **Fine-tuning Brightness**:
+   - For less brightness: Use the next higher E24 value.
+   - For more brightness: Use the next lower E24 value, ensuring you don't exceed the LED's maximum current.
+
+:::caution
+Calculate and use a separate resistor for each LED. Do not connect LEDs in series unless you're certain about the voltage requirements and current limiting.
+:::
+
+:::tip
+When in doubt, it's generally safer to use a slightly higher resistance value. This will reduce current flow, potentially extending LED lifespan at the cost of slightly reduced brightness.
+:::
+
+### 3. Check LED Polarity
 
 Correct LED polarity is crucial for proper function and to prevent damage. Here are several methods to determine LED polarity:
 
-1. **Physical Indicators:** 
-   - Longer lead is usually the anode (+)
-   - Shorter lead is typically the cathode (-)
+<div className="row">
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>Physical Indicators</h4>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li>Longer lead is usually the anode (+)</li>
+          <li>Shorter lead is typically the cathode (-)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>Flat Side or Notch</h4>
+      </div>
+      <div className="card__body">
+        <p>The side with a flat edge or notch on the LED's plastic casing usually indicates the cathode (-)</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-2. **Flat Side or Notch:** 
-   - The side with a flat edge or notch on the LED's plastic casing usually indicates the cathode (-)
+<div className="row" style={{marginTop: '1rem'}}>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>Internal Electrode Size</h4>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li>Larger electrode is typically the cathode (-)</li>
+          <li>Smaller electrode is usually the anode (+)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>Multimeter Method</h4>
+      </div>
+      <div className="card__body">
+        <ol>
+          <li>Set multimeter to diode test mode</li>
+          <li>Connect red probe to anode, black to cathode</li>
+          <li>If LED lights up, polarity is correct; if not, reverse probes</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
 
-3. **Internal Electrode Size:**
-   - Looking inside the LED, the larger electrode is typically the cathode (-)
-   - The smaller electrode is usually the anode (+)
+<div className="row" style={{marginTop: '1rem'}}>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>Datasheet Reference</h4>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li>Always consult the LED's datasheet for definitive polarity information</li>
+          <li>Look for diagrams or pinout information</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>SMD LED Markings</h4>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li>Look for a small triangle or L-shaped marking</li>
+          <li>The cathode (-) is usually on the side the triangle points to or at the base of the 'L'</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
-4. **Multimeter Method:**
-   - Set multimeter to diode test mode
-   - Connect red probe to anode, black to cathode
-   - If LED lights up, polarity is correct; if not, reverse probes
-
-5. **Datasheet Reference:**
-   - Always consult the LED's datasheet for definitive polarity information
-   - Look for diagrams or pinout information
-
-6. **SMD LED Markings:**
-   - For SMD LEDs, look for a small triangle or L-shaped marking
-   - The cathode (-) is usually on the side the triangle points to or at the base of the 'L'
-
-7. **Color-Coded Wires (for pre-wired LEDs):**
-   - Red wire typically indicates anode (+)
-   - Black or blue wire usually indicates cathode (-)
+<div className="row" style={{marginTop: '1rem'}}>
+  <div className="col col--6">
+    <div className="card">
+      <div className="card__header">
+        <h4>Color-Coded Wires (pre-wired LEDs)</h4>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li>Red wire typically indicates anode (+)</li>
+          <li>Black or blue wire usually indicates cathode (-)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
 :::info
 For SMD LEDs, the datasheet method is most reliable. Always double-check polarity before soldering.
@@ -137,7 +207,7 @@ For SMD LEDs, the datasheet method is most reliable. Always double-check polarit
 Reverse polarity can damage LEDs or prevent them from functioning. Take extra care with IR LEDs, as you can't visually confirm they're lit when powered.
 :::
 
-### 5. Solder the LEDs
+### 4. Solder the LEDs (TEMPOARY IMAGES SOMEONE PLEASE MAKE A BETTER LOOKING ONE)
 
 1. Set soldering iron to appropriate temperature (max 245°C for small IR LEDs)
 2. For each LED:
@@ -164,7 +234,7 @@ Ensure the resistor is placed after the LED in the circuit (LED cathode to resis
 For multiple LEDs, connect them in parallel, with each LED having its own resistor. This ensures consistent brightness across all LEDs.
 :::
 
-### 6. Test and Install
+### 5. Test and Install
 
 1. Test each LED-resistor pair before final installation
 2. Mount LEDs securely on the headset

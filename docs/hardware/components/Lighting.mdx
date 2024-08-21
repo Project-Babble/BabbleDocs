@@ -79,10 +79,7 @@ After calculating, consider these important factors:
    - Choose a resistor with a power rating at least 2x the calculated power.
    - Example: If calculated power is 0.1W, use a 1/4W (0.25W) or higher rated resistor.
 
-2. **Voltage Considerations**:
-   - Ensure the resistor can handle the voltage across it (usually not an issue for low-voltage LED circuits).
-
-3. **Fine-tuning Brightness**:
+2. **Fine-tuning Brightness**:
    - For less brightness: Use the next higher E24 value.
    - For more brightness: Use the next lower E24 value, ensuring you don't exceed the LED's maximum current.
 
@@ -204,7 +201,7 @@ For SMD LEDs, the datasheet method is most reliable. Always double-check polarit
 :::
 
 :::caution
-Reverse polarity can damage LEDs or prevent them from functioning. Take extra care with IR LEDs, as you can't visually confirm they're lit when powered.
+While unlikely, reverse polarity can damage LEDs or prevent them from functioning. For IR LEDs, use a phone camera to confirm they're lit when powered.
 :::
 
 ### 4. Solder the LEDs (TEMPOARY IMAGES SOMEONE PLEASE MAKE A BETTER LOOKING ONE)
@@ -237,9 +234,9 @@ For multiple LEDs, connect them in parallel, with each LED having its own resist
 ### 5. Test and Install
 
 1. Test each LED-resistor pair before final installation
-2. Mount LEDs securely on the headset
-3. Insulate all connections
-4. Perform a final check before powering on
+2. Mount LEDs securely on the headset or Babble Mount
+3. Insulate all connections (hot glue, electrical tape, etc.)
+4. Perform a final visual check before powering on (make sure nothing is shorting)
 
 :::tip Light Scattering
 If LED light is too focused, gently sand the top with fine-grit sandpaper for better diffusion.
@@ -256,5 +253,4 @@ If LED light is too focused, gently sand the top with fine-grit sandpaper for be
 ### Regular Maintenance
 
 - Inspect for loose connections, damaged wires, or dimming LEDs
-- Clean LED surfaces gently with a microfiber cloth
 - Test in various lighting conditions to ensure consistent performance

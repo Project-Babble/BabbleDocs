@@ -34,9 +34,10 @@ export default function ResistorCalculator() {
     }, []);
 
     const calculateResistor = useCallback(() => {
+        console.log('Calculating resistor with inputs:', inputs);
         const vs = parseFloat(inputs.vs) * (inputs.vsUnit === 'mV' ? 0.001 : 1);
         const vf = parseFloat(inputs.vf) * (inputs.vfUnit === 'mV' ? 0.001 : 1);
-        const current = parseFloat(inputs.if) * (inputs.ifUnit === 'mA' ? 1 : 0.001);
+        const current = parseFloat(inputs.if) * (inputs.ifUnit === 'mA' ? 0.001 : 0.000001);
 
         if (isNaN(vs) || isNaN(vf) || isNaN(current) || current === 0) {
             setError('Please enter valid numbers for all fields.');
@@ -44,7 +45,7 @@ export default function ResistorCalculator() {
             return;
         }
 
-        if (vs <= 0 || vs > 1000 || vf <= 0 || vf > 1000 || current <= 0 || current > 1000) {
+        if (vs <= 0 || vs > 1000 || vf <= 0 || vf > 1000 || current <= 0 || current > 1) {
             setError('Input values are out of reasonable range.');
             setResults(null);
             return;
@@ -57,15 +58,16 @@ export default function ResistorCalculator() {
         }
 
         const exactR = (vs - vf) / current;
-
         const standardR = fullE24.find(value => value >= exactR);
         const power = (vs - vf) * current;
+
+        console.log('Calculation results:', { exactR, standardR, power });
 
         setError('');
         setResults({
             exact: exactR.toFixed(2),
             standard: standardR,
-            power: power.toFixed(2)
+            power: power.toFixed(4)
         });
     }, [inputs]);
 
@@ -97,13 +99,11 @@ export default function ResistorCalculator() {
                                 value={inputs[field]}
                                 onChange={handleInputChange}
                                 placeholder={`e.g, ${field === 'if' ? '20' : field === 'vf' ? '2.2' : '5'}`}
-                                aria-label={field === 'vs' ? 'Supply Voltage' : field === 'vf' ? 'LED Forward Voltage' : 'LED Current'}
                             />
                             <select
                                 name={`${field}Unit`}
                                 value={inputs[`${field}Unit`]}
                                 onChange={handleInputChange}
-                                aria-label={`Unit for ${field === 'vs' ? 'Supply Voltage' : field === 'vf' ? 'LED Forward Voltage' : 'LED Current'}`}
                             >
                                 {unitOptions[field === 'if' ? 'current' : 'voltage'].map(unit => (
                                     <option key={unit} value={unit}>{unit}</option>
@@ -113,10 +113,10 @@ export default function ResistorCalculator() {
                     </div>
                 ))}
             </div>
-            <button onClick={resetCalculator} className={styles.resetButton} aria-label="Reset Calculator">
+            <button onClick={resetCalculator} className={styles.resetButton}>
                 Reset
             </button>
-            {error && <div className={styles.error} role="alert">{error}</div>}
+            {error && <div className={styles.error}>{error}</div>}
             {results && (
                 <div className={styles.result}>
                     <div className={styles.resultItem}>

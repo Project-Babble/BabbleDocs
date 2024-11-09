@@ -1,0 +1,108 @@
+---
+sidebar_position: 2
+---
+
+# Firmware
+
+:::info
+If you purchased a Babble PCB (by itself, as part of the Base Kit, or the Supporter Kit) you do *NOT* need to follow the directions below.
+
+The following instructions are for users who have assembled their own hardware.
+:::
+
+## Setup
+
+Now that you've assembled your DIY Babble Tracker, you need to flash the firmware for it. This guide uses the wired/wireless `wroom` setup, although the setup process is similar for other devices.
+
+:::info
+At present moment wireless and wired firmware can only be used mutually exclusively, IE you can't switch them out on the fly.
+:::
+
+### Step 1
+In order to flash your firmware, you'll need a copy of [VSCode](https://code.visualstudio.com/).
+
+### Step 2
+Once VSCode has installed, you'll need to download the [platformio-ide extension](https://platformio.org/install/ide?install=vscode). You can get it from this link or by searching for it in VSCode's extension tab.
+
+:::warning
+In testing, sister projects like [VSCodium](https://vscodium.com/) do not support platformio-ide. If you can find a workaround for this let us know!
+:::
+
+### Step 3
+Download/Clone the [OpenIrirs repo](https://github.com/EyeTrackVR/OpenIris) from EyeTrackVR's Github.
+
+### Step 4
+Open the OpenIris repo inside of VSCode. You may get a prompt to open to an ESP workspace, if you do click on it!
+You should now see something along the lines of this:
+
+<img src={require("@site/static/img/firmware_Start.png").default}/>
+
+### Step 5
+At this point, click on the platformio-ide extension on the left toolbar. It's the icon with a bug!
+
+At the bottom, you'll see an `env:` field followed by the firmware to build and upload. For `wroom`, choose:
+- `env:Babble_USB-wrooms-s3` for wired
+- `env:Babble-wrooms-s3` for wireless
+
+<details>
+  <summary>If flashing wireless firmware, you'll need to set your wifi's `ssid`, `password` and `mdnsname`.</summary>
+
+  You can change these under the `user_config.ini` file.
+
+  <div style={{
+    width: '90%',
+    height: 'auto',
+    margin: 'auto',
+    display: 'block'
+  }}>
+  </div>
+    <img src={require("@site/static/img/firmware_WifiConfig.png").default}/>
+
+    Where the `mdnsname` corresponds to the name of the device on the network. IE, a value of `babbletracker` would show up as `http://babbletracker.local`.
+</details>
+
+Platformio-ide will then download all the needed dependencies for your selected firmware. This might take a minute!
+
+<img src={require("@site/static/img/firmware_Download.png").default}/>
+
+### Step 6
+Now, get ready to plug in your device. You'll need to put it in *Boot Mode* to write firmware to it. To do this, hold down the boot mode button on your board as you plug it in. You'll feel a *click* as the button presses in and out. On the `wroom` board, the button is pictured here:
+
+Once you've plugged in the device, you can release this button.
+
+<img src={require("@site/static/img/firmware_WROOM.jpg").default}/>
+
+### Step 7
+
+Once the above download has completed you're ready for upload! Click on the right-arrow button on the bottom ribbon, between the check mark and trash button. You'll see terminal output during the upload, if there are any errors or if the upload was successful.
+
+<img src={require("@site/static/img/firmware_Upload.png").default}/>
+
+### Step 8
+
+To use your device, unplug it and plug it back in again to get it out of boot mode. It should work now!
+
+## Troubleshooting
+
+### Step 1
+To pull logs from your device, first download [EyeTrackVR's firmware flashing tool](https://github.com/EyeTrackVR/FirmwareFlashingTool/releases) from their Github. 
+
+Before moving onto the next steps, make sure your device is plugged in and/or connected (non-boot mode this time).
+
+### Step 2
+
+Open EyeTrackVR's firmware flashing tool. Select any firmware here, it doesn't matter. Just go to the next page. 
+
+<img src={require("@site/static/img/firmware_ETVR_1.png").default}/>
+
+If prompted for wifi, just enter anything to move on. You don't need to deal with this either.
+
+<img src={require("@site/static/img/firmware_ETVR_2.png").default}/>
+
+### Step 3
+
+Select your device on the corresponding COM port. Then, click on the left arrow next to the "Downloading logs..." button. Or you can download the logs and look at them in the text editor of your choice.
+
+<img src={require("@site/static/img/firmware_ESP32.png").default}/>
+
+For more information on how to use EyeTrackVR's firmware flashing tool, please refer to their [documentation](https://docs.eyetrackvr.dev/firmware_guide/flashing_tool).

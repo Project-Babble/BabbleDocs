@@ -10,22 +10,35 @@ For Project Babble, you can use either Infrared or visible light. Each has its a
 
 Consider these factors when choosing the type of lighting for your setup
 
+### Additional Note About Voltage
+Either 3.3V or 5V can be used to power the LEDs, however the resistor used will be different. 3.3V has the minor advantage that it may be more consistent due to being provided by the ESP32's voltage regulator while 5V is provided from the usb port.  
+
 ## Sourcing
 
 - **IR Emitters:**
-  - 2x Unfocused SMD IR emitters
-    - **Note:** The smaller ones can not be soldered at temps above 245°C or they will burn. Low-temp solder is recommended.
-    - *(Recommended)* [LCSC](https://www.lcsc.com/product-detail/Infrared-IR-LEDs_XINGLIGHT-XL-3216HIRC-850_C965891.html)
+  - 2x 5mm 850nm IR Through Hole LEDS
+    - *(Choose "F5mm 850nm")* [AliExpress](https://www.aliexpress.us/item/3256803759925241.html?)
     
 - **Resistors for IR Emitters:**
-  - 4x 68 ohm resistors (one for each LED/Emitter)
-    - *(If not using PCBs for the emitters, regular through-hole resistors are acceptable. So if your doing DIY use through hole)*
-    - [Digikey - 68 ohm](https://www.amazon.com/California-JOS-68-Tolerance-Resistance/dp/B0B4FTRDCX/)
+  - 2x 160ohm 1/4w Resistors (If using 5V)
+    - *(Choose "160R")* [AliExpress](https://www.aliexpress.us/item/3256806544238902.html?)
+  - 2x 82ohm 1/4w Resistors (If using 3.3V)
+    - *(Choose "82R")* [AliExpress](https://www.aliexpress.us/item/3256806544238902.html?)
+
 
 ### Visible Light Alternative:
-- 1x EAST16084WA1 White LED (Visible Light)
-  - [AliExpress](https://www.digikey.com/en/products/detail/everlight-electronics-co-ltd/EAST16084WA1/11200896)
+
+- **White LEDs**
+  - 2x 5mm White Through Hole LED (Visible Light)
+    - *(Choose "50pcs-white") [AliExpress](https://www.aliexpress.us/item/3256807891285585.html)
+
+- **Resistors for White LEDs:**
+  - 2x 150ohm 1/4w Resistors (If using 5V)
+    - *(Choose "150R")* [AliExpress](https://www.aliexpress.us/item/3256806544238902.html?)
+  - 2x 68ohm 1/4w Reistors (If using 3.3V)
+    - *(Choose "68R")* [AliExpress](https://www.aliexpress.us/item/3256806544238902.html?)
+
 
 ### Additional Components:
-- 1x Wire to power IR emitters (we recommended 34 AWG)
-  - [Digikey](https://www.digikey.com/en/products/detail/adafruit-industries-llc/4733/13280268)
+- 1x Wire to power IR emitters (28 AWG stranded wire is good general size)
+  - [AliExpress](https://www.aliexpress.us/item/3256807801296902.html?)

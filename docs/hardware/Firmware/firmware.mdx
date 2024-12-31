@@ -12,7 +12,7 @@ The following instructions are for users who have assembled their own hardware o
 
 ## Setup
 
-Now that you've assembled your DIY Babble Tracker, you need to flash the firmware for it. This guide uses the wired/wireless `wroom` setup, although the setup process is similar for other devices.
+Now that you've assembled your DIY Babble Tracker, you need to flash the firmware for it. This guide uses the wired/wireless `wroom` setup, although the setup process is similar for other boards.
 
 :::info
 At present moment wireless and wired firmware can only be used mutually exclusively, IE you can't switch them out on the fly.
@@ -40,9 +40,17 @@ You should now see something along the lines of this:
 ### Step 5
 At this point, click on the platformio-ide extension on the left toolbar. It's the icon with a bug!
 
-At the bottom, you'll see an `env:` field followed by the firmware to build and upload. For `wroom`, choose:
+At the bottom, you'll see an `env:` field followed by the firmware to build and upload. You must select the env appropriate to both your board type **and** wired/wireless type.
+
+For a `wroom` board:
 - `env:Babble_USB-wrooms-s3` for wired
 - `env:Babble-wrooms-s3` for wireless
+
+For Xiao Sense S3:
+- `env:xiaosenses3_USB_release` for wired
+- `env:xiaosenses3_release` for wireless
+
+Other supported boards will appear in the selector in wired/wireless variants. Make sure you select the appropriate env for your board. 
 
 <details>
   <summary>If flashing wireless firmware, you'll need to set your wifi's `ssid`, `password` and `mdnsname`.</summary>

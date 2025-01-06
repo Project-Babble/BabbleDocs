@@ -1,21 +1,26 @@
-## Wires and Adapters
+# Wiring Guide
 
-If you are soldering and using custom cables:
+Follow these steps to wire LEDs to the Seeed XIAO ESP32-S3 safely and effectively:
 
-- 1x USB Type-A male port to power both ESPs or LEDs
-  - Bare breakout:
-    - [AliExpress](https://www.aliexpress.com/)
-    - [Amazon](https://www.amazon.com/)
-  
-  - One with a cover:
-    - [AliExpress](https://www.aliexpress.com/)
-    - [Amazon](https://www.amazon.com/)
+- **Power Options for LEDs**:
+  - Either **3.3V** or **5V** can be used to power the LEDs.
+  - **3.3V** is compatible with both USB and battery power.
+  - **5V** can only be used when the ESP32 is powered via USB.
 
-- 1x Lower gauge wire to power ESPs
-  - 28 AWG gauge wire:
-    - [AliExpress](https://www.aliexpress.com/)
-    - [Amazon](https://www.amazon.com/)
+- **Resistor Requirements**:
+  - For **3.3V** power: Use **82-ohm resistors** in series with the LEDs.
+  - For **5V** power: Use **160-ohm resistors** in series with the LEDs.
 
-- 1x Higher gauge wire to power IR emitters (V3 or V4 some assembly required)
-  - 34 AWG:
-    - [AliExpress](https://www.aliexpress.com/)
+- **Steps to Wire the LEDs**:
+  1. Connect the **GND pin** on the ESP32 to the cathode (short leg) of the LED.
+  2. Add an appropriate resistor (82 ohms for 3.3V, 160 ohms for 5V) in series with the anode (long leg) of the LED.
+  3. Connect the other end of the resistor to either:
+     - **3.3V pin** (if using 3.3V power), or
+     - **5V pin** (if using 5V power).
+  4. Repeat the process for additional LEDs, ensuring each has its own resistor.
+
+- **Important Notes**:
+  - Do not connect LEDs directly to the ESP32 pins without a resistor, as it may damage the LEDs or the microcontroller.
+  - Ensure the ESP32 is correctly powered based on your selected voltage (USB or battery).
+
+![Babble Wiring Guide](/img/BabbleWiringGuide.png)

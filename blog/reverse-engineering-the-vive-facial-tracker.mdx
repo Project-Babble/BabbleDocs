@@ -1,0 +1,77 @@
+---
+title: Reverse Engineering the Vive Facial Tracker
+---
+
+# The cool intro
+
+My name is Hiatus, and I am one of the developers on the Project Babble Team. 
+
+For the past 2 years (at the time of writing this), me and a team have been working on the eponymous Project Babble, a VR lower-face expression tracking solution for VRChat, Resonite and ChilloutVR namely.
+
+This is the story of how the Vive Facial Tracker, another (abandoned) VR face tracking accessory, was reverse engineered to work with the Babble App.
+
+Buckle in.
+
+# The Vive Facial Tracker
+
+The Vive Facial Tracker is a VR accessory released in March 24th 2021. It is worn underneath a VR headset, and captures camera images an AI, SRanipal ("Super Reality Animation Pal")  converts into expressions other programs can understand*. 
+
+Sidenote here, it's really hard to describe the *impact* this had on the entirety of Social VR, at least in my experience. 
+
+Unfortunately, the VFT has been discontinued. [You can't even see it on their own store anymore.](https://www.vive.com/us/accessory/). Even worse, it's being scalped on eBay in excess of $1,000. Remember, this accesory cost ~$150 when it came out!!
+
+# The rising action: A curious conversation
+
+I was in voice chat with some people from the Babble Discord, when someone said they knew someone else in the Project Babble discord had gotten their VFT working with a fork of the Babble App. On Linux. *What*
+
+Curious, I asked for more details so they linked me a conversation that had happened earlier that week. I reached out to the person who made the post to understand what they did, and what followed was a pleasent conversation.
+
+# The Babble App
+
+Before we go on, we need to briefly cover how the Babble App works. In short, it runs an ONNX model that accept a (256x256) grayscale image, fed in from one of two video sources:
+
+1) Via OpenCV. Think webcameras, ip-cameras, etc. This handles 80% of all things cameras.
+2) Via Serial. Presently, our Babble Boards send image data via a wired USB connection a computer for processing.
+*If the Babble Board is running in wireless mode, it just spins up an IP Camera. Plain and simple stuff.
+
+:::note
+I do want to create an article about how are training/trained our ONNX models too!
+:::
+
+Got all that? 
+
+
+# Understanding the VFT's hardware
+
+The VFT consists of 2 OVXXX infrared cameras and and IR Led. See here https://archive.is/NFlaO. This produces a combined 800x400 image, at 400x400 pixels per camera, encoded in YUV2.
+
+:::note
+In SRanipal, these would be used to compute stereo disparity IE provide how close objects are to the camera. This is useful for expressions in which parts of the face are closer to the camera, such as `JawForward` and `TongueOut`.
+:::
+
+Babble doesn't care about 3D, so we have 2 options:
+1) Just pick either the left or right frame.
+2) Do something fancier that requires more work.
+
+Guess which one we did?
+
+With that in mind, we needed to
+1) Open the camera(s) (done!)
+2) Turn on the LEDs and other components
+3) Process/Convert the VFT's camera into something Babble can understand
+
+# Conclusions, Reflections
+
+At the end of all of this, I couldn't help but wonder
+
+Becuase it's fun!
+
+Also, if you're interested in a Babble Tracker we're looking to restock sometime later this March, maybe April if things go slowly.
+
+Until next time,
+
+- Hiatus
+The Project Babble Team
+
+
+### Credits

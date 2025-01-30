@@ -1,5 +1,8 @@
 ---
 title: Reverse Engineering the Vive Facial Tracker
+description: An article detailing the reverse engineering process of the Vive Facial Tracker, a VR face-tracking accessory.
+authors: dfgHiatus
+hide_table_of_contents: false
 ---
 
 # Reverse Engineering the Vive Facial Tracker
@@ -14,32 +17,41 @@ This is the story of how the Vive Facial Tracker, another VR face tracking acces
 
 Buckle in.
 
+{/* truncate */}
+
 # The Vive Facial Tracker
 
 Some context. The Vive Facial Tracker (VFT) was a VR accessory released on March 24th, 2021. Worn underneath a VR headset, it captures camera images of a user's lower face, and using an in-house AI ([SRanipal](https://docs.vrcft.io/docs/hardware/VIVE/sranipal)) converts expressions into other programs can understand. 
 
-The VFT currently has integrations for VRChat (via [VRCFaceTracking](https://github.com/benaclejames/VRCFaceTracking)), Resonite and ChilloutVR (natively). Here is a video of it in use:
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
 
-:::note
-Sidenote here, it's really hard to describe the *impact* VR face tracking has had on the entirety of Social VR, at least in my experience. It's a completely different degree of immersion, you have to see it in person.
-:::
+<ImageGallery images={[
+  "/blog/reverse-engineering-the-vive-facial-tracker/vft-front.jpg",
+  "/blog/reverse-engineering-the-vive-facial-tracker/vft-back.jpg",
+  "/blog/reverse-engineering-the-vive-facial-tracker/vive.webp",
+]} />
 
-Unfortunately, the VFT has been discontinued. [You can't even see it on Vive's own store anymore](https://www.vive.com/us/accessory/). Even worse, it's being scalped on eBay in excess of $1,000. Remember, this accessory cost ~$150 when it came out!!
+The VFT currently has integrations for VRChat (via [VRCFaceTracking](https://github.com/benaclejames/VRCFaceTracking)), Resonite and ChilloutVR (natively). Here is a video of it in use in VRChat:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F_ptjZ8Dl5E?si=sJ5ptM9EwKGZNEh3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Unfortunately, the VFT has been discontinued. [You can't even see it on Vive's own store anymore](https://www.vive.com/us/accessory/). This accessory cost ~$150 when it came out, and I've seen it scalped on eBay in excess of $1,000. So, 4 years after its launch, the VFT is still in demand more than ever.
 
 # Understanding the VFT's hardware
 
 Before we can begin to extract camera images from the VFT, we need to understand its underlying hardware. 
 
-## Camera
+## Camera(s)
 
-The VFT consists of two [OV6211 image sensors](https://www.ovt.com/products/ov6211/) and an image signal processor [OV00580-B21G-1C](https://www.ovt.com/products/ov580/) from OmniVision. The cameras record at 400px\*400px at 60Hz, their images are then shrunk to 200px\*400px then put side by side, for a combined final image 400px\*400px. 
+The VFT consists of two [OV6211 image sensors](https://www.ovt.com/products/ov6211/) and an image signal processor [OV00580-B21G-1C](https://www.ovt.com/products/ov580/) from OmniVision. The cameras record at 400px\*400px at 60Hz, their images are then shrunk to 200px\*400px then put side by side, for a combined final image 400px\*400px. Below is the "raw" (in quotation marks!!) camera image from the VFT:
+
+![Camera](/blog/reverse-engineering-the-vive-facial-tracker/hand.PNG)
 
 :::note
 In SRanipal, these separate images are used to compute [disparity](https://en.wikipedia.org/wiki/Binocular_disparity), IE provide how close an object is to the camera. This is useful for expressions in which parts of the face are closer to the camera, such as `Jaw_Forward`, `Tongue_LongStep1` and `Tongue_LongStep2`.
 :::
 
-An IR light source is used to illuminate the face of the user. The cameras do not record color information per se but rather the luminance of the IR light. This has a direct influence on the image format.
-
+An IR light source is used to illuminate the face of the user. The cameras do not record color information per se but rather luminance of the IR light.
 
 Moreover, this is the output of Video4Linux's `v4l2-ctl --list-devices`:
 
@@ -66,9 +78,11 @@ ioctl: VIDIOC_ENUM_FMT
 
 From above, we can see the VFT provides YUV422 images. 
 
-Funnily enough though, the VFT *does not actually output a proper YUV image*. Instead, the VFT stores the grayscale image in all 3 image channels. This breaks trying to convert YUV into RGB, the resulting image can be seen below:
+Remember the raw camera image from earlier? Well, that image was provided from the *SRanipal API*. We're querying the device directly, and the VFT *does not actually output a proper YUV image*. Instead, the VFT stores the grayscale image in all 3 image channels. This breaks trying to interpret YUV as RGB, the resulting image can be seen below:
 
-To workaround this, we can extract the "Y" channel use it as a grayscale image. This is pretty fast, as we only need to decode the "4" part of the YUV422 image and ignore the "22" part. 
+![YUV](/blog/reverse-engineering-the-vive-facial-tracker/YUV.PNG)
+
+To workaround this, we can extract the "Y" channel use it as a grayscale image. This is pretty fast, as we only need to decode the "4" part of the YUV422 image and ignore the "22" part. For more information on how to convert from YUV color space to RGB, check out this [Wikipedia article](https://en.wikipedia.org/wiki/Y%E2%80%B2UV#Conversion_to/from_RGB).
 
 ## Lights
 
@@ -288,17 +302,17 @@ Device Status:     0x0000
   (Bus Powered)
 ```
 
-Interestingly, the "VideoControl Interface Descriptor" guidExtensionCode's value `{2ccb0bda-6331-4fdb-850e-79054dbd5671}` matches the log output of a "ZED2i" camera online. This means the (open-source!) code of stereolabs's ZED cameras and the VIVE Facial Tracker share a lot in common, at least USB-wise:
+Interestingly, the "VideoControl Interface Descriptor" guidExtensionCode's value `{2ccb0bda-6331-4fdb-850e-79054dbd5671}` matches the log output of a "ZED2i" camera online. This means the (open-source!) code of stereolabs's ZED cameras and the VFT share a lot in common, at least USB-wise:
 
 - https://github.com/stereolabs/zed-open-capture/blob/5cf66ff777175776451b9b59ecc6231d730fa202/src/videocapture.cpp
 
 ### SB Protocol / Extension Unit
 
-The VIVE Facial Tracker is a video type USB device and behaves like one, with an exception. The data stream is not activated using the regular means but has to be activated using the "Extension Unit". Basically the VIVE Facial Tracker is controlled by sending commands to this "Extension Unit".
+The VFT is a video type USB device and behaves like one, with an exception. The data stream is not activated by regular means, but has to be controlled with an "Extension Unit".
 
-In general you have to use SET_CUR commands to set camera parameters and to enable the camera stream. The device uses a fixed size scratch buffer of 384 bytes for all sending and receiving. Only the relevant command bytes are actually consumed while the rest is disregarded.
+In general, you have to use `SET_CUR` commands to set camera parameters/enable a camera stream via USB. The VFT uses a fixed size scratch buffer of 384 bytes for all sending and receiving, with only relevant command bytes consumed. The rest are disregarded.
 
-Camera parameters are set using the `0xab` request id. Analyzing the protocol there are 11 registers touched by the original SRanipal software. The ZED2i lists in particular 6 parameters to control exposure and gain:
+Camera parameters are set using the `0xab` request ID. Analyzing the protocol, there are 11 registers touched by SRanipal. The ZED2i lists in particular 6 parameters to control exposure and gain:
 - ADDR_EXP_H
 - ADDR_EXP_M
 - ADDR_EXP_L
@@ -306,7 +320,7 @@ Camera parameters are set using the `0xab` request id. Analyzing the protocol th
 - ADDR_GAIN_M
 - ADDR_GAIN_L
 
-Using some testing they most probably map like this to the VIVE Facial Tracker:
+Some testing reveals they most likely map like this to the VFT:
 
 | Register | Value | Description |
 |----------|---------|-------------|
@@ -322,23 +336,60 @@ Using some testing they most probably map like this to the VIVE Facial Tracker:
 | `x07` | `xb2` | gain low |
 | `x0f` | `x03` | |
 
-The values on the left side are the registers and the value on the right side is the value set by SRanipal. Testing different values produced worse results so the values used by SRanipal seem to be the best choice. What the other parameters dso is unknown.
+The values on the left side are the registers and the value on the right side is the value set by SRanipal. Testing different values produced worse results so the values used by SRanipal seem to be the best choice. What the other parameters do is unknown.
 
-The `x14` request is the one enabling and disabling the data stream. Hence first the camera parameters have to be set then the stream has to be enabled.
+The `x14` request is the one that enables and disables the data stream. Hence, first the camera parameters have to be set then the stream can be enabled.
 
 Once the data stream is enabled the camera streams data in the YUV422 format using regular USB video device streaming.
 
-### Windows
-
+:::note
 One small caveat, Windows has no simple access to USB devices as Linux has. Thankfully, instead of using `v4l2`, we can use [`pygrabber`](https://github.com/andreaschiavinato/python_grabber) when needs be.
+:::
 
 ## Action
 
-Now that we have a camera image from the VFT, we just need to pass it to the Babble App. That's all it takes! Here's a video of the VFT in use with the Babble App, if you'd like to mess around with it yourself, feel free to check out the branch for it here. 
+Now that we have a camera image from the VFT, we just need to pass it to the Babble App. Of course, we need to merge and postprocess the left and right images:
+
+```python
+...
+def process_frame(self: 'ViveTracker', data: np.ndarray) -> np.ndarray:
+        """Process a captured frame.
+        Right now this applies a median blur but other manipulations
+        are possible to improve the image if desired.
+        Keyword arguments:
+        data --- Frame to process
+        """
+        lum = cv.split(data)[0]
+
+        """
+        gamma = 2.2
+        inv_gamma = 1.0 / gamma
+        lut = np.array([((i / 255.0) ** inv_gamma) * 255
+                        for i in np.arange(0, 256)]).astype("uint8")
+        lum = cv.LUT(lum, lut)
+        """
+
+        lum = lum[:, 0:200]
+
+        lum = cv.resize(lum, (400, 400))
+
+        """
+        lum = cv.medianBlur(lum, 5)
+        """
+
+        return cv.merge((lum, lum, lum))
+...
+```
+
+That's all it takes! Here's an image of the VFT in use with the Babble App:
+
+![Babble App](/blog/reverse-engineering-the-vive-facial-tracker/app.PNG)
+
+If you'd like to mess around with it yourself, feel free to check out the branch for it [here](https://github.com/Project-Babble/ProjectBabble/pull/82). 
 
 # Conclusions, Reflections
 
-I want to give a shoutout to DragonLord for providing the code the VFT as well as making it available for the Babble App. I would also like to thank my teammates Summer and Rames, as well as Aero for QA'ing this here too.
+I want to give a shoutout to DragonLord again for providing the code the VFT as well as making it available for the Babble App. I would also like to thank my teammates Summer and Rames, as well as Aero for QA'ing this here too.
 
 If you're interested in a Babble Tracker we're looking to restock sometime later this March, maybe April if things go slowly. We'll make an announcement when we re-open sales, you can follow us on Twitter or join or Discord to stay up to date on all things Babble!
 

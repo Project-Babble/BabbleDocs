@@ -1,0 +1,43 @@
+.gallery-container {
+  display: flex;
+  padding-block: 24px;
+}
+
+.gallery-item {
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.gallery-item img {
+  width: 200px;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.gallery-item img:hover {
+  transform: scale(1.05);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  padding: 48px;
+
+  & img {
+    object-fit: contain;
+    height: 80vh;
+    border-radius: 10px;
+  }
+}
+

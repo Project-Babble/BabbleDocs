@@ -336,14 +336,14 @@ Some testing reveals they most likely map like this to the VFT:
 | `x07` | `xb2` | gain low |
 | `x0f` | `x03` | |
 
-The values on the left side are the registers and the value on the right side is the value set by SRanipal. Testing different values produced worse results so the values used by SRanipal seem to be the best choice. What the other parameters do is unknown.
+The values on the left side are the registers and the values on the right side are the values set by SRanipal. In testing, different values produced worse results so the values used by SRanipal were the best choice. What the other parameters do is unknown.
 
-The `x14` request is the one that enables and disables the data stream. Hence, first the camera parameters have to be set then the stream can be enabled.
+Additionally, the `x14` request enables and disables the camera stream, this needs to be set before data can be streamed.
 
-Once the data stream is enabled the camera streams data in the YUV422 format using regular USB video device streaming.
+Once the stream is enabled, the camera streams data in the YUV422 format using regular USB video device streaming.
 
 :::note
-One small caveat, Windows has no simple access to USB devices as Linux has. Thankfully, instead of using `v4l2`, we can use [`pygrabber`](https://github.com/andreaschiavinato/python_grabber) when needs be.
+One small caveat, Windows has no simple access to USB devices as Linux has. Thankfully, instead of using `v4l2` we can use [`pygrabber`](https://github.com/andreaschiavinato/python_grabber) when needs be.
 :::
 
 ## Action
@@ -391,10 +391,6 @@ If you'd like to mess around with it yourself, feel free to check out the branch
 
 I want to give a shoutout to DragonLord again for providing the code the VFT as well as making it available for the Babble App. I would also like to thank my teammates Summer and Rames, as well as Aero for QA'ing this here too.
 
-If you're interested in a Babble Tracker we're looking to restock sometime later this March, maybe April if things go slowly. We'll make an announcement when we re-open sales, you can follow us on Twitter or join or Discord to stay up to date on all things Babble!
-
 Until next time,
 
 \- Hiatus
-
-The Project Babble Team

@@ -1,0 +1,396 @@
+---
+title: Reverse Engineering the Vive Facial Tracker
+description: An article detailing the reverse engineering process of the Vive Facial Tracker, a VR face-tracking accessory.
+authors: dfgHiatus
+hide_table_of_contents: false
+---
+
+# Reverse Engineering the Vive Facial Tracker
+
+My name is Hiatus, and I am one of the developers on the Project Babble Team. 
+
+For the past 2 years at the time of writing this, me and a team have been working on the eponymous Project Babble, a cross-platform and hardware-agnostic VR lower-face expression tracking solution for [VRChat](/docs/software/integrations/vrc), [ChilloutVR](/docs/software/integrations/chilloutVR), and [Resonite](/docs/software/integrations/resonite).
+
+This blog post was inspired by a member of our community [DragonLord](https://github.com/LordOfDragons). His work is responsible for this feature, and this blog post largely paraphrases his findings. Again, put where credit is due and check out his Github. You can check out his findings as well as his [repo](https://github.com/LordOfDragons/vivefacialtracker) here. 
+
+This is the story of how the Vive Facial Tracker, another VR face tracking accessory was reverse engineered to work with the Babble App.
+
+Buckle in.
+
+{/* truncate */}
+
+# The Vive Facial Tracker
+
+Some context. The Vive Facial Tracker (VFT) was a VR accessory released on March 24th, 2021. Worn underneath a VR headset, it captures camera images of a user's lower face, and using an in-house AI ([SRanipal](https://docs.vrcft.io/docs/hardware/VIVE/sranipal)) converts expressions into other programs can understand. 
+
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
+
+<ImageGallery images={[
+  "/blog/reverse-engineering-the-vive-facial-tracker/vft-front.jpg",
+  "/blog/reverse-engineering-the-vive-facial-tracker/vft-back.jpg",
+  "/blog/reverse-engineering-the-vive-facial-tracker/vive.webp",
+]} />
+
+The VFT currently has integrations for VRChat (via [VRCFaceTracking](https://github.com/benaclejames/VRCFaceTracking)), Resonite and ChilloutVR (natively). Here is a video of it in use in VRChat:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F_ptjZ8Dl5E?si=sJ5ptM9EwKGZNEh3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Unfortunately, the VFT has been discontinued. [You can't even see it on Vive's own store anymore](https://www.vive.com/us/accessory/). This accessory cost ~$150 when it came out, and I've seen it scalped on eBay in excess of $1,000. So, 4 years after its launch, the VFT is still in demand more than ever.
+
+# Understanding the VFT's hardware
+
+Before we can begin to extract camera images from the VFT, we need to understand its underlying hardware. 
+
+## Camera(s)
+
+The VFT consists of two [OV6211 image sensors](https://www.ovt.com/products/ov6211/) and an image signal processor [OV00580-B21G-1C](https://www.ovt.com/products/ov580/) from OmniVision. The cameras record at 400px\*400px at 60Hz, their images are then shrunk to 200px\*400px then put side by side, for a combined final image 400px\*400px. Below is the "raw" (in quotation marks!!) camera image from the VFT:
+
+![Camera](/blog/reverse-engineering-the-vive-facial-tracker/hand.PNG)
+
+:::note
+In SRanipal, these separate images are used to compute [disparity](https://en.wikipedia.org/wiki/Binocular_disparity), IE provide how close an object is to the camera. This is useful for expressions in which parts of the face are closer to the camera, such as `Jaw_Forward`, `Tongue_LongStep1` and `Tongue_LongStep2`.
+:::
+
+An IR light source is used to illuminate the face of the user. The cameras do not record color information per se but rather luminance of the IR light.
+
+Moreover, this is the output of Video4Linux's `v4l2-ctl --list-devices`:
+
+```
+...
+HTC Multimedia Camera: HTC Mult (usb-0000:0f:00.0-4.1.2.1):
+        /dev/video2
+        /dev/video3
+        /dev/media1
+...
+```
+
+As well as `v4l2-ctl -d /dev/video2 --list-formats-ext`:
+```
+...
+ioctl: VIDIOC_ENUM_FMT
+        Type: Video Capture
+
+        [0]: 'YUYV' (YUYV 4:2:2)
+                Size: Discrete 400x400
+                        Interval: Discrete 0.017s (60.000 fps)
+...
+```
+
+From above, we can see the VFT provides YUV422 images. 
+
+Remember the raw camera image from earlier? Well, that image was provided from the *SRanipal API*. We're querying the device directly, and the VFT *does not actually output a proper YUV image*. Instead, the VFT stores the grayscale image in all 3 image channels. This breaks trying to interpret YUV as RGB, the resulting image can be seen below:
+
+![YUV](/blog/reverse-engineering-the-vive-facial-tracker/YUV.PNG)
+
+To workaround this, we can extract the "Y" channel use it as a grayscale image. This is pretty fast, as we only need to decode the "4" part of the YUV422 image and ignore the "22" part. For more information on how to convert from YUV color space to RGB, check out this [Wikipedia article](https://en.wikipedia.org/wiki/Y%E2%80%B2UV#Conversion_to/from_RGB).
+
+## Lights
+
+The VFT does not provide any controls for brightness or exposure. Instead, an exposure and gain parameter can be set directly using device registers. 
+
+Once again, we can probe the VFT using `lsusb`:
+
+```
+Bus 004 Device 076: ID 0bb4:0321 HTC (High Tech Computer Corp.) HTC Multimedia Camera
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2 [unknown]
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0         9
+  idVendor           0x0bb4 HTC (High Tech Computer Corp.)
+  idProduct          0x0321 HTC Multimedia Camera
+  bcdDevice            1.00
+  iManufacturer           1 HTC Multimedia Camera
+  iProduct                2 HTC Multimedia Camera
+  iSerial                 0 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x00de
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              512mA
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         0
+      bInterfaceCount         2
+      bFunctionClass         14 Video
+      bFunctionSubClass       3 Video Interface Collection
+      bFunctionProtocol       0 
+      iFunction               2 HTC Multimedia Camera
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass        14 Video
+      bInterfaceSubClass      1 Video Control
+      bInterfaceProtocol      0 
+      iInterface              2 HTC Multimedia Camera
+      VideoControl Interface Descriptor:
+        bLength                13
+        bDescriptorType        36
+        bDescriptorSubtype      1 (HEADER)
+        bcdUVC               1.10
+        wTotalLength       0x004f
+        dwClockFrequency      150.000000MHz
+        bInCollection           1
+        baInterfaceNr( 0)       1
+      VideoControl Interface Descriptor:
+        bLength                18
+        bDescriptorType        36
+        bDescriptorSubtype      2 (INPUT_TERMINAL)
+        bTerminalID             1
+        wTerminalType      0x0201 Camera Sensor
+        bAssocTerminal          0
+        iTerminal               0 
+        wObjectiveFocalLengthMin      0
+        wObjectiveFocalLengthMax      0
+        wOcularFocalLength            0
+        bControlSize                  3
+        bmControls           0x00000000
+      VideoControl Interface Descriptor:
+        bLength                 9
+        bDescriptorType        36
+        bDescriptorSubtype      3 (OUTPUT_TERMINAL)
+        bTerminalID             2
+        wTerminalType      0x0101 USB Streaming
+        bAssocTerminal          0
+        bSourceID               4
+        iTerminal               0 
+      VideoControl Interface Descriptor:
+        bLength                13
+        bDescriptorType        36
+        bDescriptorSubtype      5 (PROCESSING_UNIT)
+        bUnitID                 3
+        bSourceID               1
+        wMaxMultiplier          0
+        bControlSize            3
+        bmControls     0x00000000
+        iProcessing             2 HTC Multimedia Camera
+        bmVideoStandards     0x00
+      VideoControl Interface Descriptor:
+        bLength                26
+        bDescriptorType        36
+        bDescriptorSubtype      6 (EXTENSION_UNIT)
+        bUnitID                 4
+        guidExtensionCode         {2ccb0bda-6331-4fdb-850e-79054dbd5671}
+        bNumControls            2
+        bNrInPins               1
+        baSourceID( 0)          3
+        bControlSize            1
+        bmControls( 0)       0x03
+        iExtension              2 HTC Multimedia Camera
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+        bMaxBurst               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass        14 Video
+      bInterfaceSubClass      2 Video Streaming
+      bInterfaceProtocol      0 
+      iInterface              0 
+      VideoStreaming Interface Descriptor:
+        bLength                            14
+        bDescriptorType                    36
+        bDescriptorSubtype                  1 (INPUT_HEADER)
+        bNumFormats                         1
+        wTotalLength                   0x004d
+        bEndpointAddress                 0x81  EP 1 IN
+        bmInfo                              0
+        bTerminalLink                       2
+        bStillCaptureMethod                 0
+        bTriggerSupport                     0
+        bTriggerUsage                       0
+        bControlSize                        1
+        bmaControls( 0)                     0
+      VideoStreaming Interface Descriptor:
+        bLength                            27
+        bDescriptorType                    36
+        bDescriptorSubtype                  4 (FORMAT_UNCOMPRESSED)
+        bFormatIndex                        1
+        bNumFrameDescriptors                1
+        guidFormat                            {32595559-0000-0010-8000-00aa00389b71}
+        bBitsPerPixel                      16
+        bDefaultFrameIndex                  1
+        bAspectRatioX                       0
+        bAspectRatioY                       0
+        bmInterlaceFlags                 0x00
+          Interlaced stream or variable: No
+          Fields per frame: 2 fields
+          Field 1 first: No
+          Field pattern: Field 1 only
+        bCopyProtect                        0
+      VideoStreaming Interface Descriptor:
+        bLength                            30
+        bDescriptorType                    36
+        bDescriptorSubtype                  5 (FRAME_UNCOMPRESSED)
+        bFrameIndex                         1
+        bmCapabilities                   0x00
+          Still image unsupported
+        wWidth                            400
+        wHeight                           400
+        dwMinBitRate                153600000
+        dwMaxBitRate                153600000
+        dwMaxVideoFrameBufferSize      320000
+        dwDefaultFrameInterval         166666
+        bFrameIntervalType                  1
+        dwFrameInterval( 0)            166666
+      VideoStreaming Interface Descriptor:
+        bLength                             6
+        bDescriptorType                    36
+        bDescriptorSubtype                 13 (COLORFORMAT)
+        bColorPrimaries                     1 (BT.709,sRGB)
+        bTransferCharacteristics            1 (BT.709)
+        bMatrixCoefficients                 4 (SMPTE 170M (BT.601))
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x0016
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000006
+      BESL Link Power Management (LPM) Supported
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000c
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   2
+      Lowest fully-functional device speed is High Speed (480Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat          32 micro seconds
+Device Status:     0x0000
+  (Bus Powered)
+```
+
+Interestingly, the "VideoControl Interface Descriptor" guidExtensionCode's value `{2ccb0bda-6331-4fdb-850e-79054dbd5671}` matches the log output of a "ZED2i" camera online. This means the (open-source!) code of stereolabs's ZED cameras and the VFT share a lot in common, at least USB-wise:
+
+- https://github.com/stereolabs/zed-open-capture/blob/5cf66ff777175776451b9b59ecc6231d730fa202/src/videocapture.cpp
+
+### SB Protocol / Extension Unit
+
+The VFT is a video type USB device and behaves like one, with an exception. The data stream is not activated by regular means, but has to be controlled with an "Extension Unit".
+
+In general, you have to use `SET_CUR` commands to set camera parameters/enable a camera stream via USB. The VFT uses a fixed size scratch buffer of 384 bytes for all sending and receiving, with only relevant command bytes consumed. The rest are disregarded.
+
+Camera parameters are set using the `0xab` request ID. Analyzing the protocol, there are 11 registers touched by SRanipal. The ZED2i lists in particular 6 parameters to control exposure and gain:
+- ADDR_EXP_H
+- ADDR_EXP_M
+- ADDR_EXP_L
+- ADDR_GAIN_H
+- ADDR_GAIN_M
+- ADDR_GAIN_L
+
+Some testing reveals they most likely map like this to the VFT:
+
+| Register | Value | Description |
+|----------|---------|-------------|
+| `x00` | `x40` | |
+| `x08` | `x01` | |
+| `x70` | `x00` | |
+| `x02` | `xff` | exposure high |
+| `x03` | `xff` | exposure med |
+| `x04` | `xff` | exposure low |
+| `x0e` | `xff` | |
+| `x05` | `xb2` | gain high |
+| `x06` | `xb2` | gain med |
+| `x07` | `xb2` | gain low |
+| `x0f` | `x03` | |
+
+The values on the left side are the registers and the values on the right side are the values set by SRanipal. In testing, different values produced worse results so the values used by SRanipal were the best choice. What the other parameters do is unknown.
+
+Additionally, the `x14` request enables and disables the camera stream, this needs to be set before data can be streamed.
+
+Once the stream is enabled, the camera streams data in the YUV422 format using regular USB video device streaming.
+
+:::note
+One small caveat, Windows has no simple access to USB devices as Linux has. Thankfully, instead of using `v4l2` we can use [`pygrabber`](https://github.com/andreaschiavinato/python_grabber) when needs be.
+:::
+
+## Action
+
+Now that we have a camera image from the VFT, we just need to pass it to the Babble App. Of course, we need to merge and postprocess the left and right images:
+
+```python
+...
+def process_frame(self: 'ViveTracker', data: np.ndarray) -> np.ndarray:
+        """Process a captured frame.
+        Right now this applies a median blur but other manipulations
+        are possible to improve the image if desired.
+        Keyword arguments:
+        data --- Frame to process
+        """
+        lum = cv.split(data)[0]
+
+        """
+        gamma = 2.2
+        inv_gamma = 1.0 / gamma
+        lut = np.array([((i / 255.0) ** inv_gamma) * 255
+                        for i in np.arange(0, 256)]).astype("uint8")
+        lum = cv.LUT(lum, lut)
+        """
+
+        lum = lum[:, 0:200]
+
+        lum = cv.resize(lum, (400, 400))
+
+        """
+        lum = cv.medianBlur(lum, 5)
+        """
+
+        return cv.merge((lum, lum, lum))
+...
+```
+
+That's all it takes! Here's an image of the VFT in use with the Babble App:
+
+![Babble App](/blog/reverse-engineering-the-vive-facial-tracker/app.PNG)
+
+If you'd like to mess around with it yourself, feel free to check out the branch for it [here](https://github.com/Project-Babble/ProjectBabble/pull/82). 
+
+# Conclusions, Reflections
+
+I want to give a shoutout to DragonLord again for providing the code the VFT as well as making it available for the Babble App. I would also like to thank my teammates Summer and Rames, as well as Aero for QA'ing this here too.
+
+Until next time,
+
+\- Hiatus

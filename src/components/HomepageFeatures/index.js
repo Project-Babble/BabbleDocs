@@ -4,12 +4,12 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Open Source',
+    title: 'Source Available',
     Svg: require('@site/static/svg/BabbleFinalLogoNoBGOpenSourceSeafoam.svg').default,
 
     description: (
       <>
-        Fully open source and free to use. 
+        Fully source available and free to use.
       </>
     ),
   },
@@ -27,8 +27,8 @@ const FeatureList = [
     Svg: require('@site/static/svg/network-transmit-receive-symbolicSeafoam.svg').default,
     description: (
       <>
-        Open platform and acces
-        sible with any Social VR game via the Open Sound Control protocol. 
+        Open platform and accessible with any Social VR game via the Open Sound
+        Control protocol. 
       </>
     ),
   },

@@ -1,0 +1,143 @@
+---
+title: Running the source code
+sidebar_position: 3
+---
+
+# Running the source code
+
+This page covers how to download and run the source code for the Babble App. It only takes 5 minutes!
+
+## 1) Prerequisites
+
+To get started, you will need to install:
+
+- [`git`](https://git-scm.com/downloads)
+
+### Windows
+
+If you're on on Windows, you'll also need to download:
+- [`pyenv-win`](https://github.com/pyenv-win/pyenv-win)
+
+### Other Operating Systems
+
+For other Operating Systems:
+- [`pyenv`](https://github.com/pyenv/pyenv)
+
+## 1) Downloading the Babble App
+
+Navigate to a folder where you would like to install the Babble App.
+
+Then, open a terminal in your folder. Make sure its current directory matches the folder!
+
+Now, run this command to download the Babble App to the folder:
+
+```
+git clone https://github.com/Project-Babble/ProjectBabble.git
+```
+
+# 2) Downloading Python
+
+Now, we need to install a version of Python the Babble App is compatible with.
+
+<details>
+  <summary>For reference, here is a compatibility table of the Babble App and different versions of Python.</summary>
+
+| < 3.7 | 3.8 | 3.9 | 3.10 | 3.11 | 3.12 | 3.13 |
+|:------:|:---:|:---:|:----:|:----:|:----:|:----:|
+|    ❌   |  ⚠️  |  ⚠️  |   ✅  |   ✅  |   ✅  |   ❌  |
+
+:::danger
+In theory, the Babble App *may* work on versions of Python as low as 3.5. We cannot guarantee its stability these versions, proceed at your own risk if you do!
+:::
+
+:::warning
+With the upcoming addition of Vive Facial Tracker support to the Babble App, the lowest version of Python supported going into the future will be 3.10.  
+:::
+
+:::note
+Python `3.13` support is planned once key dependencies are built against `3.13`, namely `onnxruntime-directml` and `onnxruntime-gpu`.
+:::
+</details>
+
+:::info
+We recommend Python version `3.12.8`. We'll use it for this tutorial!
+:::
+
+In the same terminal, run:
+
+```
+pyenv init
+```
+
+If applicable, follow the instructions the above command outputs.
+
+Once you have done that, in the same terminal as above, run:
+
+```
+pyenv install 3.12.8
+pyenv global 3.12.8
+```
+
+This will set the global version of Python in your machine. If you ever need to change it, you can run the last command above with a different version.
+
+## 3) Setting up 
+
+Now, in the same terminal as above, run:
+
+### Windows
+
+```
+cd BabbleApp
+python -m venv venv
+./venv/bin/activate.ps1
+```
+
+### Other Operating Systems:
+
+```
+cd BabbleApp
+python -m venv venv
+source venv/bin/activate
+```
+
+This creates a [virtual environment](https://www.geeksforgeeks.org/python-virtual-environment/) which is used to store the Babble App's dependencies. Now run:
+
+```
+pip install -r requirements.txt
+```
+
+And wait for `pip` to install everything. This might take some time!
+
+## 4) Running the Babble App
+
+Finally, you are ready to run the Babble App! Run:
+
+```
+python babbleapp.py
+```
+
+## 5) Subsequent Runs
+
+For subsequent runs, you will need to activate the virtual environment prior to running the Babble App. 
+
+You can do this by running the *last line* in [Step 3](building#3-setting-up) in tandem with the command from [Step 4](building#4-running-the-babble-app), making sure your terminal window is in the same location as it was before.
+
+:::info
+Make sure you are in your `BabbleApp` folder prior to running these, or they will not work!
+:::
+
+### Windows
+
+```
+./venv/bin/activate.ps1
+python babbleapp.py
+```
+
+### Other Operating Systems:
+
+```
+source venv/bin/activate
+python babbleapp.py
+```
+
+That's it!

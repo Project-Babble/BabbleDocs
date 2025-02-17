@@ -5,52 +5,61 @@ authors: dfgHiatus
 hide_table_of_contents: false
 ---
 
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
+
 # How VRCFaceTracking was ported to Linux (and macOS)
 
 I've been using [VRCFaceTracking](https://github.com/benaclejames/VRCFaceTracking) for quite some time now. At the time of writing this, the better part of 2/3 years.
 
-I've seen its beginnings as a mod, then a console app, then a Windows Form and finally (and currently) a fully fledged WinUI3 application. 
+I've seen its beginnings as a [mod](https://github.com/benaclejames/VRCFaceTracking/releases/tag/v2.6.0), then a [console app](https://github.com/benaclejames/VRCFaceTracking/releases/tag/v3.0.0), then a [Windows Form](https://github.com/benaclejames/VRCFaceTracking/releases/tag/v4.0.0) and finally (and currently) a fully-fledged [WinUI3 application](https://github.com/benaclejames/VRCFaceTracking/releases/tag/5.2.3.0). 
 
-During this time, I have also seen the growth of VR on Linux. I understand [the majority of people who use VR  are on Windows](https://store.steampowered.com/hwsurvey) and by extension users of social VR apps, myself included. I'm writing this on my 11-year old workstation I built back in 2014, and it's seen every version of Windows 10 since.
+During this time, I have also seen the growth of VR on Linux. I understand [the majority of people who use VR  are on Windows](https://store.steampowered.com/hwsurvey), and by extension users of social VR apps, myself included. I'm writing this on my 11-year old workstation I built back in 2014, and it's seen every version of Windows 10 since.
 
-I believe Linux has a place in the VR scene. More importantly, I wanted to enable my friends to smile and laugh like I'm able to. So, I set out to port VRCFaceTracking to Linux.
+I believe Linux has a place in the VR scene. More importantly, I wanted to enable my friends to smile and laugh like I'm able to in VRChat. So, I set out to port VRCFaceTracking to Linux.
 
 {/* truncate */}
 
 ## Background
 
+To the uninitiated, VRCFaceTracking describes itself as:
+
+> (An) OSC App to allow VRChat avatars to interact with eye and facial tracking hardware.
+
 Before getting my hands dirty, I looked around to see if anyone had done any relevant work prior to me. I was able to find a project called [oscavmgr](https://github.com/galister/oscavmgr), but I guess I didn't vibe with it.
 
-Ultimately, I determined there wasn't anyting out there with the features I was looking for. I wanted:
-
-1) A version of the current desktop app to run on Linux, staying true to the original as possible.
-1) With some QOL improvements:
-    - The ability to search for modules.
-    - Add custom themes.
-    - And so on.
+Ultimately, I determined there wasn't anything out there with the features I was looking for. I wanted a version of the current desktop app to run on Linux, staying true to the original as possible. With some quality-of-life improvements such as the ability to search for modules, custom themes, and so on.
 
 ## The current desktop app
 
-To understand how to port VRCFaceTracking, I needed to understand how the current app is structured. VRCFaceTracking is divided into 3 sub-projects:
+VRCFaceTracking is divided into 3 sub-projects:
 
 1) VRCFaceTracking
     - The "frontend" of the app. What you can see and touch, talks to the backend (below).
 1) VRCFaceTracking.Core
-    - The "backend" of the app. Handles all the core logic.
+    - The "backend" of the app. Handles all the business logic.
 1) VRCFaceTracking.SDK
-    - What modules implement to be recognized and loaded by VRCFaceTracking.SDK.
+    - What modules implement to be recognized and loaded by VRCFaceTracking at runtime.
 
 In other words, I only needed to recreate the first "VRCFaceTracking" project.
 
 At this point as well, I needed to choose the .NET UI framework I'd be building the app with. I opted to use [Avalonia](https://avaloniaui.net/), as I have used it before with [Babble.NET](https://github.com/Project-Babble/Babble.Net), and it's one of the best frameworks for making cross platform .NET applications (in my biased opinion).
 
-Shoutout to [MamaMiaDev](https://www.mammamia.dev/) for their [amazing tutorial video series on YouTube](https://www.youtube.com/watch?v=1mzM6N4drCU). They helped me understand Avalonia when things got confusing, and their code serves as the solid foundation for this project.
+Shoutout to [MamaMiaDev](https://www.mammamia.dev/) for their [amazing tutorial video series on YouTube](https://www.youtube.com/watch?v=1mzM6N4drCU). They helped me understand Avalonia when things got confusing, and their code serves as the solid foundation for this project :)
 
 ## Crafting the pages
 
 Avalonia uses [AXAML](https://docs.avaloniaui.net/docs/basics/user-interface/introduction-to-xaml), an xml-formatted markdown language to define UI elements. You can think of it as the HTML of a website. I started by defining the home, the output, then the module, the settings and then finally the mutator page in that order.
 
-There isn't too much to write about here, this was mainly boilerplate code. This was, however, the easy part of the project.
+<ImageGallery images={[
+  "/blog/vrcft-avalonia/app-1.png",
+  "/blog/vrcft-avalonia/app-2.png",
+  "/blog/vrcft-avalonia/app-3.png",
+  "/blog/vrcft-avalonia/app-4.png",
+]} />
+
+If you've WinUI3 before, you'll feel right at home with this. There isn't too much to write about here, this was mainly boilerplate code. 
+
+This was, however, the easy part of the project.
 
 ## Issues with VRCFaceTracking.Core
 
@@ -108,7 +117,7 @@ Firstly, we need UTF-8 string formatting for marshalled strings on macOS and Lin
 Secondly, the `fti_osc` class received a number of OS preprocessor directives to determine which library it should load.
 
 ```csharp
-    public static class fti_osc
+public static class fti_osc
     {
 #if WINDOWS_DEBUG || WINDOWS_RELEASE
     private const string DllName = "fti_osc.dll";
@@ -177,51 +186,65 @@ public static readonly string VRCData = Path.Combine($"{Environment.GetEnvironme
 After:
 
 ```csharp
-private static string VRCData
+static VRChat()
     {
-        get
-        {
 #if WINDOWS_DEBUG || WINDOWS_RELEASE
-            // On Windows, VRChat's OSC folder is under %appdata%/LocalLow/VRChat/VRChat
-            return Path.Combine(
-                $"{Environment.GetEnvironmentVariable("localappdata")}Low",
-                "VRChat", "VRChat"
-            );
+        VRCOSCDirectory = Path.Combine(
+                $"{Environment.GetEnvironmentVariable("localappdata")}Low", "VRChat", "VRChat", "OSC"
+        );
 #else
-            /* On Linux, things are a little different. The above points to a non-existent folder
-             * Thankfully, we can make some assumptions based on the fact VRChat on Linux runs through Proton
-             * For reference, here is what a target path looks like:
-             * /home/USER_NAME/.steam/steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/OSC/
-             * Where 438100 is VRChat's Steam GameID, and the path after "steam" is pretty much fixed */
+        /* On macOS/Linux, things are a little different. The above points to a non-existent folder
+         * Thankfully, we can make some assumptions based on the fact VRChat on Linux runs through Proton
+         * For reference, here is what a target path looks like:
+         * /home/USER_NAME/.steam/steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/OSC/
+         * Where 438100 is VRChat's Steam GameID, and the path after "steam" is pretty much fixed */
 
-            // 1) First, get the user profile folder
-            // (/home/USER_NAME/)
-            string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        // 1) Get where steam is installed
+        using var process = new Process();
+        process.StartInfo.FileName = "which";
+        process.StartInfo.Arguments = "steam";
+        process.StartInfo.RedirectStandardOutput = true;
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.CreateNoWindow = true;
+        process.Start();
 
-            // 2) Then, search for common Steam install paths
-            // (/home/USER_NAME/.steam/steam/)
-            string[] possiblePaths =
+        var steamPath = process.StandardOutput.ReadLine();
+        process.WaitForExit();
+
+        // 2) Inside the steam install directory, find the file steamPath/steamapps/libraryfolders.vdf
+        // This is a special file that tells us where on a users computer their steam libraries are
+        var steamLibrariesPaths = Path.Combine(steamPath!, "steamapps", "libraryfolders.vdf");
+        dynamic volvo = VdfConvert.Deserialize(File.ReadAllText(steamLibrariesPaths));
+
+        string vrchatPath = null!;
+        foreach (dynamic library in volvo.Value)
+        {
+            if (library.Value["path"] != null && library.Value["apps"] != null)
             {
-                Path.Combine(home, ".steam", "steam"),
-                Path.Combine(home, ".local", "share", "Steam"),
-                Path.Combine(home, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam")
-            };
-            string steamPath = Array.Find(possiblePaths, Directory.Exists) ?? string.Empty;
+                string libraryPath = library.Value["path"].ToString();
+                dynamic apps = library.Value["apps"];
 
-            // 3) Finally, append the fixed path to find the OSC folder.
-            return string.IsNullOrEmpty(steamPath) ?
-                throw new DirectoryNotFoundException("Could not detect Steam install!") :
-                Path.Combine(steamPath, "steamapps", "compatdata", "438100", "pfx", "drive_c", "users", "steamuser", "AppData", "LocalLow", "VRChat", "VRChat");
-#endif
+                // From this, determine which of all the libraries has the VRChat install via its AppID (438100)
+                if (apps != null && apps.ContainsKey(438100))
+                {
+                    vrchatPath = libraryPath;
+                    break;
+                }
+            }
         }
-    }
-```
 
-It's verbose, but it gets the job done.
+        // 3) Finally, construct the path to the user's VRChat install
+        VRCOSCDirectory = Path.Combine(vrchatPath, "steamapps", "compatdata", "438100", "pfx", "drive_c",
+            "users", "steamuser", "AppData", "LocalLow", "VRChat", "VRChat", "OSC");
+#endif
+    }
+
+    public static string VRCOSCDirectory { get; }
+```
 
 #### Validator:
 
-Uses of `Validator.TryValidateObject` in `OscRecvService.cs` and `OscSendService.cs` crash on macOS/Linux.
+Uses of `Validator.TryValidateObject` in `OscRecvService.cs` and `OscSendService.cs` crash on macOS/Linux. 
 
 ### PR?
 
@@ -229,37 +252,31 @@ I intend to submit my changes as a PR to the main repo.
 
 ## Putting it all together
 
-A little bit of tinkering later, I had a functioning version of the app on Windows. I used my app for a night to see how it would perform, and it was able to keep up just fine. You wouldn't be able to tell the difference in VRChat.
+A little bit of tinkering later, I had a functioning version of the app on my Windows PC. I used my app for a night to see how it would perform in VRChat, and it was able to keep up just fine.
 
 ## Bread
 
-On the second night of me testing this, a friend of mine, Bread, joined on me in VRChat in Desktop mode. He was eager to show me something he was working on. 
-
-It turns out he had riced a fresh install of Arch Linux to look just like Windows 7. Very nice:
+On the second night of testing a friend of mine, Bread, joined on me in VRChat's screen mode. He was eager to show me something he was working on:
 
 ![bread-screenshot-1](/blog/vrcft-avalonia/bread-screenshot-1.png)
 
 ![bread-screenshot-2](/blog/vrcft-avalonia/bread-screenshot-2.png)
 
-Anyways, I tell him about the app I'm working on and offer to send him a copy. At this point I had built and run a copy of the app on my craptop (neofetch below, I use mint btw). 
+A fresh install of Arch riced to look just like Windows 7? Very nice.
 
-![neofetch](/blog/vrcft-avalonia/arch-is-overrated-imo.png)
+Anyways, I tell him about the app I'm working on and offer to send him a copy. At this point I had built and run a copy of the app on my craptop (I use mint btw). 
 
 He said sure, and I sent him a copy of the app. It booted up just fine, so he said he would get into VR to try out some of the modules.
 
 One install of [ALVR](https://github.com/alvr-org/alvr) later, the app crashed. But it wasn't with ALVR or its module: I took a look at his log file and determined the app looking for VRChat's OSC in the wrong place! 
 
-So I quickly hardcoded Bread's path into the app:
+So I quickly hardcoded Bread's path into the app, threw it on Proton Drive, and eagerly waited for him to download it:
 
 ```
 /home/toast/.steam/steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/OSC/
 ```
 
-Threw it on Proton Drive, and eagerly waited for him to download it.
-
-And it worked! Ok, his eyes were a little wonky but I suspect this might due to a faulty software update Meta pushed.
-
-We opted to use [ALXR](https://github.com/korejan/ALXR-nightly/), and the issue vanished. Here's Bread!
+And it worked! Here's Bread with eye and face tracking, in VRChat, on Arch!
 
 ![bread-screenshot-3](/blog/vrcft-avalonia/bread-screenshot-3.png)
 
@@ -391,30 +408,21 @@ if __name__ == "__main__":
 
 Up next, I want to create installers for Windows, macOS and Linux. I've started work on using [`pup-net`](https://github.com/kuiperzone/PupNet-Deploy), a tool that builds and creates installers with one script.
 
-I could also take the Babble App approach that [curls down a bash script](https://gist.github.com/dfgHiatus/e1bce63cd6be1e8645c3b3adfd5b71a6), and runs that and adds `vrcft` as a path-invokable terminal command.
-
-If you know of any tools, please let me know!
+I could also take the Babble App approach that [curls down a bash script](https://gist.github.com/dfgHiatus/e1bce63cd6be1e8645c3b3adfd5b71a6), runs that and adds `vrcft` as a path-invokable terminal command. If you know of any other tools, please let me know!
 
 ### Localization
 
-Another thing I want to add localization for our app. For reference, the Babble App has been translated into over 12 languages thanks to the help of our amazing community and Crowdin. 
+Another thing I want to add is localization for the app. For reference, [the Babble App has been translated into over 12 languages](https://crowdin.com/project/project-babble-locale/translations) thanks to the help of our amazing community and Crowdin. 
 
-VRCFaceTracking has been translated into 5, and it doesn't come bundled with a language selector. To this end, I've created [an unnoficial Crowdin page]() for this, and translations here are directly applicable to both our app as well as the base app.
+VRCFaceTracking has been translated into 5, and it doesn't come bundled with a language selector. To this end, I've created [an unofficial Crowdin page](https://crowdin.com/project/vrcfacetracking-unofficial) for this, and translations here are directly applicable to both our app as well as the original app.
 
 ### Mobile Builds?!
 
-The starter project contained some sample code to make the app run on Android. I disregarded it during development, but kept it there. With some more tweaking it would be *possible* to port things to Android and iOS.
+The starter project contained some sample code to make the app run on Android. With some more tweaking it would be *possible* to port things to Android and iOS. No promises!
 
 ### The Github
 
-If you want to check out the code for this project we have it here! We also have downloads there as well, feel free to snag a copy. 
-
-<ImageGallery images={[
-  "/blog/vrcft-avalonia/app-1.png",
-  "/blog/vrcft-avalonia/app-2.png",
-  "/blog/vrcft-avalonia/app-3.png",
-  "/blog/vrcft-avalonia/app-4.png",
-]} />
+If you want to check out the code for this project we have it here! We also have downloads there as well, feel free to snag a copy: https://github.com/dfgHiatus/VRCFaceTracking.Avalonia/
 
 That does it for me here. I'll keep y'all posted:
 

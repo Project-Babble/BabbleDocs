@@ -1,37 +1,42 @@
-## Cameras
+---
+title: Cameras
+---
 
-Although any camera can be used with Project Babble, the tracking quality can vary greatly depending on a variety of factors such as lighting, camera angle, camera framing, and field of view. If you decide to build something with your own components, please keep the following example of a “good image” in mind. 
+Although Project Babble is compatible with any camera, the quality of tracking can vary significantly based on several factors, including lighting, camera angle, framing, and field of view. If you plan to build your own setup using custom components, keep the following example of a “good image” in mind:
 
-Below is an example of a good image:
+### Characteristics of a Good Image:
 
-- Plenty of even lighting on the face that doesn’t change from the environment (Visible or Infrared)
-- Balanced field of view with an acceptable amount of distortion (120/130 deg)
-- Camera is horizontal with the mouth
-- Little to no artifacts (noise, strobing, etc.)
+- **Even Lighting:** Ensure the face is well-lit with consistent, even lighting that doesn’t fluctuate due to environmental factors. This can be achieved using visible or infrared (IR) light.
+- **Balanced Field of View:** Aim for a field of view between 120° and 130°, with minimal distortion.
+- **Proper Camera Alignment:** The camera should be positioned horizontally in line with the mouth.
+- **Minimal Artifacts:** The image should have little to no noise, strobing, or other artifacts that could interfere with tracking.
 
-We recommend esp32 based openiris trackers with 120-160 degree lenses. 
+We recommend using ESP32-based OpenIRIS trackers with lenses offering a 120° to 160° field of view. 
 
-The cameras that come with the boards can work, they however have an IR filter inside which will need to be removed if you use infrared lighting. The filter can be removed, but doing so may break your cameras. Here's how to do it: [IR filter removal tutorial](https://www.youtube.com/watch?v=QYH-FWvDbDc)
+### Camera Recommendations:
 
-**DANGER:** If you decide to remove the filter, wear eye protection while doing so, the removal of the filter will shatter it.
-
-### Recommended Cameras:
-
-1. 1x OV2640 160° FOV IR / Night vers (850nm) (In firmware cropping recommended)
-   - [AliExpress](https://www.aliexpress.com/)
+1. **OV2640 160° FOV IR / Night Version (850nm)**
+   - Ideal for use with infrared lighting; firmware cropping is recommended.
+   - [Buy on AliExpress](https://www.aliexpress.com/i/3256802893361919.html)
    
    **Alternatively:**
    
-2. 1x OV2640 120° FOV (Requires manual IR filter removal)
-   - [AliExpress](https://www.aliexpress.com/)
+2. **OV2640 120° FOV (Requires Manual IR Filter Removal)**
+   - A solid choice, but you'll need to remove the IR filter if using infrared lighting.
+   - [Buy on AliExpress](https://www.aliexpress.us/item/3256804729833235.html)
    
    **Alternatively:**
    
-3. 1x OV2640 130° FOV (Requires manual IR filter removal)
-   - [AliExpress](https://www.aliexpress.com/)
+3. **OV2640 130° FOV (Requires Manual IR Filter Removal)**
+   - Finding this option may require some searching, as listings are common but not always available.
 
-   **Amazon alternative (note that you will have to manually remove the IR filter)**
+   **Amazon Alternative:**
+   - Note that you will need to manually remove the IR filter for this option.
 
-### Things worth noting:
+### IR Filter Removal Warning:
 
-- Some mounts may use a camera with a longer connector than the standard short one. Keep that in mind when selecting a camera to order (Physics Dude's Index mount for example).
+If you choose to remove the IR filter from your camera, **please wear eye protection** as the filter may shatter during the process. You can follow this tutorial for guidance: [IR Filter Removal Tutorial](https://www.youtube.com/watch?v=QYH-FWvDbDc)
+
+### Additional Considerations:
+
+- Some mounts, like Physics Dude's Index mount, may require a camera with a longer connector than the standard short one. Be sure to check the connector length when selecting a camera to order.

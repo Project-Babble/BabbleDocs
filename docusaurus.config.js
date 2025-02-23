@@ -9,7 +9,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Babble Docs',
-  tagline: 'Open-source and DIY friendly VR mouth tracking ecosystem.',
+  tagline: 'Source-available and DIY friendly VR mouth tracking ecosystem.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

@@ -1,0 +1,445 @@
+---
+title: How VRCFaceTracking was ported to Linux (and macOS)
+description: An article detailing how VRCFaceTracking was rewritten in Avalonia for Linux and macOS
+authors: dfgHiatus
+hide_table_of_contents: false
+---
+
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
+
+# How VRCFaceTracking was ported to Linux (and macOS)
+
+I've been using [VRCFaceTracking](https://github.com/benaclejames/VRCFaceTracking) for quite some time now. At the time of writing this, the better part of 2/3 years.
+
+I've seen its beginnings as a [mod](https://github.com/benaclejames/VRCFaceTracking/releases/tag/v2.6.0), then a [console app](https://github.com/benaclejames/VRCFaceTracking/releases/tag/v3.0.0), then a [Windows Form](https://github.com/benaclejames/VRCFaceTracking/releases/tag/v4.0.0) and finally (and currently) a fully-fledged [WinUI3 application](https://github.com/benaclejames/VRCFaceTracking/releases/tag/5.2.3.0). 
+
+During this time, I have also seen the growth of VR on Linux. I understand [the majority of people who use VR  are on Windows](https://store.steampowered.com/hwsurvey), and by extension users of social VR apps, myself included. I'm writing this on my 11-year old workstation I built back in 2014, and it's seen every version of Windows 10 since.
+
+I believe Linux has a place in the VR scene. More importantly, I wanted to enable my friends to smile and laugh like I'm able to in VRChat. So, I set out to port VRCFaceTracking to Linux.
+
+{/* truncate */}
+
+## Background
+
+To the uninitiated, VRCFaceTracking describes itself as:
+
+> (An) OSC App to allow VRChat avatars to interact with eye and facial tracking hardware.
+
+Before getting my hands dirty, I looked around to see if anyone had done any relevant work prior to me. 
+
+While I was able to find a project called [oscavmgr](https://github.com/galister/oscavmgr), I determined there wasn't anything out there with the features I was looking for. I wanted a version of the current desktop app to run on Linux, staying true to the original app as possible. With some quality-of-life improvements such as the ability to search for modules, custom themes, and so on.
+
+## The Current Desktop App
+
+VRCFaceTracking is divided into 3 sub-projects:
+
+1) VRCFaceTracking
+    - The "frontend" of the app. What you can see and touch, talks to the backend (below).
+1) VRCFaceTracking.Core
+    - The "backend" of the app. Handles all the business logic.
+1) VRCFaceTracking.SDK
+    - What modules implement to be recognized and loaded by VRCFaceTracking at runtime.
+
+In other words, I only needed to recreate the first "VRCFaceTracking" project.
+
+At this point as well, I needed to choose the .NET UI framework I'd be building the app with. I opted to use [Avalonia](https://avaloniaui.net/), as I have used it before with [Babble.NET](https://github.com/Project-Babble/Babble.Net), and it's one of the best frameworks for making cross platform .NET applications (in my biased opinion).
+
+Shoutout to [MamaMiaDev](https://www.mammamia.dev/) for their [amazing tutorial video series on YouTube](https://www.youtube.com/watch?v=1mzM6N4drCU). They helped me understand Avalonia when things got confusing, and their code serves as the solid foundation for this project :)
+
+## Crafting The Pages
+
+Avalonia uses [AXAML](https://docs.avaloniaui.net/docs/basics/user-interface/introduction-to-xaml), an xml-formatted markdown language to define UI elements. You can think of it as the HTML of a website. I started by defining the home, the output, then the module, the settings and then finally the mutator page in that order.
+
+<ImageGallery images={[
+  "/blog/vrcft-avalonia/app-1.png",
+  "/blog/vrcft-avalonia/app-2.png",
+  "/blog/vrcft-avalonia/app-3.png",
+  "/blog/vrcft-avalonia/app-4.png",
+]} />
+
+If you've WinUI3 before, you'll feel right at home with this. There isn't too much to write about here, this was mainly boilerplate code. 
+
+This was, however, the easy part of the project.
+
+## Issues With VRCFaceTracking.Core
+
+With the frontend out of the way, I started to connect the bits and pieces of my new frontend to the backend, VRCFaceTracking.Core. I quickly ran into a number of issues:
+
+### Pathing
+
+This was by far the most common issue.
+
+#### AvatarConfigFileParser.cs (L24):
+
+Before:
+```csharp
+foreach (var avatarFile in Directory.GetFiles(userFolder + "\\Avatars"))
+```
+
+After:
+```csharp
+foreach (var avatarFile in Directory.GetFiles(Path.Combine(userFolder, "Avatars")))
+```
+
+#### Redirectors.cs (L34), Utils.cs (L34)
+
+Before:
+```csharp
+public static readonly string CustomLibsDirectory = PersistentDataDirectory + "\\CustomLibs";
+```
+
+After:
+```csharp
+public static readonly string CustomLibsDirectory = Path.Combine(PersistentDataDirectory, "CustomLibs");
+```
+
+### Windows-Exclusive Functions
+
+In `MainStandalone.cs L40`, `Utils.TimeEndPeriod()` is Windows exclusive.
+
+In `ModuleInstaller.cs L68`, `RemoveZoneIdentifier()` applies only to files on Windows.
+
+### fti_osc
+
+VRCFaceTracking.Core uses an in-house rust library `fti_osc` to process OSC messages. I was able to compile this for macOS and Linux without issue, but proper marshalling needed to be included in the interop file.
+
+Firstly, we need UTF-8 string formatting for marshalled strings on macOS and Linux. We can use `LPUTF8Str`, in place of the `LPStr` here, and this also works for Windows:
+
+```csharp
+[MarshalAs(UnmanagedType.LPUTF8Str)]
+public string some_string_name;
+```
+
+Secondly, `fti_osc` needs a base dll name for cross-platform support:
+
+```csharp
+public static class fti_osc
+{
+    private const string DllName = "fti_osc";
+
+    /// <summary>
+    /// Parses a byte buffer of specified length into a single pointer to an osc message
+    /// </summary>
+    /// <param name="buffer">The target byte buffer to parse osc from</param>
+    /// <param name="bufferLength">The length of <paramref name="buffer"/></param>
+    /// <param name="byteIndex">The index of the first byte of the message. This is modified after a message is parsed
+    /// This way we can sequentially read messages by passing in the value this int was last modified to be</param>
+    /// <returns>Pointer to an OscMessageMeta struct</returns>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr parse_osc(byte[] buffer, int bufferLength, ref int byteIndex);
+
+    /// <summary>
+    /// Serializes a pointer to an OscMessageMeta struct into a 4096 length byte buffer
+    /// </summary>
+    /// <param name="buf">Target write buffer</param>
+    /// <param name="osc_template">Target OscMessageMeta to serialize</param>
+    /// <returns>Amount of bytes written to <paramref name="buf"/></returns>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int create_osc_message([MarshalAs(UnmanagedType.LPArray, SizeConst = 4096)] byte[] buf, ref OscMessageMeta osc_template);
+
+    /// <summary>
+    /// Serializes a pointer to an array of OscMessageMeta structs to a byte array of size 4096
+    /// </summary>
+    /// <param name="buf">Target byte array</param>
+    /// <param name="messages">Array of messages to be contained within the bundle</param>
+    /// <param name="len">Length of <paramref name="messages"/></param>
+    /// <param name="messageIndex">Index of the last message written to <paramref name="buf"/> before it was filled</param>
+    /// <returns></returns>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int create_osc_bundle(
+        [MarshalAs(UnmanagedType.LPArray, SizeConst = 4096)] byte[] buf,
+        [MarshalAs(UnmanagedType.LPArray)] OscMessageMeta[] messages,
+        int len,
+        ref int messageIndex);
+
+    /// <summary>
+    /// Free memory allocated to OscMessageMeta by fti_osc lib
+    /// </summary>
+    /// <param name="oscMessage">Target message pointer</param>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void free_osc_message(IntPtr oscMessage);
+}
+```
+
+### Misc.
+
+#### VRChat.VRCData
+
+Logic was added to get the user's VRChat OSC folder on macOS/Linux machines:
+
+Before:
+
+```csharp
+public static readonly string VRCData = Path.Combine($"{Environment.GetEnvironmentVariable("localappdata")}Low", "VRChat\\VRChat");
+```
+
+After:
+
+```csharp
+static VRChat()
+{
+    // (Windows code remains the same)
+
+    // On macOS/Linux, things are a little different. The above points to a non-existent folder
+    // Thankfully, we can make some assumptions based on the fact VRChat on Linux runs through Proton
+
+    // 1) First, get the user profile folder
+    // (/home/USER_NAME/)
+    var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+    // 2) Then, search for common Steam install paths
+    // (/home/USER_NAME/.steam/steam/)
+    string[] possibleSteamPaths =
+    [
+        Path.Combine(home, ".steam", "steam"),
+        Path.Combine(home, ".local", "share", "Steam"),
+        Path.Combine(home, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam")
+    ];
+    var steamPath = Array.Find(possibleSteamPaths, Directory.Exists);
+    var vrChatPath = string.Empty;
+
+    // 3) Inside the steam install directory, find the file steamPath/steamapps/libraryfolders.vdf
+    // This is a special file that tells us where on a users computer their steam libraries are
+    if (!string.IsNullOrEmpty(steamPath))
+    {
+        var steamLibrariesPaths = Path.Combine(steamPath!, "steamapps", "libraryfolders.vdf");
+        dynamic volvo = VdfConvert.Deserialize(File.ReadAllText(steamLibrariesPaths));
+
+        foreach (var library in volvo.Value)
+        {
+            if (library.Value["path"] == null || library.Value["apps"] == null)
+            {
+                continue;
+            }
+
+            string libraryPath = library.Value["path"].ToString();
+            VObject apps = library.Value["apps"];
+
+            // From this, determine which of all the libraries has the VRChat install via its AppID (438100)
+            if (apps == null || !apps.ContainsKey("438100"))
+            {
+                continue;
+            }
+
+            vrChatPath = libraryPath;
+            break;
+        }
+    }
+
+    /* 4) Edge case! Here, if:
+    A) VRChat was NOT detected OR
+    B) VRChat was detected, BUT it's NOT running
+    An avatar emulator might be trying to use us!
+    For reference, here is what an emulator path looks like on MacOS. Gotta have variety:
+    /Users/[user]/.local/share/VRChat/vrchat/OSC/
+    We need to try this first before defaulting to the game path */
+    string[] possibleEmulatorPaths =
+    [
+        Path.Combine(home, ".local", "share", "VRChat")
+    ];
+    var emulatorPath = Array.Find(possibleEmulatorPaths, Directory.Exists);
+    var isVRChatInactive = string.IsNullOrEmpty(vrChatPath) || !IsVrChatRunning();
+
+    if (!string.IsNullOrEmpty(emulatorPath) && isVRChatInactive)
+    {
+        // Construct the path to the avatar emulator's data folder
+        VRCOSCDirectory = Path.Combine(emulatorPath, "vrchat", "OSC");
+    }
+
+    /* 5) Finally, construct the path to the user's VRChat install
+    For reference, here is what a target path looks like:
+    /home/USER_NAME/.steam/steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/OSC/
+    Where 438100 is VRChat's Steam GameID, and the path after "steam" is pretty much fixed */
+    else if (!string.IsNullOrEmpty(vrChatPath))
+    {
+        VRCOSCDirectory = Path.Combine(vrChatPath, "steamapps", "compatdata", "438100", "pfx", "drive_c",
+            "users", "steamuser", "AppData", "LocalLow", "VRChat", "VRChat", "OSC");
+    }
+}
+
+public static string VRCOSCDirectory { get; }
+```
+
+#### Validator:
+
+Uses of `Validator.TryValidateObject` in `OscRecvService.cs` and `OscSendService.cs` crash on macOS/Linux.
+
+## Putting It All Together
+
+A little bit of tinkering later, I had a functioning version of the app on my Windows PC. I used my app for a night to see how it would perform in VRChat, and it was able to keep up just fine.
+
+### Bread Joins
+
+On the second night of testing a friend of mine, Bread, joined on me in VRChat's screen mode. He was eager to show me something he was working on:
+
+![bread-screenshot-1](/blog/vrcft-avalonia/bread-screenshot-1.png)
+
+![bread-screenshot-2](/blog/vrcft-avalonia/bread-screenshot-2.png)
+
+A fresh install of Arch riced to look just like Windows 7? Very nice.
+
+Anyways, I tell him about the app I'm working on and offer to send him a copy. At this point I had built and run a copy of the app on my craptop (I use mint btw). 
+
+He said sure, and I sent him a copy of the app. It booted up just fine, so he said he would get into VR to try out some of the modules.
+
+One install of [ALVR](https://github.com/alvr-org/alvr) later, the app crashed. But it wasn't with ALVR or its module: I took a look at his log file and determined the app looking for VRChat's OSC in the wrong place! 
+
+So I quickly hardcoded Bread's path into the app, threw it on Proton Drive, and eagerly waited for him to download it:
+
+```
+/home/toast/.steam/steam/steamapps/compatdata/438100/pfx/drive_c/users/steamuser/AppData/LocalLow/VRChat/VRChat/OSC/
+```
+
+And it worked! Here's Bread with eye and face tracking, in VRChat, on Arch!
+
+![bread-screenshot-3](/blog/vrcft-avalonia/bread-screenshot-3.png)
+
+## Packaging
+So, with a working app we need a way to get it in the hands of people. I wrote a python script that builds and packages the desktop app to .zip files. Currently we have `x64` and `arm64` builds for Windows, macOS and Linux. Other builds are possible too, if and when needs be I can update the script. Here is the code: 
+
+```python
+import os
+import shutil
+import subprocess
+import glob
+
+def run_dotnet_publish(runtime, config, self_contained, framework):
+    """Run the dotnet publish command with the specified parameters."""
+    cmd = [
+        'dotnet', 'publish',
+        '-r', runtime,
+        '-c', config,
+        '--self-contained' if self_contained else '',
+        '-f', framework
+    ]
+    cmd = [part for part in cmd if part]  # Remove empty strings
+    print(f"Running: {' '.join(cmd)}")
+    subprocess.run(cmd, check=True)
+
+def create_zip(source_dir, zip_name):
+    """Create a zip file from the specified directory."""
+    # Create zip file
+    if os.path.exists(zip_name):
+        os.remove(zip_name)
+
+    # Check if directory has content
+    if not os.listdir(source_dir):
+        print(f"Warning: Directory {source_dir} is empty, skipping zip creation")
+        return False
+
+    shutil.make_archive(
+        base_name=zip_name[:-4],  # Remove .zip extension
+        format='zip',
+        root_dir=source_dir,
+        base_dir='./'
+    )
+    print(f"Created: {zip_name}")
+    return True
+
+def find_output_directory(bin_dir, framework, runtime):
+    """Find the directory containing the published output for a specific framework and runtime."""
+    # For Windows-specific frameworks
+    if framework.startswith('net') and 'windows' in framework.lower():
+        # Convert framework format to directory format (replace - with .)
+        dir_framework = framework.replace('-', '.')
+
+        # Check for direct match first
+        publish_dir = os.path.join(bin_dir, dir_framework, runtime, 'publish')
+        if os.path.exists(publish_dir) and os.listdir(publish_dir):
+            return publish_dir
+
+        # Try alternative paths for windows frameworks
+        # First try with dots instead of dashes
+        alt_path = os.path.join(bin_dir, framework.replace('-', '.'), runtime, 'publish')
+        if os.path.exists(alt_path) and os.listdir(alt_path):
+            return alt_path
+
+        # Then try with just the base framework (net8.0)
+        base_framework = framework.split('-')[0]
+        alt_path = os.path.join(bin_dir, base_framework, runtime, 'publish')
+        if os.path.exists(alt_path) and os.listdir(alt_path):
+            return alt_path
+    else:
+        # For non-Windows frameworks
+        publish_dir = os.path.join(bin_dir, framework, runtime, 'publish')
+        if os.path.exists(publish_dir) and os.listdir(publish_dir):
+            return publish_dir
+
+    # If we couldn't find it with the specific approaches, do a more general search
+    for root, dirs, files in os.walk(bin_dir):
+        if root.endswith(os.path.join(runtime, 'publish')) and os.listdir(root):
+            return root
+
+    return None
+
+def main():
+    # Define the publish configurations
+    configs = [
+        # runtime, config_name, self_contained, framework
+        ('win-x64', 'Windows Release', True, 'net8.0-windows10.0.17763.0'),
+        ('win-arm64', 'Windows Release', True, 'net8.0-windows10.0.17763.0'),
+        ('osx-x64', 'MacOS Release', True, 'net8.0'),
+        ('osx-arm64', 'MacOS Release', True, 'net8.0'),
+        ('linux-x64', 'Linux Release', True, 'net8.0'),
+        ('linux-arm64', 'Linux Release', True, 'net8.0')
+    ]
+
+    # Current directory where the script is run
+    current_dir = os.getcwd()
+
+    for runtime, config, self_contained, framework in configs:
+        # Run the publish command
+        run_dotnet_publish(runtime, config, self_contained, framework)
+
+        # Determine the bin directory
+        bin_dir = os.path.join(current_dir, 'bin', config)
+
+        # Find the output directory
+        output_dir = find_output_directory(bin_dir, framework, runtime)
+
+        if output_dir and os.listdir(output_dir):
+            # Create zip filename
+            clean_framework = framework.split('-')[0]  # Get base framework name like 'net8.0'
+            zip_filename = f"{runtime}_{clean_framework}.zip"
+            if create_zip(output_dir, zip_filename):
+                print(f"Successfully created zip for {runtime} with framework {framework}")
+        else:
+            print(f"Could not find non-empty output directory for {runtime} with framework {framework} in {bin_dir}")
+            # Print the directory structure to help debugging
+            print("Available directories in bin folder:")
+            for root, dirs, files in os.walk(bin_dir):
+                print(f"  {root}")
+                for d in dirs:
+                    print(f"    - {d}")
+
+if __name__ == "__main__":
+    main()
+```
+
+## The Future 
+
+### Installers
+
+Up next, I want to create installers for Windows, macOS and Linux. I've started work on using [`pup-net`](https://github.com/kuiperzone/PupNet-Deploy), a tool that builds and creates installers with one script.
+
+I could also take the Babble App approach that [curls down a bash script](https://gist.github.com/dfgHiatus/e1bce63cd6be1e8645c3b3adfd5b71a6), runs that and adds `vrcft` as a path-invokable terminal command. If you know of any other tools, please let me know!
+
+### Localization
+
+Another thing I want to add is localization for the app. For reference, [the Babble App has been translated into over 12 languages](https://crowdin.com/project/project-babble-locale/translations) thanks to the help of our amazing community and Crowdin. 
+
+VRCFaceTracking has been translated into 5, and it doesn't come bundled with a language selector. To this end, I've created [an unofficial Crowdin page](https://crowdin.com/project/vrcfacetracking-unofficial) for this, and translations here are directly applicable to both our app as well as the original app.
+
+### Mobile Builds?!
+
+The starter project contained some sample code to make the app run on Android. With some more tweaking it would be *possible* to port things to Android and iOS. No promises!
+
+### The Github
+
+If you want to check out the code for this project we have it here! We also have downloads there as well, feel free to snag a copy: https://github.com/dfgHiatus/VRCFaceTracking.Avalonia/
+
+That does it for me here. I'll keep y'all posted:
+
+\- Hiatus
+
+The Project Babble Team

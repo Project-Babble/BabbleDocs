@@ -18,12 +18,12 @@ To get started, you will need to install:
 If you're on on Windows, you'll also need to download:
 - [`pyenv-win`](https://github.com/pyenv-win/pyenv-win)
 
-### Other Operating Systems
+### macOS/Linux
 
-For other Operating Systems:
+For macOS/Linux:
 - [`pyenv`](https://github.com/pyenv/pyenv)
 
-## 1) Downloading the Babble App
+## 1) Downloading The Babble App
 
 Navigate to a folder where you would like to install the Babble App.
 
@@ -56,6 +56,9 @@ With the upcoming addition of Vive Facial Tracker support to the Babble App, the
 
 :::note
 Python `3.13` support is planned once key dependencies are built against `3.13`, namely `onnxruntime-directml` and `onnxruntime-gpu`.
+
+While not supported, nightly builds of the above dependencies exist that enable this. Microsoft outlines how to set this up [here](https://github.com/microsoft/onnxruntime/issues/22274#issuecomment-2423585092). 
+
 :::
 </details>
 
@@ -89,10 +92,10 @@ Now, in the same terminal as above, run:
 ```
 cd BabbleApp
 python -m venv venv
-./venv/bin/activate.ps1
+./venv/Scripts/activate.ps1
 ```
 
-### Other Operating Systems:
+### macOS/Linux
 
 ```
 cd BabbleApp
@@ -129,11 +132,11 @@ Make sure you are in your `BabbleApp` folder prior to running these, or they wil
 ### Windows
 
 ```
-./venv/bin/activate.ps1
+./venv/Scripts/activate.ps1
 python babbleapp.py
 ```
 
-### Other Operating Systems:
+### macOS/Linux
 
 ```
 source venv/bin/activate

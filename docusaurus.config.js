@@ -92,17 +92,12 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Resources',
             items: [
               {
                 label: 'Tutorial',
                 to: '/docs/welcome',
               },
-            ],
-          },
-          {
-            title: 'Resources',
-            items: [
               {
                 label: 'Branding',
                 to: '/docs/branding',

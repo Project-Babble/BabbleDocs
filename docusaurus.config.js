@@ -101,6 +101,15 @@ const config = {
             ],
           },
           {
+            title: 'Resources',
+            items: [
+              {
+                label: 'Branding',
+                to: '/docs/branding',
+              },
+            ],
+          },
+          {
             title: 'Community',
             items: [
               {

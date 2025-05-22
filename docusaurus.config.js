@@ -92,11 +92,15 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Resources',
             items: [
               {
                 label: 'Tutorial',
                 to: '/docs/welcome',
+              },
+              {
+                label: 'Branding',
+                to: '/docs/branding',
               },
             ],
           },

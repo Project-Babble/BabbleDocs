@@ -5,12 +5,14 @@ title: Babble Tracker Quickstart
 
 # Babble Tracker Quickstart
 
+# TODO, Replace Images w. Injection Mold, Avalonia Software
+
 This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.
 
 ## Getting Started
 ### Initial Setup
 
-1. **Plug your tracker into your PC**
+**Plug your tracker into your PC**
 - Connect using the USB port on your tracker
 - Make sure the switch is in the "ON" position, as seen below
 - Two bright green lights should appear on the back of the tracker
@@ -18,34 +20,26 @@ This guide applies to the Official Babble Tracker, and should cover DIY versions
 
 ![Switch Position](/img/setup_switch.jpg)
 
-2. **Finding your device's name**
-- **Windows**
-    - Press the Windows key, type "Device Manager" and press enter
-    - Expand "Ports (COM & LPT)"
-    - Look for a "USB Serial Device" entry - this is your tracker's COM port
-
-![Device Manager](/img/setup_comm.png)
-
-- **macOS/Linux**
-    - On **macOS/Linux**, the Babble Tracker with appear as a device with a `/dev/ttyACM` prefix . You can list what devices are present with `ls -ld /dev/ttyACM*`.
 
 #### Download and install the software
 - **Windows**
-    - Get the latest version from here [Babble Tracker Software](https://drive.google.com/file/d/1KmMBYSmAGlqDeTEjgnOOCX8YpWeeBgPb/view?usp=drive_link). Download the Project_Babble-Setup-vX.X.X.exe file and run the installer
+    - Get the latest version from here [Babble Tracker Software](https://github.com/Project-Babble/Baballonia). Download the Baballonia Setup.exe file and run the installer
 - **macOS/Linux**
-    - Use the [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
+    - Avalonia C# isn't currently supported on these platforms with an installer.
+    - For assistance building Babble Avalonia on these platforms, please contact us in our discord server.
+    - Babble Python, our legacy face-tracking only app can be run from source easily, 
+    - To do this, use the [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
 
 #### Connect to your tracker
 - Open the Project Babble software
-- Click on the dropdown next to "Camera Address"
-- Select the namely identified in step 2
-- Click "Save and Restart Tracking" to connect
+- Type the name of your tracker into the "Face Camera Address" field
+- For an official Babble tracker, this will be "openiristracker"
+- Older trackers and DIY solutions running serial firmware will be named COM, followed by a number
+- Click "Start Camera" to connect
 
-:::info
-If your camera isn't present in the dropdown, just type it in.
-:::
 
-![Camera Address Selection](/img/setup_dropdown_comm_select.png)
+
+![Camera Address Selection](/img/avalonianame.png)
 
 ## Setting Up The Camera Feed
 
@@ -57,9 +51,9 @@ Before use, you need to properly set up your camera feed:
 - Positioned at a slight angle that shows the tip of your nose/nostrils
 
 2. **Set the crop area**
-- Click the "Cropping Mode" button
+- Set the Face Camera into "Cropping" mode
    
-![Cropping Mode Button](/img/babbleofficaltracker/1.png)
+![Cropping Mode Button](/img/avaloniacrop.png)
    
 - The feed may appear choppy in this mode - *this is normal*
 - Click and drag across the image to set the crop area
@@ -70,18 +64,20 @@ Before use, you need to properly set up your camera feed:
    
 ![Proper Crop Example](/img/babbleofficaltracker/2.png)
    
-- Don't worry if the image is flipped - mirroring options are available at the bottom of the cam tab
+- Don't worry if the image is flipped - mirroring options are available in the "Face Camera Settings" dropdown
+
+![Face Camera Settings](/img/avaloniaface.png)
 
 3. **Switch to tracking mode**
-- Once you've set your crop, click "Tracking Mode"
+- Once you've set your crop, set your face camera back into "Tracking" mode
    
-![Tracking Mode Button](/img/babbleofficaltracker/3.png)
+![Tracking Mode Button](/img/avalonianame.png)
    
 - You should now see a smooth video feed from your camera
    
-![Working Camera Feed](/img/setup_working_V.png)
+![Working Camera Feed](/img/avaloniapeace.png)
 
-## Calibration Process
+## Calibration Process FIX THIS ONCE AVALONIA IS DONE SMILE 
 
 Proper calibration is essential for accurate facial tracking:
 

@@ -1,0 +1,100 @@
+---
+title: Baballonia
+description: An article detailing development, challenges and tidbits about Baballonia, the new Babble App.
+authors: dfgHiatus
+hide_table_of_contents: false
+---
+
+# Baballonia
+At the time of writing this, Baballonia will have been in development since February of this year.
+
+# Recap
+
+This isn't my first time working with the [Avalonia]() framework. I've used it before in [VRCFaceTracking.Avalonia](/vrcft-avalonia.mdx) as well as [Babble.NET]. This app is a logical extension of the latter, this app takes some inspiration/code from both.
+
+We gave a presentation at Furality??
+
+# Motivations
+
+So why reinvent the wheel when we already have an existing Babble app for face tracking? Well,
+- The original Babble app was originally a fork of the ETVR app. We inherited the technical debt fro this project, and it also prevented us from exploring mobile platform integrations as possible options.
+- Some members of our team had performance concerns
+
+# The Home Page
+
+When designing this app, I wanted it to be as visually similar to other ET/FT apps users are used to.
+
+In retrospect, we could have "merged" the left and right eye sections into one, if I had to change something about the home page this would definitely be it.
+
+Our eye tracking model needs a left and right eye image to work properly. How do you then interface this with a UI that suggests you can enter only 1 eye at a time?
+
+I know in the case of ETVR, if you only supply a left or right eye it will mirror the image in the backend. We originally encountered some race conditions where the left and right cameras had to talk to another but this was largely resolved by v12
+
+(Personally, I would consider versions after v10 to embody a MVP)
+
+# Calibration
+
+In the current Babble app, we offer a user the ability to adjust how sensitive individual face expressions are. For instance, if you smile fully and the model only thinks you're "half" smiling, you can remap this.
+
+We also wanted this in the new app. Instead of numerical entry, we opted for two-range sliders with a live dot representing the current mapped value of your expression. These knobs are very easy to grab in VR with a controller as a cursor
+
+[Image!]
+
+# Firmware
+
+A chief motivation for the development of this app was the consolidation of our firmware flashing. Historically, if a user needed to re-flash the firmware of their board, they would need to download a 3rd party app (IE the ETVRFirmwareFlashing Tool) and use that.
+
+This introduces some challenges. You have to tell a user where to get the tool, install it, how to use it, what firmware to flash, and how to resolve problems as they arise. OpenIris (our camera firmware stack) has support for over a dozen wired and wireless cameras, this was increasingly a pain point as more people got started with Babble.
+
+To this end, I created a firmware flashing page that takes no more than 10 clicks/2 minutes to use with minimal instruction.
+
+---
+
+The new firmware presents some unique challenges from a programming perspective. To briefly describe these, we must first look at how the old firmware was flashed: Plug it in, it identifies itself as a COM or /dev/ttyACM* port, and you can use any ol' tool (ETVRFirmwareFlashing tool, espflash, python-espflash, etc.) to send over a .bin containing the entire program. One restart later, and you're done. Both firmware types are mutually exclusive
+
+With the new firmware, we're actually able to store both the wired and wireless on the board at the same time and switch between them using serial commands. We can detect the device the same as above, but then we need to verify it is a valid device - we listen to a heartbeat coming from the board. If a few seconds pass and we don't get anything, this means 1 of 2 things:
+- This is not something we can write to
+- This *is* a valid board, but it's using our legacy firmware or a version that does not have the heartbeat
+
+To complicate things, some versions of the firmware would only produce this heartbeat for the first 20 seconds after it was powered on. Newer versions do not have this problem, but it's something we've needed to address as well.
+
+# Logging
+
+Eh, it's logging. Not much to go over here. Look at it oooooooh
+
+[Iamge]
+
+# Settings
+
+The current Babble app has been translated into over a dozen languages.
+
+We also brought over the one-euro filter, and GPU acceleration. We currently support DirectML, CUDA, ROCm, CoreML, and the nnAPI for acceleration and can detect which one to use based on the user's platform and hardware.
+
+[Rant]
+The following paragraph details a complicated problem with a dumb solution. As mentioned earlier, our application adheres to the MVVM framework. We load in settings from a settings file, which then populate the pages one can visit.
+
+Consider the case in which we have a default page A, and a page B. If we start an app for the first time, page a will attempt to retrieve settings values, and if they do not exist write to the settings file with appropriate default values.
+
+However, assume now A needs to read settings from B's page, but the user hasn't visited page B yet. Page A will attempt to load non-existent settings, which in turn will load default values every time from B!
+
+The solution is to keep a settings file handy with proper defaults, that way even is a user hasn't visited page B we still know ahead what information we need to act upon.
+
+# Challenges
+
+# The Future
+
+We want to add a searchable combo box as well as enhanced logging. After this, we then want to shift focus to finalizing the firmware page - currently, it is only equipped to deal with our "legacy" firmware, wired serial and wireless. We'll probably release some version of v12 (v1.0.1.2) as a public facing release, maybe v13.
+
+Down the road:
+- Make a new crowdin, we have a lot more strings that need translation!
+- A (proper) Linux release
+- Compile the overlay/trainer for Linux.
+Or redo this with something more cross platform?
+- An Android release, bring eye and face tracking to the mobile audience.
+- Custom app themes
+- Automatic update detection and installation
+- In support of our logging, Sentry crash detection
+
+Thanks for reading. Until next time,
+
+- Hiatus

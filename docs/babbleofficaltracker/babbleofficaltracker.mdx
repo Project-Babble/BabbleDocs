@@ -5,38 +5,34 @@ title: Babble Tracker Quickstart
 
 # Babble Tracker Quickstart
 
-# TODO, Replace Images w. Injection Mold, Avalonia Software
-
 This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.
 
 ## Getting Started
-### Initial Setup
+### Hardware Setup
 
 **Plug your tracker into your PC**
-- Connect using the USB port on your tracker
-- Make sure the switch is in the "ON" position, as seen below
-- Two bright green lights should appear on the back of the tracker
-- You should hear a connection sound when properly connected
+1) Connect using the USB port on your tracker
+1) Make sure the switch is in the "ON" position, as seen below
+1) Two bright green lights should appear on the back of the tracker
+1) You should hear a connection sound when properly connected
 
 ![Switch Position](/img/setup_switch.jpg)
 
 
-#### Download and install the software
-- **Windows**
-    - Get the latest version from here [Babble Tracker Software](https://github.com/Project-Babble/Baballonia). Download the Baballonia Setup.exe file and run the installer
-- **macOS/Linux**
-    - Avalonia C# isn't currently supported on these platforms with an installer.
+### Software Setup
+#### Windows
+    - Get the latest version from our [Github](https://github.com/Project-Babble/Baballonia/releases/latest). Download the installer and run it.
+#### macOS/Linux
+    - Currently, we do not offer installers for these platforms. You will need to build these from source.
     - For assistance building Babble Avalonia on these platforms, please contact us in our discord server.
-    - Babble Python, our legacy face-tracking only app can be run from source easily, 
-    - To do this, use the [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
+    - Our [Legacy App](docs\software\babbleApps\babble-app.mdx) can be run from our [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
 
-#### Connect to your tracker
+### Connect to your tracker
 - Open the Project Babble software
 - Type the name of your tracker into the "Face Camera Address" field
 - For an official Babble tracker, this will be "openiristracker"
 - Older trackers and DIY solutions running serial firmware will be named COM, followed by a number
 - Click "Start Camera" to connect
-
 
 
 ![Camera Address Selection](/img/avalonianame.png)
@@ -76,49 +72,6 @@ Before use, you need to properly set up your camera feed:
 - You should now see a smooth video feed from your camera
    
 ![Working Camera Feed](/img/avaloniapeace.png)
-
-## Calibration Process FIX THIS ONCE AVALONIA IS DONE SMILE 
-
-Proper calibration is essential for accurate facial tracking:
-
-1. **Navigate to the Calibration tab**
-   
-![Calibration Tab](/img/babbleofficaltracker/4.png)
-
-2. **Perform Neutral Calibration**
-- Set the calibration mode to "Neutral"
-
-![Neutral Mode](/img/babbleofficaltracker/5.png)
-
-- Return to the Cam tab
-- Check "Enable Calibration"
-
-![Enable Calibration](/img/babbleofficaltracker/8.png)
-
-- Relax your face into its natural resting position
-- Click "Start Calibration"
-
-![Start Calibration](/img/babbleofficaltracker/9.png)
-
-- You'll hear a sound indicating calibration has started
-- After a few seconds, click "Stop Calibration"
-
-![Stop Calibration](/img/babbleofficaltracker/10.png)
-
-3. **Perform Full Calibration**
-- Return to the Calibration tab
-- Set the calibration mode to "Full"
-
-![Full Mode](/img/babbleofficaltracker/6.png)
-
-- Go back to the Cam tab
-- Click "Start Calibration"
-- After hearing the start sound, make as many facial expressions as possible:
-    - Smile, frown, open mouth wide
-    - Puff cheeks, stick out tongue
-    - Move jaw side to side
-- **Tip:** Keep movements natural - don't exaggerate expressions
-- Calibration ends when you hear a different sound
 
 ## Fine-Tuning and Troubleshooting
 

@@ -18,7 +18,6 @@ This guide applies to the Official Babble Tracker, and should cover DIY versions
 
 ![Switch Position](/img/setup_switch.jpg)
 
-
 ### Software Setup
 #### Windows
     - Get the latest version from our [Github](https://github.com/Project-Babble/Baballonia/releases/latest). Download the installer and run it.
@@ -28,12 +27,10 @@ This guide applies to the Official Babble Tracker, and should cover DIY versions
     - Our [Legacy App](docs\software\babbleApps\babble-app.mdx) can be run from our [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
 
 ### Connect to your tracker
-- Open the Project Babble software
-- Type the name of your tracker into the "Face Camera Address" field
-- For an official Babble tracker, this will be "openiristracker"
-- Older trackers and DIY solutions running serial firmware will be named COM, followed by a number
+- Open Baballonia
+- Type the name of your tracker into the "Camera Address" fields
+- Older trackers and DIY solutions running serial firmware will be start with `COM`/`/dev/ttyACM` followed by a number
 - Click "Start Camera" to connect
-
 
 ![Camera Address Selection](/img/avalonianame.png)
 
@@ -51,7 +48,6 @@ Before use, you need to properly set up your camera feed:
    
 ![Cropping Mode Button](/img/avaloniacrop.png)
    
-- The feed may appear choppy in this mode - *this is normal*
 - Click and drag across the image to set the crop area
 - Make sure the cropped area includes:
     - Tip of your nose/nostrils
@@ -72,48 +68,6 @@ Before use, you need to properly set up your camera feed:
 - You should now see a smooth video feed from your camera
    
 ![Working Camera Feed](/img/avaloniapeace.png)
-
-## Fine-Tuning and Troubleshooting
-
-If some expressions work better on one side than the other, or you need to adjust tracking sensitivity:
-
-### Understanding the Calibration Tab
-
-![Calibration Panel](/img/babbleofficaltracker/12.png)
-
-The calibration panel allows you to manually adjust tracking values:
-
-- **Left/Right**: Indicates which side of the face the shape corresponds to
-
-![Left Right Options](/img/babbleofficaltracker/13.png)
-
-- **Shapes**: The specific facial movement (left and/or right) being tracked (Mouth Open, Cheek Puff, etc.)
-
-![Shape Names](/img/babbleofficaltracker/14.png)
-
-- **Min**: The threshold at which the model starts detecting a shape
-
-![Min Value](/img/babbleofficaltracker/15.png)
-
-- **Max**: The maximum value the model detects for the shape
-
-![Maximum Value](/img/babbleofficaltracker/16.png)
-
-### Adjusting Values
-
-- For proper tracking, minimum values should generally start at around 0.1
-- Example with CheekPuff:
-  - Setting Minimum to 0.4: You need significant cheek puffing before detection
-  - Setting Maximum to 0.1: Slight cheek movement registers as full puffing
-
-### Fixing Common Issues
-
-If your jaw appears to lean in your neutral position:
-- Adjust the minimum value for JawLeft until it's no longer detected when your face is at rest
-
-**Pro Tip:** For precise adjustments, open your VR application's debug menu for the mouth tracking asset. Watch how values change as you make expressions, then return to the calibration tab to fine-tune.
-
-![Maximum Value](/img/babbleofficaltracker/17.png)
 
 ## Next Steps
 

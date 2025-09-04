@@ -1,0 +1,113 @@
+---
+title: Baballonia
+sidebar_position: 2
+---
+
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
+
+# Baballonia
+
+This page explains all of the tabs of Baballonia and what they do.
+
+## Home
+
+![Home](@site\static\img\avalonia\Home.png)
+
+This is the main tab of Babballonia, you will use this page to select, modify, and enable your cameras. 
+
+In the top right is the Eye Calibration button. You will need to perform an eye calibration as a part the eye tracking first time setup.
+
+Currently, there is only Eye Calibration option available.
+
+## Calibration
+
+![Calibration](@site\static\img\avalonia\Calibration.png)
+
+The calibraiton page is used to calibrate the sensitivity of your face expressions.
+- Raising the Minimum value requires a stronger expression before it starts to show.
+- Lowering the Maximum value means a smaller expression will reach 100% faster.
+
+## Firmware
+
+![Firmware](@site\static\img\avalonia\Firmware.png)
+
+The firmware page is used to alter the state of a connected babble tracker.
+
+To use the tool, click `Launch openirissetup.exe`. Your tracker should be auto-detected, if not enter the devices name from the list of detected devices.
+
+### Setting the device mode
+To set if the tracker is in wired/wireless mode:
+- Enter `9` to `Switch Device Mode`
+- Enter `1` for Wifi mode, `2` for Wired mode. Hybrid mode is not implemented.
+- Optionally, Enter 5 to `Configure UVC Name`
+- Enter "exit" and restart!
+
+Below is a diagram:
+
+<ImageGallery images={[
+  "/img/avalonia/firmware/1.png",
+  "/img/avalonia/firmware/2.png",
+  "/img/avalonia/firmware/3.png",
+  "/img/avalonia/firmware/4.png",
+  "/img/avalonia/firmware/5.png",
+  "/img/avalonia/firmware/6.png",
+  "/img/avalonia/firmware/7.png",
+  "/img/avalonia/firmware/8.png",
+  "/img/avalonia/firmware/9.png",
+  "/img/avalonia/firmware/10.png",
+]} />
+
+### Connecting to Wifi
+In order to use wireless mode, you need to send your wifi name and password to the device.
+
+First, **perform the steps above**. Then:
+- Enter 1 to `Scan for Wifi Networks `
+- Enter 2 to `Show available networks`. **If your tracker cannot see your Wifi network, contact the Babble discord for support.**
+- Enter 3 to `Configure Wifi`. Enter your wifi name and password when prompted
+- Optionally, Enter 4 to `Configure MDNS`
+- Enter "exit" and restart!
+
+Below is a diagram:
+
+<ImageGallery images={[
+  "/img/avalonia/firmware/wifi1.png",
+  "/img/avalonia/firmware/wifi2.png",
+  "/img/avalonia/firmware/wifi3.png",
+  "/img/avalonia/firmware/wifi4.png",
+  "/img/avalonia/firmware/wifi5.png",
+  "/img/avalonia/firmware/wifi6.png",
+]} />
+
+## Output
+
+![Output](@site\static\img\avalonia\Output.png)
+
+The output tab is a logger that can be used to discern the state of the device.
+
+## Settings
+
+![Settings](@site\static\img\avalonia\Settings.png)
+
+### App Theme
+Sets the theme of the app. Can select System, Light or Dark
+
+### Language
+Sets the language of the app. WIP!
+
+### OSC
+Tells Baballonia where face tracking information should go.
+
+### One Euro Filter
+Tells Baballonia how much to smooth out face tracking data.
+
+### Use GPU Acceleration
+Tells Baballonia to use GPU acceleration.
+
+### Log Level Verbosity
+Sets the logging level. Debug is the best when finding issues!
+
+### Check for Updates
+Tells Baballonia to check for updates online.
+
+### Show Onboarding
+Shows the first-time setup.

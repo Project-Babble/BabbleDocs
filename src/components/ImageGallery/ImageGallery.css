@@ -1,11 +1,14 @@
 .gallery-container {
   display: flex;
   padding-block: 24px;
+  overflow-x: auto; /* allow horizontal scroll */
+  white-space: nowrap; /* keep items in one row */
 }
 
 .gallery-item {
   cursor: pointer;
   margin-right: 10px;
+  display: inline-block;
 }
 
 .gallery-item img {
@@ -32,12 +35,39 @@
 }
 
 .modal-content {
-  padding: 48px;
-
-  & img {
-    object-fit: contain;
-    height: 80vh;
-    border-radius: 10px;
-  }
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 20px;
 }
 
+.modal-content img {
+  object-fit: contain;
+  height: 80vh;
+  border-radius: 10px;
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.nav-btn.left {
+  position: absolute;
+  left: -60px;
+}
+
+.nav-btn.right {
+  position: absolute;
+  right: -60px;
+}

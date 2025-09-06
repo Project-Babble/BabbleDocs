@@ -1,0 +1,46 @@
+---
+title: Running Baballonia
+sidebar_position: 1
+---
+
+# Running the Baballonia source code
+
+This page covers how to download and run the source code for the Babble App.
+
+## 1) Prerequisites
+
+To get started, you will need to install:
+
+- [`git`](https://git-scm.com/downloads)
+- [`git-lfs`](https://git-lfs.com/)
+- A copy of Visual Studio 2022 or Rider 2024+
+
+## 1) Downloading The Babble App
+
+Navigate to a folder where you would like to install the Babble App.
+
+Then, open a terminal in your folder. Make sure its current directory matches the folder!
+
+Now, run this command to download the Babble App to the folder:
+
+```
+git clone https://github.com/Project-Babble/Baballonia.git
+```
+
+You will need to clone this repo's submodules.
+
+## 2) Downloading the right SDKs
+
+Both Visual Studio 2022 and Rider 2024+ will detect and prompt you to download the proper SDKs for build the Babble App.
+
+:::info
+Unless you plan on doing mobile development, feel free to unload the `Baballonia.Android` and `Baballonia.iOS` projects.
+:::
+
+:::info
+Unless you plan on adding features to the VRCFaceTracking module, you can unload the `VRCFaceTracking.Baballonia`, `VRCFaceTracking`, `VRCFaceTracking.Core`, and the `VRCFaceTracking.SDK` projects.
+:::
+
+## 3) Building and running
+
+Once your tools have installed, you want to build and run the `Baballonia.Desktop` project. That's it!

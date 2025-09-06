@@ -3,95 +3,66 @@ title: Firmware
 sidebar_position: 1
 ---
 
-# Firmware
-
-:::info
-If you purchased a Babble PCB (by itself, as part of the Base Kit, or the Supporter Kit) you do *NOT* need to follow the directions below *if you are using it in wired mode.*
-
-The following instructions are for users who have *assembled their own hardware* or people who wish to use the *wireless mode* with their *Babble Kit*.
-:::
-
 :::warning 
-Your wifi MUST have 2.4Ghz enabled for the Babble V1 Tracker or any ESP32 device to connect to it. 5Ghz doesn't work with the ESP32 series of processors, which is what the Babble V1 Tracker uses.
+Your MUST have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly. 
+5Ghz doesn't work with the ESP32 series of processors, which is what the Babble Tracker uses.
 ::: 
 
 
 ## Setup
 
-Now that you've assembled your Babble Tracker, you'll need to flash the firmware for it. This guide uses the wired/wireless `wroom` setup, although the setup process is similar for other boards.
+Now that you've got your Babble Tracker, you'll need to flash the firmware for it.
 
-### Step 1
-First, download [EyeTrackVR's firmware flashing tool](https://github.com/EyeTrackVR/FirmwareFlashingTool/releases) from their Github. 
+### Step 1 - Open Baballonia and navigate to the Firmware page:
 
-Before moving onto the next steps, you'll need to put your device in *Boot Mode* to write firmware to it. To do this, hold down the boot mode button on your board **as you plug it in.** You'll feel a *click* as the button presses in and out. On the `Babble V1` board, the button is pictured here:
+### Step 1.1 - Plug in *or* unplug and replug your tracker to make sure it's in configuration mode.
 
-:::info 
-If you purchased an Offical Babble Tracker from us then you do not need to hold down the boot button as we have already flashed a bootloader onto it for you. 
+![fw](@site\static\img\avalonia\firmware\new\fw.png)
+
+### Step 2 - Refresh the connected trackers. Then, select yours:
+
+:::warning
+Upon connecting the tracker, you will have a 20 second window to press ‘Refresh’. If you wait too long, you will need to unplug the tracker and try again.
 :::
 
-After you've plugged in the device, you can release this button.
+![refresh](@site\static\img\avalonia\firmware\new\refresh.png)
+![dropdown](@site\static\img\avalonia\firmware\new\dropdown.png)
+![selected](@site\static\img\avalonia\firmware\new\selected.png)
 
-<img src={require("@site/static/img/firmware_WROOM.jpg").default}/>
+### Step 3 - Set whether you want a wired or wireless connection:
 
-### Step 2
+![mode](@site\static\img\avalonia\firmware\new\mode.png)
 
-At this point your board should be pluged into your PC. Open EyeTrackVR's firmware flashing tool. You'll need to select the firmware that corresponds to your device. We've listed how to find the XAIO Seed Studio and Babble V1 Kit Fimware below. 
+### Step 3.1 - (Optional) If using wireless, set your Wifi credentials:
 
-#### Babble Offical Board
+:::warning
+You need to press 'Refresh Wifi Networks' before the tracker can connect to a network, even if you enter the SSID manually.
+:::
 
-##### Babble Offical Board WIRELESS FIMWARE: 
-![switch](/img/BabbleWireless.png)
+![wifi](@site\static\img\avalonia\firmware\new\wifi.png)
 
-##### Babble Offical Board WIRED FIMWARE:
-![switch](/img/BabbleWired.png)
+### Step 4 Unplug and replug your tracker. 20 seconds after being powered on, it will start!
 
-#### XAIO SEED STUDIO 
+:::info
+The tracker will now boot into either Wired or Wireless mode. If in wired mode it will function as a USB camera with the device name 'openiristracker', if it's in wireless mode it will host a camera stream on the URL 'http://openiristracker.local/'
+:::
 
-##### XAIO WIRELESS FIMWARE: 
-![switch](/img/XAIOwireless.png)
+## Reflashing
 
-##### XAIO WIRED FIMWARE: 
-![switch](/img/XAIOwired.png)
+### Step 1) Follow Steps 1-2 above, then click the "Flash Firmware" button:
 
-#### Wireless fimrware selection
-
-In the wireless firmware section of the ETVR firmware flasher you see 3 things:
-
-##### Tracker name
-
-This is the link that you can access your tracker at! By defualt it's ```http://openiristracker.local/``` but you can change this to whatever you'd like. 
-
-##### SSID
-
-This is the name of your wifi network 
-
-##### Password 
-
-The password to your wifi network
-
-
-### Step 3
-
-Select your device on the corresponding COM port. Then, click on the "Install Openiris" button to flash your firmware! This will flash the new firmware onto your board!
-
-<img src={require("@site/static/img/firmware_ESP32.png").default}/>
-
-### Step 4 
-
-After flashing your board make sure to **Unplug and replug** your board into a power source. This way it will start using the new firmware.
-
-After that you're done!
+![flash](@site\static\img\avalonia\firmware\new\flash.png)
 
 ## Troubleshooting
 
-### Step 1
+### Step 1)
 To pull logs from your device, first download [EyeTrackVR's firmware flashing tool](https://github.com/EyeTrackVR/FirmwareFlashingTool/releases) from their Github. 
 
 Before moving onto the next steps, make sure your device is plugged in and/or connected (non-boot mode this time).
 
-### Step 2
-
+### Step 2)
 Open EyeTrackVR's firmware flashing tool. Select any firmware here, it doesn't matter. Just go to the next page. 
+
 
 <img src={require("@site/static/img/firmware_ETVR_1.png").default}/>
 
@@ -99,8 +70,7 @@ If prompted for wifi, just enter anything to move on. You don't need to deal wit
 
 <img src={require("@site/static/img/firmware_ETVR_2.png").default}/>
 
-### Step 3
-
+### Step 3)
 Select your device on the corresponding COM port. Then, click on the left arrow next to the "Downloading logs..." button. Or you can download the logs and look at them in the text editor of your choice.
 
 <img src={require("@site/static/img/firmware_ESP32.png").default}/>

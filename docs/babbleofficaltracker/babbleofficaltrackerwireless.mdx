@@ -1,16 +1,14 @@
 ---
 sidebar_position: 2
-title: Babble Tracker Quickstart
+title: Wireless Setup
 ---
 
-# Babble Tracker Quickstart
-
-This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.
+# Wireless Mode Quickstart
 
 
-:::info
-If you'd like to use your tracker in *Wireless* mode, follow this [guide.](docs/babbleofficaltracker/babbleofficaltrackerwireless.mdx)
-:::
+
+
+
 ## Getting Started
 ### Hardware Setup
 
@@ -34,12 +32,17 @@ If you'd like to use your tracker in *Wireless* mode, follow this [guide.](docs/
 
 ### Mode Selection
 
+:::warning 
+Your MUST have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly. 
+5Ghz doesn't work with the ESP32 series of processors, which is what the Babble Tracker uses.
+::: 
+
 :::info
 For more detailed instructions and troubleshooting information, head to the [firmware guide.](/hardware/Firmware/firmware.mdx)
 :::
 
-
 Now that you've got your Babble Tracker, you'll need to flash the firmware for it.
+
 
 #### Step 1 - Open Baballonia and navigate to the Firmware page:
 
@@ -57,36 +60,38 @@ Upon connecting the tracker, you will have a 20 second window to press ‘Refres
 ![dropdown](@site\static\img\avalonia\firmware\new\dropdown.png)
 ![selected](@site\static\img\avalonia\firmware\new\selected.png)
 
-#### Step 3 - Set your tracker into 'Wired' mode:
+#### Step 3 - Set the tracker into 'Wireless' mode:
 
 ![mode](@site\static\img\avalonia\firmware\new\mode.png)
 
+#### Step 3.1 - Set your Wifi credentials:
+
+:::warning
+You need to press 'Refresh Wifi Networks' before the tracker can connect to a network, even if you enter the SSID manually.
+:::
 
 ![wifi](@site\static\img\avalonia\firmware\new\wifi.png)
 
 #### Step 4 Unplug and replug your tracker. 20 seconds after being powered on, it will start!
 
 :::info
-The tracker will now boot into UVC mode and function as a USB camera with the device name 'openiristracker'
+The tracker will now boot into Wireless mode and function as a wireless camera broadcasting on the URL 'http://openiristracker.local/'
 :::
-
 
 ### Connect to your tracker
 - Open Baballonia
-- Open the dropdown menu
-- Select 'openiristracker' 
-:::info
-Older trackers and DIY solutions running serial firmware will be start with `COM`/`/dev/ttyACM` followed by a number
-:::
+- Type in the URL of the wireless tracker
+- The default will be 'http://openiristracker.local/'
 - Click "Start Camera" to connect
 
- ![Camera Address Selection](/img/uvcfirst.png)
+ ![Camera Address Selection](/img/wire1.png)
 
- ![Camera Address Selection](/img/uvcsecond.png)
+ ![Camera Address Selection](/img/wire2.png)
 
- ![Camera Address Selection](/img/uvcthird.png)
+ ![Camera Address Selection](/img/wire3.png)
  
- ![Camera Address Selection](/img/uvclast.png)
+ ![Camera Address Selection](/img/wir4.png)
+
 ## Setting Up The Camera Feed
 
 Before use, you need to properly set up your camera feed:

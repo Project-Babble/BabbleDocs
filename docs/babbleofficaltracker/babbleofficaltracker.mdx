@@ -43,6 +43,8 @@ Now that you've got your Babble Tracker, you'll need to flash the firmware for i
 
 #### Step 1 - Open Baballonia and navigate to the Firmware page:
 
+#### Step 1.1 - Plug in *or* unplug and replug your tracker to make sure it's in configuration mode.
+
 ![fw](@site\static\img\avalonia\firmware\new\fw.png)
 
 #### Step 2 - Refresh the connected trackers. Then, select yours:
@@ -64,11 +66,18 @@ Upon connecting the tracker, you will have a 20 second window to press ‘Refres
 
 #### Step 4 Unplug and replug your tracker. 20 seconds after being powered on, it will start!
 
+:::info
+The tracker will now boot into UVC mode and function as a USB camera with the device name 'openiristracker'
+:::
+
 
 ### Connect to your tracker
 - Open Baballonia
-- Type the name of your tracker into the "Camera Address" fields
-- Older trackers and DIY solutions running serial firmware will be start with `COM`/`/dev/ttyACM` followed by a number
+- Open the dropdown menu
+- Select 'openiristracker' 
+:::info
+Older trackers and DIY solutions running serial firmware will be start with `COM`/`/dev/ttyACM` followed by a number
+:::
 - Click "Start Camera" to connect
 
 ![Camera Address Selection](/img/avalonianame.png)

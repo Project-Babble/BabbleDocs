@@ -27,56 +27,9 @@ The calibraiton page is used to calibrate the sensitivity of your face expressio
 - Raising the Minimum value requires a stronger expression before it starts to show.
 - Lowering the Maximum value means a smaller expression will reach 100% faster.
 
-## Firmware
 
-![Firmware](@site\static\img\avalonia\Firmware.png)
 
-The firmware page is used to alter the state of a connected babble tracker.
 
-To use the tool, click `Launch openirissetup.exe`. Your tracker should be auto-detected, if not enter the devices name from the list of detected devices.
-
-### Setting the device mode
-To set if the tracker is in wired/wireless mode:
-- Enter `9` to `Switch Device Mode`
-- Enter `1` for Wifi mode, `2` for Wired mode. Hybrid mode is not implemented.
-- Optionally, Enter 5 to `Configure UVC Name`
-- Enter "exit" and restart!
-
-Below is a diagram:
-
-<ImageGallery images={[
-  "/img/avalonia/firmware/1.png",
-  "/img/avalonia/firmware/2.png",
-  "/img/avalonia/firmware/3.png",
-  "/img/avalonia/firmware/4.png",
-  "/img/avalonia/firmware/5.png",
-  "/img/avalonia/firmware/6.png",
-  "/img/avalonia/firmware/7.png",
-  "/img/avalonia/firmware/8.png",
-  "/img/avalonia/firmware/9.png",
-  "/img/avalonia/firmware/10.png",
-]} />
-
-### Connecting to Wifi
-In order to use wireless mode, you need to send your wifi name and password to the device.
-
-First, **perform the steps above**. Then:
-- Enter 1 to `Scan for Wifi Networks `
-- Enter 2 to `Show available networks`. **If your tracker cannot see your Wifi network, contact the Babble discord for support.**
-- Enter 3 to `Configure Wifi`. Enter your wifi name and password when prompted
-- Optionally, Enter 4 to `Configure MDNS`
-- Enter "exit" and restart!
-
-Below is a diagram:
-
-<ImageGallery images={[
-  "/img/avalonia/firmware/wifi1.png",
-  "/img/avalonia/firmware/wifi2.png",
-  "/img/avalonia/firmware/wifi3.png",
-  "/img/avalonia/firmware/wifi4.png",
-  "/img/avalonia/firmware/wifi5.png",
-  "/img/avalonia/firmware/wifi6.png",
-]} />
 
 ## Output
 

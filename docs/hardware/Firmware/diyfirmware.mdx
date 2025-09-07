@@ -1,0 +1,108 @@
+---
+title: DIY Tracker Firmware
+sidebar_position: 1
+---
+
+:::info
+If you purchased a Babble PCB (by itself, as part of the Base Kit, or the Supporter Kit) you do *NOT* need to follow the directions below *if you are using it in wired mode.*
+
+The following instructions are for users who have *assembled their own hardware* or people who wish to use the *wireless mode* with their *Babble Kit*.
+:::
+
+:::warning 
+Your wifi MUST have 2.4Ghz enabled for the Babble V1 Tracker or any ESP32 device to connect to it. 5Ghz doesn't work with the ESP32 series of processors, which is what the Babble V1 Tracker uses.
+::: 
+
+
+## Setup
+
+Now that you've assembled your Babble Tracker, you'll need to flash the firmware for it. This guide uses the wired/wireless `wroom` setup, although the setup process is similar for other boards.
+
+### Step 1
+First, download [EyeTrackVR's firmware flashing tool](https://github.com/EyeTrackVR/FirmwareFlashingTool/releases) from their Github. 
+
+Before moving onto the next steps, you'll need to put your device in *Boot Mode* to write firmware to it. To do this, hold down the boot mode button on your board **as you plug it in.** You'll feel a *click* as the button presses in and out. On the `Babble V1` board, the button is pictured here:
+
+:::info 
+If you purchased an Offical Babble Tracker from us then you do not need to hold down the boot button as we have already flashed a bootloader onto it for you. 
+:::
+
+After you've plugged in the device, you can release this button.
+
+<img src={require("@site/static/img/firmware_WROOM.jpg").default}/>
+
+### Step 2
+
+At this point your board should be pluged into your PC. Open EyeTrackVR's firmware flashing tool. You'll need to select the firmware that corresponds to your device. We've listed how to find the XAIO Seed Studio and Babble V1 Kit Fimware below. 
+
+#### Babble Offical Board
+
+##### Babble Offical Board WIRELESS FIMWARE: 
+![switch](/img/BabbleWireless.png)
+
+##### Babble Offical Board WIRED FIMWARE:
+![switch](/img/BabbleWired.png)
+
+#### XAIO SEED STUDIO 
+
+##### XAIO WIRELESS FIMWARE: 
+![switch](/img/XAIOwireless.png)
+
+##### XAIO WIRED FIMWARE: 
+![switch](/img/XAIOwired.png)
+
+#### Wireless fimrware selection
+
+In the wireless firmware section of the ETVR firmware flasher you see 3 things:
+
+##### Tracker name
+
+This is the link that you can access your tracker at! By defualt it's ```http://openiristracker.local/``` but you can change this to whatever you'd like. 
+
+##### SSID
+
+This is the name of your wifi network 
+
+##### Password 
+
+The password to your wifi network
+
+
+### Step 3
+
+Select your device on the corresponding COM port. Then, click on the "Install Openiris" button to flash your firmware! This will flash the new firmware onto your board!
+
+<img src={require("@site/static/img/firmware_ESP32.png").default}/>
+
+### Step 4 
+
+After flashing your board make sure to **Unplug and replug** your board into a power source. This way it will start using the new firmware.
+
+After that you're done!
+
+## Troubleshooting
+
+### Step 1
+To pull logs from your device, first download [EyeTrackVR's firmware flashing tool](https://github.com/EyeTrackVR/FirmwareFlashingTool/releases) from their Github. 
+
+Before moving onto the next steps, make sure your device is plugged in and/or connected (non-boot mode this time).
+
+### Step 2
+
+Open EyeTrackVR's firmware flashing tool. Select any firmware here, it doesn't matter. Just go to the next page. 
+
+<img src={require("@site/static/img/firmware_ETVR_1.png").default}/>
+
+If prompted for wifi, just enter anything to move on. You don't need to deal with this either.
+
+<img src={require("@site/static/img/firmware_ETVR_2.png").default}/>
+
+### Step 3
+
+Select your device on the corresponding COM port. Then, click on the left arrow next to the "Downloading logs..." button. Or you can download the logs and look at them in the text editor of your choice.
+
+<img src={require("@site/static/img/firmware_ESP32.png").default}/>
+
+##
+
+For more information on how to use EyeTrackVR's firmware flashing tool, please refer to their [documentation](https://docs.eyetrackvr.dev/firmware_guide/flashing_tool).

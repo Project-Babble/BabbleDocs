@@ -1,92 +1,66 @@
 ---
 title: Baballonia
-description: An article detailing firmware development, challenges and tidbits about Baballonia, the new Babble App.
+description: An article detailing the firmware development, initial challenges and tidbits about Baballonia, the new Babble App.
 authors: dfgHiatus
 hide_table_of_contents: false
 ---
 
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
+
 # Recap
 
-I feel like I am at a finally point where I can write about my latest project "Baballonia": The *new* Babble App. This blog post has been a year in the making, since starting this the [Vive Facial Tracker can now be used with the current Babble App](blog/reverse-engineering-the-vive-facial-tracker.mdx), and [VRCFaceTracking was ported to Linux](blog/vrcft-avalonia.mdx).
+I feel like I am finally at a point where I can start to write about my latest project, "Baballonia". This blog post has been a year in the making, since starting this the [Vive Facial Tracker can now be used with the current Babble App](blog/reverse-engineering-the-vive-facial-tracker.mdx), and [VRCFaceTracking was ported to Linux](blog/vrcft-avalonia.mdx).
 
-A lot more has happened. We gave a [technical presentation]() and returned to [Open Sauce]() for a second year. We met a lot of cool people! Here's a couple of pictures from the event:
+{/* truncate */}
 
-The name Baballonia is a portmanteau of "Babble" and "Avalonia", the latter being a C# UI framework. This isn't my first time rodeo with it. In addition to the aforementioned VRCFaceTracking.Avalonia, I've also tinkered with [Babble.NET](), a precursor project. This app is a logical extension of the latter, taking some inspiration from both projects.
+A lot more has happened. We gave technical presentations and returned to [Open Sauce](https://opensauce.com/) for a second year. We met a lot of cool people! Here's a couple of pictures from the event:
 
-There's a lot to talk about. My plan is to split up the major problems we encountered into their own blogs. This article will talk about the firmware side of things, as well as serve as a general recap to the project as a whole.
+<ImageGallery images={[
+  "/blog/baballonia/open-sauce/20250718_105614.jpg",
+  "/blog/baballonia/open-sauce/20250718_105616.jpg",
+  "/blog/baballonia/open-sauce/20250718_105617.jpg",
+  "/blog/baballonia/open-sauce/20250718_105612.jpg",
+  "/blog/baballonia/open-sauce/20250719_105643.jpg",
+  "/blog/baballonia/open-sauce/20250719_105618.jpg",
+]} />
+
+The name Baballonia is a portmanteau of "Babble" and "Avalonia", the latter being a C# UI framework. In addition to the aforementioned VRCFaceTracking.Avalonia, I've also tinkered with [Babble.NET](https://github.com/Project-Babble/Babble.Net), a precursor project. This app is a logical extension of the latter, taking inspiration from both projects.
+
+There's a lot to talk about. My plan is to split up the major problems we encountered into their own blogs. This blog will talk about the firmware side of things, as well as serve as a general recap to the project as a whole.
 
 # History:
 
-So why reinvent the wheel if we already have a working desktop app? To quote that presentation I gave earlier this year:
+So why reinvent the wheel if we already have a working desktop app? To quote a presentation I gave earlier this year:
 > The original Babble app was based off of a fork of the EyeTrackVR app. As a consequence of this, we inherited the technical debt of the existing project, and were locked into the python ecosystem. This  limited our ability to develop for Android - Quest based platforms represent an increasingly larger percentage of Social VR users.
 
 There were also a handful of other problems with the pythonic approach:
-- Packaging. Currently, we use [Pyintsaller]() to create our Windows installers. As we added more features to the Python App, we ran into more and more packaging issues. We were unable to bundle certain Python packages, such as when we tried to move our desktop notifications library from a windows-specific one to a cross-platform one.
+- Packaging. Currently, we use [Pyintsaller](https://pyinstaller.org/en/stable/) to create our Windows installers. As we added more features to the Python App, we ran into more and more packaging issues. We were unable to bundle certain Python packages, such as when we tried to move our desktop notifications library from a windows-specific one to a cross-platform one.
 - Hierarchy of Information. As we added new features, UX took a hit as we exposed new UI controls to the user. Case in point, the per-expression calibration menu was difficult to edit once in VR.
 - Firmware flashing. As it stood, when a user wanted to flash firmware to their device they would need to use a separate app, the EyeTrackVR Firmware Flashing Tool. I'll talk about this later.
 
 We considered rewriting just the frontend in Kivy, however, it didn't change the fact a number of our key libraries wouldn't work at all on Android. Here's a table of what the Python Babble App uses: 
 
-Package
-Android Support
-Notes
-pydantic
-✅ Works
-Pure Python + Rust backend (Rust must be available).
-python-osc
-✅ Works
-Pure Python.
-requests
-✅ Works
-Pure Python.
-colorama
-✅ Works
-Pure Python.
-psutil
-✅ With effort
-Needs C extension, but Termux/Android builds exist.
-pillow
-✅ With effort
-Requires libjpeg/libpng/zlib compiled for Android.
-soundfile
-✅ With effort
-Wraps libsndfile, must cross-compile.
-sounddevice
-✅ With effort
-Depends on PortAudio, needs custom Android build.
-torch
-⚠️ Possible
-PyTorch has Android builds, but no pip wheels; requires NDK.
-torchvision
-⚠️ Possible
-Must be built against Android PyTorch.
-opencv_python
-⚠️ Possible
-Pip wheels won’t work; needs OpenCV-for-Android build.
-onnxruntime
-⚠️ Possible
-Use ONNX Runtime Mobile (AAR/so); pip wheel won’t run.
-onnxruntime-directml
-❌ No
-Windows-only (DirectML).
-onnxruntime-gpu
-❌ No
-CUDA/ROCm only, not Android.
-FreeSimpleGUI
-❌ No
-Tkinter-based, no Tk on Android.
-pyserial
-⚠️ Limited
-Might work with /dev/tty* if Android exposes it + permissions.
-comtypes
-❌ No
-Windows-only COM interop.
-pygrabber
-❌ No
-Windows-only (DirectShow).
-v4l2py
-❌ No
-Linux-only (Video4Linux), not Android camera HAL.
+| Package                 | Android Support | Notes |
+|--------------------------|-----------------|-------|
+| **pydantic**            | ✅ Works        | Pure Python + Rust backend (Rust must be available). |
+| **python-osc**          | ✅ Works        | Pure Python. |
+| **requests**            | ✅ Works        | Pure Python. |
+| **colorama**            | ✅ Works        | Pure Python. |
+| **psutil**              | ✅ With effort  | Needs C extension, but Termux/Android builds exist. |
+| **pillow**              | ✅ With effort  | Requires libjpeg/libpng/zlib compiled for Android. |
+| **soundfile**           | ✅ With effort  | Wraps libsndfile, must cross-compile. |
+| **sounddevice**         | ✅ With effort  | Depends on PortAudio, needs custom Android build. |
+| **torch**               | ⚠️ Possible     | PyTorch has Android builds, but no pip wheels; requires NDK. |
+| **torchvision**         | ⚠️ Possible     | Must be built against Android PyTorch. |
+| **opencv_python**       | ⚠️ Possible     | Pip wheels won’t work; needs OpenCV-for-Android build. |
+| **onnxruntime**         | ⚠️ Possible     | Use ONNX Runtime Mobile (AAR/so); pip wheel won’t run. |
+| **onnxruntime-directml**| ❌ No           | Windows-only (DirectML). |
+| **onnxruntime-gpu**     | ❌ No           | CUDA/ROCm only, not Android. |
+| **FreeSimpleGUI**       | ❌ No           | Tkinter-based, no Tk on Android. |
+| **pyserial**            | ⚠️ Limited     | Might work with `/dev/tty*` if Android exposes it + permissions. |
+| **comtypes**            | ❌ No           | Windows-only COM interop. |
+| **pygrabber**           | ❌ No           | Windows-only (DirectShow). |
+| **v4l2py**              | ❌ No           | Linux-only (Video4Linux), not Android camera HAL. |
 
 Despite the aforementioned flaws, it's important to note the things the Python Babble App did well:
 - Automatic GPU Acceleration (DirectML for Windows, CoreML for macOS, CUDA for Linux with CPU fallback)

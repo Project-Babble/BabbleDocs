@@ -1,0 +1,127 @@
+---
+title: Baballonia
+description: An article detailing firmware development, challenges and tidbits about Baballonia, the new Babble App.
+authors: dfgHiatus
+hide_table_of_contents: false
+---
+
+# Recap
+
+I feel like I am at a finally point where I can write about my latest project "Baballonia": The *new* Babble App. This blog post has been a year in the making, since starting this the [Vive Facial Tracker can now be used with the current Babble App](blog/reverse-engineering-the-vive-facial-tracker.mdx), and [VRCFaceTracking was ported to Linux](blog/vrcft-avalonia.mdx).
+
+A lot more has happened. We gave a [technical presentation]() and returned to [Open Sauce]() for a second year. We met a lot of cool people! Here's a couple of pictures from the event:
+
+The name Baballonia is a portmanteau of "Babble" and "Avalonia", the latter being a C# UI framework. This isn't my first time rodeo with it. In addition to the aforementioned VRCFaceTracking.Avalonia, I've also tinkered with [Babble.NET](), a precursor project. This app is a logical extension of the latter, taking some inspiration from both projects.
+
+There's a lot to talk about. My plan is to split up the major problems we encountered into their own blogs. This article will talk about the firmware side of things, as well as serve as a general recap to the project as a whole.
+
+# History:
+
+So why reinvent the wheel if we already have a working desktop app? To quote that presentation I gave earlier this year:
+> The original Babble app was based off of a fork of the EyeTrackVR app. As a consequence of this, we inherited the technical debt of the existing project, and were locked into the python ecosystem. This  limited our ability to develop for Android - Quest based platforms represent an increasingly larger percentage of Social VR users.
+
+There were also a handful of other problems with the pythonic approach:
+- Packaging. Currently, we use [Pyintsaller]() to create our Windows installers. As we added more features to the Python App, we ran into more and more packaging issues. We were unable to bundle certain Python packages, such as when we tried to move our desktop notifications library from a windows-specific one to a cross-platform one.
+- Hierarchy of Information. As we added new features, UX took a hit as we exposed new UI controls to the user. Case in point, the per-expression calibration menu was difficult to edit once in VR.
+- Firmware flashing. As it stood, when a user wanted to flash firmware to their device they would need to use a separate app, the EyeTrackVR Firmware Flashing Tool. I'll talk about this later.
+
+We considered rewriting just the frontend in Kivy, however, it didn't change the fact a number of our key libraries wouldn't work at all on Android. Here's a table of what the Python Babble App uses: 
+
+Package
+Android Support
+Notes
+pydantic
+✅ Works
+Pure Python + Rust backend (Rust must be available).
+python-osc
+✅ Works
+Pure Python.
+requests
+✅ Works
+Pure Python.
+colorama
+✅ Works
+Pure Python.
+psutil
+✅ With effort
+Needs C extension, but Termux/Android builds exist.
+pillow
+✅ With effort
+Requires libjpeg/libpng/zlib compiled for Android.
+soundfile
+✅ With effort
+Wraps libsndfile, must cross-compile.
+sounddevice
+✅ With effort
+Depends on PortAudio, needs custom Android build.
+torch
+⚠️ Possible
+PyTorch has Android builds, but no pip wheels; requires NDK.
+torchvision
+⚠️ Possible
+Must be built against Android PyTorch.
+opencv_python
+⚠️ Possible
+Pip wheels won’t work; needs OpenCV-for-Android build.
+onnxruntime
+⚠️ Possible
+Use ONNX Runtime Mobile (AAR/so); pip wheel won’t run.
+onnxruntime-directml
+❌ No
+Windows-only (DirectML).
+onnxruntime-gpu
+❌ No
+CUDA/ROCm only, not Android.
+FreeSimpleGUI
+❌ No
+Tkinter-based, no Tk on Android.
+pyserial
+⚠️ Limited
+Might work with /dev/tty* if Android exposes it + permissions.
+comtypes
+❌ No
+Windows-only COM interop.
+pygrabber
+❌ No
+Windows-only (DirectShow).
+v4l2py
+❌ No
+Linux-only (Video4Linux), not Android camera HAL.
+
+Despite the aforementioned flaws, it's important to note the things the Python Babble App did well:
+- Automatic GPU Acceleration (DirectML for Windows, CoreML for macOS, CUDA for Linux with CPU fallback)
+- Cross platform (Installers for Windows, macOS and Linux)
+Translated into 12 languages
+- Decent performance (GPU acceleration was an opt-in feature)
+- Set and forget: Some effort up front, but once configured could be left to run in the background
+
+# Firmware
+
+:::info
+Some quick hardware stats. A Babble tracker is comprised of an ESP32-S3-wrooms3, and uses a OV2640/OV3660 camera with night vision/IR support. In total we draw ~5000ma, which can be powered by almost any USB hubs on a VR headset. On the BigScreen Beyond 2, we couldn't request anywhere near that much power, or we would result in a brownout. 
+
+We had to take our existing design (the v1.1 board) and make it much more power efficient (the v1.2 boards). I'll spare you the details, but the board now consumes 33% less power. It runs cooler, wireless users can enjoy longer play sessions, and more importantly we have a board that just works with the BigScreen Beyond 2.
+:::
+
+Historically, if a user needed to (re)flash the firmware of their board, they would need to download a 3rd party tool such the ETVR Firmware Flashing Tool and use that.
+
+This introduced some challenges. We had to tell a user where to get the ETVR Firmware Flashing tool, how to install it, how to use it, what firmware to flash (out of a dozen+ choices!), and how to resolve problems as they arose. Additionally, previous firmware was mutually exclusive - you couldn't have a wired/wireless stack running on a tracker at the same time.
+
+To deal with this, a new firmware was created. Said new firmware could swap between wired and wireless modes, and exposed a serial interface to control the state of the board. Trackers with the newer firmware have a "Command mode" and "Camera mode", the former is present for 20 seconds after the device is powered on, or if requested via the serial interface. Some commands include:
+
+- Set Device Paused (Command/Camera mode)
+- Scan/Refresh Wifi Networks
+- Get Wifi Networks
+- Set Device Mode (Wired/Wireless)
+
+The current implementation can be seen here:
+
+We've partnered with PiShock to assemble and deliver Babble trackers units. Post launch, we found some users with [1.0 Base Stations]() had tracking loss: the presence of a babble tracker underneath their headset was interfering with the base stations infrared light, making it unusable. We found that instead of keeping the LEDs constantly on, we could strobe the LEDs to match the tracker's camera shutter, this fixed the issue.
+
+During this, it was found erroneous startup code on the wireless side of things was causing power draw spikes. By fixing this, it was found that out v1.1 could be used with the BigScreen Beyond 2! 
+
+That's all I got. Thanks for reading, until next time,
+
+- Hiatus
+
+

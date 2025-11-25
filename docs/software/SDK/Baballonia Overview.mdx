@@ -1,0 +1,98 @@
+---
+title: Overview of Baballonia SDK
+sidebar_position: 1
+---
+
+# Overview of Baballonia SDK
+
+The Baballonia SDK provides developers with the tools and interfaces necessary to integrate eye-tracking and face-tracking capabilities into their applications. This SDK is designed to work seamlessly with the Baballonia software, allowing for easy access to processed tracking data and raw camera streams.
+
+It enables developers to build custom plugins, create new capture sources, and develop integrations inside the Baballonia application—without needing to modify Baballonia’s core codebase itself.
+
+---
+
+## SDK Components
+
+### **1. Capture System (Camera Stream Behavior)**
+
+At the core of the SDK is the Capture System: a unified API for accessing frames from any supported camera source. Rather than tying Baballonia to a single device type, each camera is represented as a subclass of the abstract `Capture` class.
+
+:::info The `Capture` Base Class
+- Defines how a camera source starts and stops streaming  
+- Handles thread-safe delivery of OpenCV `Mat` frame objects  
+- Tracks device readiness and connection status  
+- Allows developers to safely produce and consume frames across multiple threads  
+:::
+
+This makes it possible for Baballonia to support:
+
+- Standard USB webcams (UVC)  
+- Varjo eye-tracking cameras  
+- Android phone camera streams  
+- V4L2 devices on Linux  
+- Custom or experimental capture sources  
+
+<h3><b><i>All through the same interface.</i></b></h3>
+
+---
+
+### **2. Capture Factories (Plugin System)**
+
+The SDK includes the `ICaptureFactory` interface, which allows developers to create custom camera capture sources as plugins. By implementing this interface, developers can define how their specific camera hardware integrates with the Baballonia application.
+
+:::info The `ICaptureFactory` interface defines:
+- Creating a new capture source by returning a subclass of the `Capture` class  
+- Checking if your source is connectable via the `CanConnect` method  
+- Providing the provider name that identifies your capture source inside Baballonia  
+:::
+
+Baballonia's core application queries all registered factories to determine which one can handle a given camera address.
+
+This plugin-based structure lets you extend Baballonia with new device support **without modifying the main application**.
+
+---
+
+### **3. Thread-Safe Frame Transfer**
+
+The `Capture` class includes methods like:
+
+- `SetRawMat(Mat value)` — called by the capture thread to provide new frames  
+- `AcquireRawMat()` — called by the processing thread to consume frames  
+
+These methods transfer ownership of the frame safely, preventing race conditions and ensuring that each frame is only processed once. Optimized for performance, the SDK avoids unnecessary copies of frame data.
+
+This design allows Baballonia to run real-time tracking models efficiently and reliably.
+
+---
+
+### **4. Tracking Data Pipeline**
+
+While the Capture system provides raw video frames, the SDK also defines interfaces and data structures for:
+
+- Processed lower-face expression data  
+- Eye gaze direction  
+- Blink and openness values  
+- Confidence metrics  
+- Filtered/smoothed measurement output  
+
+Baballonia’s core uses these structures to generate high-quality tracking data, which can then be streamed via OSC or consumed by external modules (such as VRCFaceTracking integrations).
+
+---
+
+### **5. Software Extensibility**
+
+The Baballonia SDK is built with extensibility in mind. Developers can create new modules that plug into the Baballonia application, enabling:
+
+- Custom camera drivers  
+- Designing custom tracking pipelines  
+- Logging or manipulating frame data  
+- Integrating Baballonia into other applications (e.g., VRCFT)  
+- Creating new output modules (OSC, WebSocket, gRPC, etc.)  
+
+---
+
+### **Summary**
+
+The Baballonia SDK provides a robust foundation for camera capture, frame handling, and tracking integration. Its abstraction layers and plugin-friendly architecture make it easy to extend Baballonia with new devices, add custom processing, or integrate tracking data into external applications.
+
+Whether you're building support for a new camera, creating a custom VR integration, or experimenting with computer vision, the Baballonia SDK gives you the structure and flexibility for your applications.

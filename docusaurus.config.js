@@ -96,7 +96,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/welcome',
+                to: '/docs/intro',
               },
               {
                 label: 'Branding',
@@ -109,7 +109,7 @@ const config = {
             items: [
               {
                 label: 'Discord',
-                href: 'https://discord.gg/2nnx36uaE5',
+                href: 'https://babble.diy/discord',
               },
               {
                  label: 'Twitter',

@@ -4,18 +4,18 @@ sidebar_position: 1
 ---
 
 # VRChat
-Project Babble has an *osc-based* integration for VRChat.
+Project Babble has an *osc-based* integration for VRChat. It can be used either VRCFaceTracking or VRC Native eye-look.
 
 ## Usage
 
 ### 1. Prerequisites 
-Ensure you have setup your hardware and software before proceeding to the next steps
+Ensure you have setup your [hardware and software](docs/babbleofficaltracker/babbleofficaltracker.mdx) before proceeding to the next steps.
 
 ### 2. Install VRCFaceTracking
-Download and install [VRCFaceTracking](https://docs.vrcft.io/) and install the Babble Module from the module registry. 
+Download and install [VRCFaceTracking from Steam](https://store.steampowered.com/app/3329480/VRCFaceTracking/).
 
 ### 3. Setup VRCFT 
-Install VRCFT and install the Babble module from the VRCFT Module Registry.
+Install the `VRCFT-Babble` module from the VRCFT Module Registry.
 <details>
   <summary>How To Install From the VRCFT Module Registry</summary>
 
@@ -33,6 +33,12 @@ Install VRCFT and install the Babble module from the VRCFT Module Registry.
   </div>
     <img src={require("@site/static/img/vrc_vrcft_module_install.png").default}/>
 </details>
+
+Use Baballonia to set the module mode (eyes, face or both). Restart VRCFaceTracking to see your changes.
+
+![VRChat/VRCFaceTracking Page](@site\static\img\avalonia\vrc-vrcft-page.png) 
+
+Alternatively, Baballonia also supports VRC Native Eyelook. While this doesn't support lower face tracking, it supports (almost) all VRChat Avatars.
 
 ### 4. Enable OSC in VRChat
 To send OSC data to VRChat, OSC must be enabled in game. 
@@ -57,10 +63,10 @@ For VRChat's official documentation, please [visit their site here.](https://doc
     <img src={require("@site/static/img/vrc_vrc_osc_menu.png").default}/>
 </details>
 
-### 6. Test with a Public VRCFT Avatar
-At this time, VRChat does **not** have a native face tracking solution. Avatars must have been specifically set up for face tracking to work with VRCFaceTracking.
+### 5. Test with a Public VRCFT Avatar
+At this time, VRChat does **not** have a native (lower) face tracking solution. Avatars must have been specifically set up for face tracking to work with VRCFaceTracking.
 
 There are many worlds that have VRCFaceTracking ready avatars. [Jerry's Mod](https://vrchat.com/home/launch?worldId=wrld_b24fbb7c-9369-4cff-9242-32a35d44a8e8) is a great place to start.
 
-### 7. Profit!
+### 6. Profit!
 For more information, please defer to the [VRCFaceTracking Discord](https://discord.com/invite/vrcft) for custom avatar setup, help and feedback.

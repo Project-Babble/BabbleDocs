@@ -1,16 +1,18 @@
 ---
 sidebar_position: 2
-title: Babble Tracker Quickstart
+title: Quickstart Guide
 ---
+
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
 
 # Babble Tracker Quickstart
 
 This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.
 
-
 :::info
-**If you'd like to use your tracker in _Wireless_ mode, follow this [guide.](docs/babbleofficaltracker/babbleofficaltrackerwireless.mdx)**
+If you'd like to use your tracker in _Wireless_ mode, follow this [guide](docs/babbleofficaltracker/babbleofficaltrackerwireless.mdx).
 :::
+
 ## Getting Started
 ### Hardware Setup
 
@@ -32,22 +34,20 @@ This guide applies to the Official Babble Tracker, and should cover DIY versions
     - Our [Legacy App](docs\babbleofficaltracker\legacySetup.mdx) can be run from our [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
 
 
-### Mode Selection
+### Tracker Mode Selection (Wired or Wireless)
 
 :::info
 For more detailed instructions and troubleshooting information, head to the [firmware guide.](/hardware/Firmware/firmware.mdx)
 :::
 
-
 Now that you've got your Babble Tracker, you'll need to flash the firmware for it.
 
-#### Step 1 - Open Baballonia and navigate to the Firmware page:
-
-#### Step 1.1 - Plug in *or* unplug and replug your tracker to make sure it's in configuration mode.
+1) Open Baballonia and navigate to the Firmware page:
+2) Plug in *or* unplug and replug your tracker to make sure it's in configuration mode.
 
 ![fw](@site\static\img\avalonia\firmware\new\fw.png)
 
-#### Step 2 - Refresh the connected trackers. Then, select yours:
+3) Refresh the connected trackers. Then, select yours:
 
 :::warning
 Upon connecting the tracker, you will have a 20 second window to press ‘Refresh’. If you wait too long, you will need to unplug the tracker and try again.
@@ -57,37 +57,41 @@ Upon connecting the tracker, you will have a 20 second window to press ‘Refres
 ![dropdown](@site\static\img\avalonia\firmware\new\dropdown.png)
 ![selected](@site\static\img\avalonia\firmware\new\selected.png)
 
-#### Step 3 - Set your tracker into 'Wired' mode:
+4) Set your tracker into 'Wired' mode:
 
 ![mode](@site\static\img\avalonia\firmware\new\mode.png)
 
-:::info
-You do not need to utilize the firmware flashing feature after changing mode
+:::danger
+Do not click the "flash firmware" buttons after changing the mode! If you do you'll need to start over.
 :::
 
-#### Step 4 Unplug and replug your tracker. 20 seconds after being powered on, it will start!
+5) Unplug and replug your tracker. 20 seconds after being powered on, it will start!
 
 :::info
 The tracker will now boot into UVC mode and function as a USB camera with the device name 'openiristracker'
 :::
 
-
 ### Connect to your tracker
-- Open Baballonia
-- Open the dropdown menu
-- Select 'openiristracker' 
+1) Open Baballonia
+1) Open the dropdown menu
+1) Select 'openiristracker'
+1) Click "Start Camera" to connect
+
+<ImageGallery images={[
+  "/img/uvcfirst.png",
+  "/img/uvcsecond.png",
+  "/img/uvcthird.png",
+  "/img/uvclast.png",
+]} />
+
 :::info
 Older trackers and DIY solutions running serial firmware will be start with `COM`/`/dev/ttyACM` followed by a number
 :::
-- Click "Start Camera" to connect
 
- ![Camera Address Selection](/img/uvcfirst.png)
+:::info
+In the event your tracker does not show up in the dropdown, you can enter a numerical index for a camera (0, 1, 2...);
+:::
 
- ![Camera Address Selection](/img/uvcsecond.png)
-
- ![Camera Address Selection](/img/uvcthird.png)
- 
- ![Camera Address Selection](/img/uvclast.png)
 ## Setting Up The Camera Feed
 
 Before use, you need to properly set up your camera feed:
@@ -103,7 +107,6 @@ Before use, you need to properly set up your camera feed:
 ![Cropping Mode Button](/img/crop1.png)
    
 - Click and drag across the image to set the crop area
-
    
 ![Cropping Mode Button](/img/crop2.png)
 
@@ -121,9 +124,7 @@ Before use, you need to properly set up your camera feed:
 ![Face Camera Settings](/img/avaloniaface.png)
 
 3. **Switch to tracking mode**
-- Once you've set your crop, set your face camera back into "Tracking"
-
-   
+- Once you've set your crop, set your face camera back into "Tracking"   
 - You should now see a smooth and cropped video feed from your camera
    
 ![Working Camera Feed](/img/crop3.png)

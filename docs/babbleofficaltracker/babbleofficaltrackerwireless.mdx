@@ -3,14 +3,11 @@ sidebar_position: 2
 title: Wireless Setup
 ---
 
+import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
+
 # Wireless Mode Quickstart
 
-
-
-
-
-## Getting Started
-### Hardware Setup
+## Hardware Setup
 
 **Plug your tracker into your PC**
 1) Connect using the USB port on your tracker
@@ -21,16 +18,15 @@ title: Wireless Setup
 
 ![Switch Position](/img/setup_switch.jpg)
 
-### Software Setup
-#### Windows
+## Software Setup
+### Windows
     - Get the latest version from our [Github](https://github.com/Project-Babble/Baballonia/releases/latest). Download the installer and run it.
-#### macOS/Linux
+### macOS/Linux
     - Currently, we do not offer installers for these platforms. You will need to build these from source.
     - For assistance building Babble Avalonia on these platforms, please contact us in our discord server.
-    - Our [Legacy App](docs\babbleofficaltracker\legacySetup.mdx) can be run from our [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
+    - Our [Legacy App](docs/software/sourceCode/python.mdx) can be run from our [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
 
-
-### Mode Selection
+## Mode Selection
 
 :::warning 
 Your MUST have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly. 
@@ -43,14 +39,11 @@ For more detailed instructions and troubleshooting information, head to the [fir
 
 Now that you've got your Babble Tracker, you'll need to flash the firmware for it.
 
-
-#### Step 1 - Open Baballonia and navigate to the Firmware page:
-
-#### Step 1.1 - Plug in *or* unplug and replug your tracker to make sure it's in configuration mode.
+1) Open Baballonia and navigate to the Firmware page. Plug in *or* unplug and replug your tracker to make sure it's in configuration mode.
 
 ![fw](@site\static\img\avalonia\firmware\new\fw.png)
 
-#### Step 2 - Refresh the connected trackers. Then, select yours:
+2) Refresh the connected trackers. Then, select yours:
 
 :::warning
 Upon connecting the tracker, you will have a 20 second window to press ‘Refresh’. If you wait too long, you will need to unplug the tracker and try again.
@@ -60,15 +53,15 @@ Upon connecting the tracker, you will have a 20 second window to press ‘Refres
 ![dropdown](@site\static\img\avalonia\firmware\new\dropdown.png)
 ![selected](@site\static\img\avalonia\firmware\new\selected.png)
 
-#### Step 3 - Set the tracker into 'Wireless' mode:
+3) Set the tracker into 'Wireless' mode:
 
 ![mode](@site\static\img\avalonia\firmware\new\mode.png)
 
-:::info
-You do not need to utilize the firmware flashing feature after changing mode
+:::danger
+Do not click the "flash firmware" buttons after changing the mode! If you do you'll need to start over.
 :::
 
-#### Step 3.1 - Set your Wifi credentials:
+4) Set your Wifi credentials:
 
 :::warning
 You need to press 'Refresh Wifi Networks' before the tracker can connect to a network, even if you enter the SSID manually.
@@ -76,25 +69,24 @@ You need to press 'Refresh Wifi Networks' before the tracker can connect to a ne
 
 ![wifi](@site\static\img\avalonia\firmware\new\wifi.png)
 
-#### Step 4 Unplug and replug your tracker. 20 seconds after being powered on, it will start!
+5) Unplug and replug your tracker. 20 seconds after being powered on, it will start!
 
 :::info
 The tracker will now boot into Wireless mode and function as a wireless camera broadcasting on the URL 'http://openiristracker.local/'
 :::
 
-### Connect to your tracker
-- Open Baballonia
-- Type in the URL of the wireless tracker
-- The default will be 'http://openiristracker.local/'
-- Click "Start Camera" to connect
+## Connect to your tracker
+1) Open Baballonia
+2) Type in the URL of the wireless tracker
+3) The default will be 'http://openiristracker.local/'
+4) Click "Start Camera" to connect
 
- ![Camera Address Selection](/img/wire1.png)
-
- ![Camera Address Selection](/img/wire2.png)
-
- ![Camera Address Selection](/img/wire3.png)
- 
- ![Camera Address Selection](/img/wir4.png)
+<ImageGallery images={[
+  "/img/wire1.png",
+  "/img/wire2.png",
+  "/img/wire3.png",
+  "/img/wir4.png",
+]} />
 
 ## Setting Up The Camera Feed
 
@@ -137,8 +129,6 @@ Before use, you need to properly set up your camera feed:
 ![Working Camera Feed](/img/crop3.png)
 
 ## Next Steps
-
-To learn more about the Babble App, [click here.](/docs/software/baballonia.mdx)
 
 To get started with specific VR platforms:
 

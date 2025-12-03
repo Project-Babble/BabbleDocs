@@ -102,6 +102,10 @@ const config = {
                 label: 'Branding',
                 to: '/docs/branding',
               },
+              {
+                label: 'Data Privacy',
+                to: '/docs/dataprivacy',
+              },
             ],
           },
           {

@@ -1,0 +1,43 @@
+---
+title: Overview of Baballonia SDK
+sidebar_position: 1
+---
+
+# Overview of Baballonia SDK
+
+The Baballonia SDK provides developers with the tools and interfaces necessary to integrate eye-tracking and face-tracking capabilities into applications. It works seamlessly with the Baballonia desktop software, giving access to processed tracking data as well as raw camera streams.
+
+With the SDK, developers can build custom plugins, implement new capture sources, and develop integrations inside the Baballonia application—without modifying the core codebase.
+
+---
+
+## SDK Components
+
+### 1. `Capture` Class
+
+`Capture` provides the framework that lets developers create their own camera capture sources. By extending the `Capture` class, you define exactly how your camera behaves and how it provides frames to Baballonia.
+
+Baballonia currently supports:
+
+- Standard USB webcams (UVC)
+- Varjo eye-tracking cameras
+- Android camera streams
+- IP cameras
+- V4L2 devices on Linux
+- Custom or experimental capture sources
+
+This system allows all of these devices to work through a unified interface inside of Baballonia.
+
+---
+
+### 2. `ICaptureFactory` Interface
+
+Every custom camera backend must provide a corresponding `ICaptureFactory`. A factory tells Baballonia:
+
+- Whether it can connect to a given camera address (`CanConnect`)
+- How to construct the correct `Capture` implementation (`Create`)
+- What provider name should appear in the UI and logs (`GetProviderName`)
+
+Baballonia never instantiates `Capture` classes directly.
+
+The capture system and the `ICaptureFactory` are inseparable: a `Capture` implementation cannot function without a corresponding factory, and a factory has no purpose without a `Capture` implementation. 

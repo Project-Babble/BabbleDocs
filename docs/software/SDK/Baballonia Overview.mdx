@@ -7,15 +7,13 @@ sidebar_position: 1
 
 The Baballonia SDK provides developers with the tools and interfaces necessary to integrate eye-tracking and face-tracking capabilities into applications. It works seamlessly with the Baballonia desktop software, giving access to processed tracking data as well as raw camera streams.
 
-With the SDK, developers can build custom plugins, implement new capture sources, and develop integrations inside the Baballonia application—without modifying the core codebase.
-
 ---
 
 ## SDK Components
 
-### 1. `Capture` Class
+### 1. [`Capture` Class](./Camera%20Stream%20Behavior.mdx)
 
-`Capture` provides the framework that lets developers create their own camera capture sources. By extending the `Capture` class, you define exactly how your camera behaves and how it provides frames to Baballonia.
+`Capture` provides the framework that lets developers create their own camera capture sources. By extending the `Capture` class, you define how your camera behaves and how it provides frames to Baballonia.
 
 Baballonia currently supports:
 
@@ -26,11 +24,9 @@ Baballonia currently supports:
 - V4L2 devices on Linux
 - Custom or experimental capture sources
 
-This system allows all of these devices to work through a unified interface inside of Baballonia.
-
 ---
 
-### 2. `ICaptureFactory` Interface
+### 2. [`ICaptureFactory` Interface](./ICaptureFactory.mdx)
 
 Every custom camera backend must provide a corresponding `ICaptureFactory`. A factory tells Baballonia:
 
@@ -38,6 +34,4 @@ Every custom camera backend must provide a corresponding `ICaptureFactory`. A fa
 - How to construct the correct `Capture` implementation (`Create`)
 - What provider name should appear in the UI and logs (`GetProviderName`)
 
-Baballonia never instantiates `Capture` classes directly.
-
-The capture system and the `ICaptureFactory` are inseparable: a `Capture` implementation cannot function without a corresponding factory, and a factory has no purpose without a `Capture` implementation. 
+The capture system and the factory work together: a `Capture` implementation requires an `ICaptureFactory`, and a factory has no purpose without its corresponding `Capture` implementation.

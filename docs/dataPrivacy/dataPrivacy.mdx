@@ -1,0 +1,29 @@
+---
+title: Data Privacy
+sidebar_position: 11
+---
+
+As of Baballonia version `1.1.0.9`, we've implemented an opt-in data sharing feature. By enabling this setting, you're making eye and face tracking for Social VR better for everyone - including yourself!
+
+This page outlines what data we collect, how we use it, how to delete your data, and so on.
+
+## How can you join the data collection program?
+In Baballonia's settings tab, we have a checkbox that will opt you into the program. This setting is disabled by default, and can be opted in or out of anytime. Do note it may require a restart of Baballonia for changes to take effect.
+
+## What data do we collect?
+We collect images of eyes and face, as well as relevant information collected after an eye tracking calibration. This information includes:
+- Gaze direction
+- Eye openness
+- Eye and eyebrow perceived expression (angry, widen, squint)
+- Position in calibration routine
+
+## How do we collect and store data?
+As mentioned above, we collect data after an eye tracking calibration is performed and you have opted into the data collection program. We take your privacy seriously, all data uploads are encrypted using AES/RSA before being uploaded to our servers. 
+
+## Why are we collecting data, and how are we using it?
+Currently, the Project Babble team uses a synthetic data training pipeline to train our eye and face models. While these are effective, the introduction of real human eye/face data *dramatically* improves model fidelity. 
+
+For context, the current face model is trained off of 4 million synthetic frames and 30k real frames. That's less than 1% of the data!
+
+## How do you request your data be removed?
+To request your data be removed, go to your settings page and copy your unique ID. Reach out to us on Discord or our Email asking for your data to be removed and include your unique ID. 

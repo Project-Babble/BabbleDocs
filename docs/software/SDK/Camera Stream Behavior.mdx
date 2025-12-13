@@ -1,0 +1,19 @@
+---
+title: Custom Camera Stream Behavior
+sidebar_position: 2
+---
+
+# Custom Camera Stream Behavior
+
+The Baballonia SDK allows developers to create their own camera stream sources by extending the abstract `Capture` class. This system unifies how Baballonia interacts with any camera type—USB webcams, Varjo eye-tracking cameras, Android/IP streams, V4L2 devices, or fully custom experimental hardware.
+
+Custom capture sources integrate directly into Baballonia **without modifying the core application**, thanks to the plugin-based capture factory system.
+
+---
+
+## Understanding the `Capture` Class
+
+Every camera source in Baballonia is implemented as a subclass of the `Capture` base class:
+
+```csharp
+public abstract class Capture(string source, ILogger logger) : IDisposable

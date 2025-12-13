@@ -1,0 +1,53 @@
+---
+title: ICaptureFactory Interface
+sidebar_position: 3
+---
+
+# ICaptureFactory Interface
+
+The `ICaptureFactory` interface in the Baballonia SDK is the entry point for adding **custom camera sources** to Baballonia. Any new camera backend—USB, IP-based, native hardware, or experimental—must be registered through a factory so the system knows *how* to connect to it.
+
+:::info
+Every Capture Source requires a Factory.  
+A factory tells Baballonia:
+
+- **Whether it can connect** to a given address  
+- **How to create the correct `Capture` subclass**  
+- **What provider name** the source should appear under inside Baballonia  
+
+This system enables full plugin-based extensibility without modifying the core application.
+:::
+
+---
+
+## Purpose of `ICaptureFactory`
+
+Baballonia supports many types of cameras, such as:
+
+- USB webcams  
+- Varjo eye-tracking cameras  
+- Android/IP camera streams  
+- V4L2 devices on Linux  
+- Custom or experimental camera hardware  
+
+Each type often needs unique connection logic—for example, parsing its own address, validating availability, or allocating platform-specific resources.
+
+The `ICaptureFactory` interface standardizes this by requiring every plugin to define:
+
+- **How to validate an address** (`CanConnect`)  
+- **How to construct the correct capture implementation** (`Create`)  
+- **What name represents the provider** (`GetProviderName`)  
+
+This ensures all camera types behave consistently inside Baballonia.
+
+---
+
+## Interface Definition
+
+```csharp
+public interface ICaptureFactory
+{
+    Capture Create(string address);
+    bool CanConnect(string address);
+    string GetProviderName();
+}

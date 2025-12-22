@@ -1,0 +1,18 @@
+---
+title: Architecture
+sidebar_position: 1
+---
+
+# Architecture
+
+Baballonia is an MVVM Avalonia cross-platform application using C# as its primary programming language. It has dependency injection!
+
+Visual elements you can touch and see are represented with Models (the `.axaml` that defines how UI elements are laid out) -> View (Glue that binds the UI to business, transforms data) -> View Models (the real business logic layer).
+
+Each ViewModel can compose Services, reusable classes, to extend functionality. Individual services are covered under the services page. 
+
+# Lifecycle
+
+For an eye camera frame to be converted to and sent out to a game, read the below:
+
+

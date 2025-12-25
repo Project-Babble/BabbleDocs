@@ -5,7 +5,7 @@ sidebar_position: 2
 
 # Services
 
-Services are reusable classes designed to *be* a feature.
+Services are reusable feature.
 
 For example, let's say we wanted to listen to when USB devices were attached and disconnected, and update the drop-down device menu. To do this, we could create a `UsbService`, register it under the `App.axaml.cs` (so we can find it in code!), and "inject" it into the Home View.
 
@@ -21,7 +21,7 @@ public interface IUsbService
 }
 ```
 
-:::note
+:::info
 Note the above interface we have created. By creating an interface, we can mock a UsbService which makes unit testing a whole lot easier!
 :::
 
@@ -68,7 +68,6 @@ public sealed class UsbService : IUsbService
 
     private void RateLimitedAction(string deviceName, Action<string>? action)
     {
-
         var now = DateTime.UtcNow;
         var timeSinceLastEvent = now - _lastEventTime;
 

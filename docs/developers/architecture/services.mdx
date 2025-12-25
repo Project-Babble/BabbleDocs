@@ -1,0 +1,101 @@
+---
+title: Services
+sidebar_position: 2
+---
+
+# Services
+
+Services are reusable feature.
+
+For example, let's say we wanted to listen to when USB devices were attached and disconnected, and update the drop-down device menu. To do this, we could create a `UsbService`, register it under the `App.axaml.cs` (so we can find it in code!), and "inject" it into the Home View.
+
+Here's what this might look like:
+
+```cs
+namespace Baballonia.Contracts;
+
+public interface IUsbService
+{
+    public event Action<string> OnUsbConnected;
+    public event Action<string> OnUsbDisconnected;
+}
+```
+
+:::info
+Note the above interface we have created. By creating an interface, we can mock a UsbService which makes unit testing a whole lot easier!
+:::
+
+```cs
+namespace Baballonia.Services;
+
+public sealed class UsbService : IUsbService
+{
+    public event Action<string>? OnUsbConnected;
+    public event Action<string>? OnUsbDisconnected;
+
+    private static readonly IUsbEventWatcher UsbEventWatcher = new UsbEventWatcher(
+        startImmediately: true,                 // True - This part is obvious
+        addAlreadyPresentDevicesToList: false,  // False - This part is less obvious.
+                                                // Don't check devices that are already plugged in! This will spam the refresh queue on launch
+        usePnPEntity: false,                    // False - PnP entity is slower, overkill for our use case
+        includeTTY: true);                      // True - Legacy Babble Tracker show up under /dev/ttyACM*
+
+    private readonly TimeSpan _eventThrottleInterval = TimeSpan.FromSeconds(1);
+    private DateTime _lastEventTime = DateTime.MinValue;
+    private readonly object _eventLock = new();
+
+    public UsbService()
+    {
+        UsbEventWatcher.UsbDeviceAdded += UsbDeviceAdded;
+        UsbEventWatcher.UsbDeviceRemoved += UsbDeviceRemoved;
+    }
+
+    private void UsbDeviceAdded(object? sender, UsbDevice? device)
+    {
+        if (device == null)
+            return;
+
+        RateLimitedAction(device.DeviceName, OnUsbConnected);
+    }
+
+    private void UsbDeviceRemoved(object? sender, UsbDevice? device)
+    {
+        if (device == null)
+            return;
+
+        RateLimitedAction(device.DeviceName, OnUsbDisconnected);
+    }
+
+    private void RateLimitedAction(string deviceName, Action<string>? action)
+    {
+        var now = DateTime.UtcNow;
+        var timeSinceLastEvent = now - _lastEventTime;
+
+        if (timeSinceLastEvent < _eventThrottleInterval)
+        {
+            return;
+        }
+
+        _lastEventTime = now;
+        
+        action?.Invoke(deviceName);
+    }
+
+    ~UsbService()
+    {
+        UsbEventWatcher.UsbDeviceAdded -= UsbDeviceAdded;
+        UsbEventWatcher.UsbDeviceRemoved -= UsbDeviceRemoved;
+        UsbEventWatcher.Dispose();
+    }
+}
+```
+
+Now, we inject this under the `App.axaml.cs`:
+
+```cs
+...
+services.AddTransient<IUsbService, UsbService>();
+...
+```
+
+And now we can pull it in from the constructor in any of our registered classes.

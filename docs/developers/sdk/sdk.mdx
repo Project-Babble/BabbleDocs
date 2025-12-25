@@ -1,0 +1,28 @@
+---
+title: SDK
+sidebar_position: 2
+---
+
+# SDK
+
+The Baballonia SDK provides developers with the tools necessary to bring eye and face image data into Baballonia.
+
+---
+
+## SDK Components
+
+### 1. [`Capture` Class](/docs/developers/sdk/Capture)
+
+By extending the `Capture` class, you define how your camera behaves and how it provides frames to Baballonia.
+
+---
+
+### 2. [`ICaptureFactory` Interface](./docs/developers/sdk/ICaptureFactory)
+
+Every custom camera backend must provide a corresponding `ICaptureFactory`. A factory tells Baballonia:
+
+- Whether it can connect to a given camera address (`CanConnect`)
+- How to construct the correct `Capture` implementation (`Create`)
+- What provider name should appear in the UI and logs (`GetProviderName`)
+
+The capture system and the factory work together: a `Capture` implementation requires an `ICaptureFactory`, and a factory has no purpose without its corresponding `Capture` implementation.

@@ -1,0 +1,41 @@
+---
+title: Architecture
+sidebar_position: 1
+---
+
+# Architecture
+
+Baballonia is an [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) [Avalonia](https://avaloniaui.net/) cross-platform application using [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection), and [C#](https://dotnet.microsoft.com/en-us/languages/csharp) as its primary programming language.
+
+The pages you can touch and see in the app are represented with their:
+1. **Model** `.axaml` that defines how UI elements are laid out
+1. **View** Glue that binds the UI to business, transforms data
+1. **ViewModels** the real business logic layer. Each ViewModel composes [Services](docs/developers/architecture/services.mdx) (reusable classes) to extend functionality.
+
+## Hot Path Lifecycle
+
+To contextualize the above, consider the lifecycle of a camera frame to be converted to and sent out to a game:
+
+1. Baballonia initializes its services in the `App.axaml` file. 
+1. Baballonia loads Views and defaults to the Home pages.
+1. Home page, in its services, has references to:
+
+```cs
+FacePipelineManager facePipelineManager,
+EyePipelineManager eyePipelineManager,
+IFacePipelineEventBus facePipelineEventBus,
+IEyePipelineEventBus eyePipelineEventBus,
+...
+```
+
+`EyePipelineManager` manages `EyeProcessingPipeline` and `FacePipelineManager` manages `FaceProcessingPipeline`. Let's just focus on the eye pipeline for now. Both Pipelines extend the `DefaultProcessingPipeline`, which is responsible for the underlying machine-learning inference. Each Pipeline fires off an event when there is new data from an inference run, in this case from the Home page.
+
+Now consider the `ParameterSenderService`. In it constructor, we also inject the `EyeProcessingPipeline` and `FaceProcessingPipeline`. Here, when there is new data, we Queue information to be send out via the `OscSendService`.
+
+The above cylce repeats.
+
+
+
+
+
+

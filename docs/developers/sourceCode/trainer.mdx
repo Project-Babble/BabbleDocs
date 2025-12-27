@@ -1,0 +1,142 @@
+---
+title: Running the Trainer
+sidebar_position: 2
+---
+
+# Running the Babble Trainer
+
+Having file/directory issues on Linux? Did your model training fail, or do you just want to run things manually? You've come to the right place!
+
+This page covers how to download and run the source code for the Babble Trainer.
+
+## 1) Prerequisites
+
+To get started, you will need to install:
+
+- [`git`](https://git-scm.com/downloads)
+
+### Windows
+
+If you're on on Windows, you'll also need to download:
+- [`pyenv-win`](https://github.com/pyenv-win/pyenv-win)
+
+### macOS/Linux
+
+For macOS/Linux:
+- [`pyenv`](https://github.com/pyenv/pyenv)
+
+## 2) Downloading The Babble Trainer
+
+Navigate to a folder where you would like to install the Babble Trainer. We'll be using the folder `BabbleTrainer`.
+
+Then, open a terminal in your folder. Make sure its current directory matches the folder!
+
+Now, run this command to download the Babble Trainer to the folder:
+
+```
+git clone https://github.com/Project-Babble/BabbleTrainer 
+```
+
+### Downloading Python
+
+Now, we need to install a version of Python the Babble Trainer is compatible with.
+
+<details>
+  <summary>For reference, here is a compatibility table of the Babble Trainer and different versions of Python.</summary>
+
+| < 3.7 | 3.8 | 3.9 | 3.10 | 3.11 | 3.12 | 3.13 |
+|:------:|:---:|:---:|:----:|:----:|:----:|:----:|
+|    ❌   |  ⚠️  |  ⚠️  |   ✅  |   ✅  |   ✅  |   ❌  |
+
+
+:::note
+Python `3.13` support is planned once key dependencies are built against `3.13`, namely `onnxruntime-directml` and `onnxruntime-gpu`.
+
+While not supported, nightly builds of the above dependencies exist that enable this. Microsoft outlines how to set this up [here](https://github.com/microsoft/onnxruntime/issues/22274#issuecomment-2423585092). 
+
+:::
+</details>
+
+:::info
+We recommend Python version `3.12.8`.
+:::
+
+In the same terminal, run:
+
+```
+pyenv init
+```
+
+If applicable, follow the instructions the above command outputs.
+
+Once you have done that, in the same terminal as above, run:
+
+```
+pyenv install 3.12.8
+pyenv global 3.12.8
+```
+
+This will set the global version of Python in your machine. If you ever need to change it, you can run the last command above with a different version.
+
+## 3) Setting up 
+
+Now, in the same terminal as above, run:
+
+### Windows
+
+```
+cd BabbleTrainer
+python -m venv venv
+./venv/Scripts/activate.ps1
+```
+
+### macOS/Linux
+
+```
+cd BabbleTrainer
+python -m venv venv
+source venv/bin/activate
+```
+
+This creates a [virtual environment](https://www.geeksforgeeks.org/python-virtual-environment/) which is used to store the Babble Trainer's dependencies. Now run:
+
+```
+pip install -r requirements.txt
+```
+
+And wait for `pip` to install everything. This might take some time!
+
+## 4) Running the Babble Trainer
+
+Finally, you are ready to run the Babble Trainer! Run:
+
+```
+python main.py /path/to/user_cal.bin output_onnx_file.onnx
+```
+
+## 5) Subsequent Runs
+
+For subsequent runs, you will need to activate the virtual environment prior to running the Babble Trainer. 
+
+You can do this by running the *last line* in [Step 3](building#3-setting-up) in tandem with the command from [Step 4](building#4-running-the-babble-trainer), making sure your terminal window is in the same location as it was before.
+
+:::info
+Make sure you are in your Babble Trainer folder prior to running these, or they will not work!
+:::
+
+### Windows
+
+```
+./venv/Scripts/activate.ps1
+python main.py /path/to/user_cal.bin output_onnx_file.onnx
+```
+
+### macOS/Linux
+
+```
+source venv/bin/activate
+python main.py /path/to/user_cal.bin output_onnx_file.onnx
+```
+
+That's it!
+

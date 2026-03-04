@@ -44,6 +44,22 @@ If you'd like to use your tracker in _Wireless_ mode, follow this [guide](docs/b
 For more detailed instructions and troubleshooting information, head to the [firmware guide.](/hardware/Firmware/firmware.mdx)
 :::
 
+:::warning
+**Linux Users:** Babble Boards do not support UVC/Serial wired, you **must** use a wireless configuration.
+:::
+
+:::warning
+**Linux Users:** We only support the Steam and GitHub releases, not the AUR package.
+:::
+
+:::info
+**Linux Users:** If you are experiencing issues configuring or opening a Babble Tracker camera, there are a few things you can do:
+1) Try the Steam scout 1.0 runtime (not sniper 3.0)
+1) Install `libudev`, building from source, or making/joining the `plugdev` group
+1) Install the [99-platformio-udev.rules](https://docs.platformio.org/en/stable/core/installation/udev-rules.html)
+1) Run the app via Proton
+:::
+
 Now that you've got your Babble Tracker, you'll need to flash the firmware for it.
 
 1) Open Baballonia and navigate to the Firmware page:

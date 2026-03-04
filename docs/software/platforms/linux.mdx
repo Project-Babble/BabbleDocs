@@ -5,11 +5,27 @@ sidebar_position: 2
 
 # Notes on Linux
 
+## Baballonia
+
 :::warning
-This page concerns the [legacy Desktop App](/docs/developers/sourceCode/python.mdx), which is no longer updated. For current babbling, please use the current Desktop App [Baballonia](docs/software/baballonia/baballonia.mdx).
+Babble Boards do not support UVC/Serial wired on Linux, you must use a wireless configuration.
 :::
 
+:::warning
+We only support the Steam and GitHub releases, not the AUR package.
+:::
+
+If you are experiencing issues configuring or opening a Babble Tracker camera, there are a few things you can do:
+1) Try the Steam scout 1.0 runtime (not sniper 3.0)
+1) Install `libudev`, building from source, or making/joining the `plugdev` group
+1) Install the [99-platformio-udev.rules](https://docs.platformio.org/en/stable/core/installation/udev-rules.html)
+1) Run the app via Proton
+
 ## The Babble App
+
+:::warning
+The below concerns the [legacy Desktop App](/docs/developers/sourceCode/python.mdx), which is no longer updated. For current babbling, please use the current Desktop App [Baballonia](docs/software/baballonia/baballonia.mdx).
+:::
 
 ### v4l2/v4l-utils
 

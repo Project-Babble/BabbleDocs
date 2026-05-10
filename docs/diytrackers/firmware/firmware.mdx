@@ -1,13 +1,13 @@
 ---
+sidebar_position: 4
 title: Firmware
-sidebar_position: 1
+pagination_next: software/baballonia/baballonia
 ---
 
-:::warning 
-Your MUST have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly. 
+:::warning
+Your MUST have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly.
 5Ghz doesn't work with the ESP32 series of processors, which is what the Babble Tracker uses.
-::: 
-
+:::
 
 ## Setup
 
@@ -15,7 +15,7 @@ Now that you've got your Babble Tracker, you'll need to flash the firmware for i
 
 ### Step 1 - Open Baballonia and navigate to the Firmware page:
 
-### Step 1.1 - Plug in *or* unplug and replug your tracker to make sure it's in configuration mode.
+### Step 1.1 - Plug in _or_ unplug and replug your tracker to make sure it's in configuration mode.
 
 ![fw](@site\static\img\avalonia\firmware\new\fw.png)
 
@@ -56,24 +56,26 @@ The tracker will now boot into either Wired or Wireless mode. If in wired mode i
 ## Troubleshooting
 
 ### Step 1)
-To pull logs from your device, first download [EyeTrackVR's firmware flashing tool](https://github.com/EyeTrackVR/FirmwareFlashingTool/releases) from their Github. 
+
+To pull logs from your device, first download [EyeTrackVR's firmware flashing tool](https://github.com/EyeTrackVR/FirmwareFlashingTool/releases) from their Github.
 
 Before moving onto the next steps, make sure your device is plugged in and/or connected (non-boot mode this time).
 
 ### Step 2)
-Open EyeTrackVR's firmware flashing tool. Select any firmware here, it doesn't matter. Just go to the next page. 
 
+Open EyeTrackVR's firmware flashing tool. Select any firmware here, it doesn't matter. Just go to the next page.
 
-<img src={require("@site/static/img/firmware_ETVR_1.png").default}/>
+<img src={require("@site/static/img/firmware_ETVR_1.png").default} />
 
 If prompted for wifi, just enter anything to move on. You don't need to deal with this either.
 
-<img src={require("@site/static/img/firmware_ETVR_2.png").default}/>
+<img src={require("@site/static/img/firmware_ETVR_2.png").default} />
 
 ### Step 3)
+
 Select your device on the corresponding COM port. Then, click on the left arrow next to the "Downloading logs..." button. Or you can download the logs and look at them in the text editor of your choice.
 
-<img src={require("@site/static/img/firmware_ESP32.png").default}/>
+<img src={require("@site/static/img/firmware_ESP32.png").default} />
 
 ##
 

@@ -52,12 +52,6 @@ As a quick reference sheet, this is how it should be assembled.
 For more detailed instructions and troubleshooting information, head to the [firmware guide.](diytrackers\partsguide\partsguide.mdx)
 :::
 
-1. Try the Steam scout 1.0 runtime (not sniper 3.0)
-1. Install `libudev`, building from source, or making/joining the `plugdev` group
-1. Install the [99-platformio-udev.rules](https://docs.platformio.org/en/stable/core/installation/udev-rules.html)
-1. Run the app via Proton
-   :::
-
 ### Tracker Mode Selection (Wired or Wireless)
 
 Now that you've got your Babble Tracker plugged in and Babbalonia installed, you'll need to complete device setup.
@@ -97,7 +91,11 @@ Upon connecting the tracker, you will have a 20 second window to press 'Refresh'
 ![dropdown](@site\static\img\avalonia\firmware\new\dropdown.png)
 ![selected](@site\static\img\avalonia\firmware\new\selected.png)
 
-4. Set your tracker into 'Wired' or 'Wireless' mode:
+4a. Set your tracker into 'Wired' or 'Wireless' mode:
+
+:::warning
+You *must* have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly. 5Ghz doesn't work with the ESP32 series of processors, which is what the Babble Tracker uses.
+:::
 
 :::info
 <u>Wired:</u> Your headset has a dedicated USB port for accessories that connects directly to your PC (e.g. Valve Index frunk USB)  
@@ -106,6 +104,14 @@ Upon connecting the tracker, you will have a 20 second window to press 'Refresh'
 :::
 
 ![mode](@site\static\img\avalonia\firmware\new\mode.png)
+
+4b. If using Wireless mode, set your WiFi credentials:
+
+:::warning
+You need to press 'Refresh WiFi Networks' before the tracker can connect to a network, even if you enter the SSID manually.
+:::
+
+![wifi](@site\static\img\avalonia\firmware\new\wifi.png)
 
 5. Unplug and replug your tracker. 20 seconds after being powered on, it will start.
 

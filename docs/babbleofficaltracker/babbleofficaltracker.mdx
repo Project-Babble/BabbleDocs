@@ -8,10 +8,10 @@ import ImageGallery from "@site/src/components/ImageGallery/ImageGallery";
 
 # Babble Tracker Quickstart
 
-This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.
+This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.  
 
-:::info
-If you'd like to use your tracker in _Wireless_ mode, follow this [guide](docs/babbleofficaltracker/babbleofficaltrackerwireless.mdx).
+:::danger
+For official Babble facial trackers, flashing the firmware is <u>not recommended</u> since they arrive from our warehouse already fully flashed. You should only flash firmware if you know what you're doing and are troubleshooting.
 :::
 
 ## Getting Started
@@ -20,17 +20,20 @@ If you'd like to use your tracker in _Wireless_ mode, follow this [guide](docs/b
 
 **Assemble your tracker**
 
-1. Follow this video for how to assemble your tracker: [Unboxing and Assembling your Babble Tracker](https://www.youtube.com/watch?v=iPRabTew0KU)
+1. Follow this video for how to assemble your tracker: [Unboxing and Assembling your Babble Tracker](https://www.youtube.com/watch?v=iPRabTew0KU)  
+As a quick reference sheet, this is how it should be assembled.
+
+![Screw Placement](/img/screw_placement_diagram.jpg)
 
 **Plug your tracker into your PC**
 
-1. Connect using the USB port on your tracker
-1. Make sure the switch is in the "ON" position, as seen below
-1. A bright green/red light should appear on the back of the tracker
-1. You should hear a connection sound when properly connected
-1. The tracker will take about 20 seconds to boot upon receiving power
+1. Connect using the USB port on your tracker.  
+1. Make sure the switch is in the "ON" position, as seen below.  
+1. A bright green/red light should appear on the back of the tracker.  
+1. You should hear a standard USB connection sound on your PC when properly connected.  
+1. The tracker will take about 20 seconds to boot upon receiving power.  
 
-![Switch Position](/img/setup_switch.jpg)
+![ON/OFF Switch Position](/img/on_off_diagram.jpg)
 
 ### Software Setup
 
@@ -45,22 +48,9 @@ If you'd like to use your tracker in _Wireless_ mode, follow this [guide](docs/b
     - For assistance building Babble Avalonia on these platforms, please contact us in our discord server.
     - Our [Legacy App](docs\babbleofficaltracker\legacySetup.mdx) can be run from our [installer scripts](https://github.com/project-Babble/projectBabble/?tab=readme-ov-file#macos-and-linux) on the Github
 
-### Tracker Mode Selection (Wired or Wireless)
-
 :::info
 For more detailed instructions and troubleshooting information, head to the [firmware guide.](diytrackers\partsguide\partsguide.mdx)
 :::
-
-:::warning
-**Linux Users:** Babble Boards do not support UVC/Serial wired, you **must** use a wireless configuration.
-:::
-
-:::warning
-**Linux Users:** We only support the Steam and GitHub releases, not the AUR package.
-:::
-
-:::info
-**Linux Users:** If you are experiencing issues configuring or opening a Babble Tracker camera, there are a few things you can do:
 
 1. Try the Steam scout 1.0 runtime (not sniper 3.0)
 1. Install `libudev`, building from source, or making/joining the `plugdev` group
@@ -68,43 +58,67 @@ For more detailed instructions and troubleshooting information, head to the [fir
 1. Run the app via Proton
    :::
 
-Now that you've got your Babble Tracker, you'll need to flash the firmware for it.
+### Tracker Mode Selection (Wired or Wireless)
+
+Now that you've got your Babble Tracker plugged in and Babbalonia installed, you'll need to complete device setup.
+<details>
+<summmary>Notes for Linux users only</summary>
+
+:::info
+**Linux Users:** If you are experiencing issues configuring or opening a Babble Tracker camera, there are a few things you can do:
+1) Try the Steam scout 1.0 runtime (not sniper 3.0).
+1) Install `libudev`, building from source, or making/joining the `plugdev` group.
+1) Install the [99-platformio-udev.rules](https://docs.platformio.org/en/stable/core/installation/udev-rules.html).
+1) Run the app via Proton.
+:::
+
+:::warning
+**Linux:** Babble Boards do not support UVC/Serial wired, you **must** use a wireless configuration.
+:::
+
+:::warning
+**Linux:** We only support the Steam and GitHub releases, not the AUR package.
+:::
+
+</details>
 
 1. Open Baballonia and navigate to the Firmware page:
-2. Plug in _or_ unplug and replug your tracker to make sure it's in configuration mode.
+2. Plug in _or_ unplug and replug your tracker to make sure it's in Configuration mode.
 
 ![fw](@site\static\img\avalonia\firmware\new\fw.png)
 
-3. Refresh the connected trackers. Then, select yours:
+3. Once your Babble tracker is in Configuration mode, select Refresh to see the connected trackers. Once you see yours appear, select it:
 
 :::warning
-Upon connecting the tracker, you will have a 20 second window to press ‘Refresh’. If you wait too long, you will need to unplug the tracker and try again.
+Upon connecting the tracker, you will have a 20 second window to press 'Refresh'. If you wait too long, you will need to unplug the tracker and try again.
 :::
 
 ![refresh](@site\static\img\avalonia\firmware\new\refresh.png)
 ![dropdown](@site\static\img\avalonia\firmware\new\dropdown.png)
 ![selected](@site\static\img\avalonia\firmware\new\selected.png)
 
-4. Set your tracker into 'Wired' mode:
+4. Set your tracker into 'Wired' or 'Wireless' mode:
+
+:::info
+<u>Wired:</u> Your headset has a dedicated USB port for accessories that connects directly to your PC (e.g. Valve Index frunk USB)  
+<u>Wireless:</u> Your headset connects to your PC via Wi-Fi or doesn’t pass USB data to your PC (e.g. Quest 2/3*)  
+*Quest Link via wired Link Cable **cannot** be used via Wired mode, as Meta Quest Link only streams PCVR *to* the headset. It doesn't let your Babble tracker communicate to the PC when wired streaming is occurring.
+:::
 
 ![mode](@site\static\img\avalonia\firmware\new\mode.png)
 
-:::danger
-Do not click the "flash firmware" buttons after changing the mode! If you do you'll need to start over.
-:::
-
-5. Unplug and replug your tracker. 20 seconds after being powered on, it will start!
+5. Unplug and replug your tracker. 20 seconds after being powered on, it will start.
 
 :::info
-The tracker will now boot into UVC mode and function as a USB camera with the device name 'openiristracker'
+The tracker will now boot into USB camera mode (UVC mode) and function as a USB camera with the device name 'openiristracker'.
 :::
 
 ### Connect to your tracker
 
-1. Open Baballonia
-1. Open the dropdown menu
-1. Select 'openiristracker'
-1. Click "Start Camera" to connect
+1. Open Baballonia.
+1. Open the dropdown menu.
+1. Select 'openiristracker'.
+1. Click "Start Camera" to connect.
 
 <ImageGallery
   images={[

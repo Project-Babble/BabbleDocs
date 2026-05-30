@@ -6,9 +6,9 @@ pagination_next: babbleofficaltracker/troubleshoot
 
 import ImageGallery from "@site/src/components/ImageGallery/ImageGallery";
 
-# The calibration tab
+# The Calibration Tab
 
-## What is the Calibration tab?
+## What is the Calibration Tab?
 
 #### The calibration tab allows you to tweak how your tracker responds to your facial movements and expressions. It is the primary method of tuning babble's performance to your preferences.
 
@@ -43,7 +43,9 @@ The slider also contains a red dot visualizing the current state of the given bl
 
 ![SliderRedDot](@site/static/img/CalibrationGuideImages/RedDotSlider.png)
 
-# Adjusting values
+
+## Adjusting values
+
 
 The slider for each blendshape is controlled by **two handles** on either side of the blue bar. The left side is the _minimum_ cutoff, and the right side is the _maximum_. By tweaking those, you influence how the tracker picks up your expressions.&#x20;
 
@@ -54,7 +56,7 @@ The red dot will always move between the **far left and far right** side of the 
 You can check if any given shape is being detected by simply observing if the red dot is moving.
 :::
 
-### **Left slider - minimum:** controls how quickly the tracker will pick up your movement. By moving it, you will change how big of a movement you have to make for it to be detected.
+#### **Left slider - minimum:** controls how quickly the tracker will pick up your movement. By moving it, you will change how big of a movement you have to make for it to be detected.
 
 ![SliderLeftSide](@site/static/img/CalibrationGuideImages/LeftSideSlider.png)
 
@@ -62,7 +64,7 @@ You can check if any given shape is being detected by simply observing if the re
 This is not a scalar, anything below selected minimum value will be completely cutoff.
 :::
 
-### **Right slider -** **maximum:** controls how quickly the given movement will max out. By moving it, you will also change how small of a movement you have to do for it to get detected.
+#### **Right slider -** **maximum:** controls how quickly the given movement will max out. By moving it, you will also change how small of a movement you have to do for it to get detected.
 
 ![SliderRightSide](@site/static/img/CalibrationGuideImages/RightSideSlider.png)
 
@@ -70,7 +72,7 @@ This is not a scalar, anything below selected minimum value will be completely c
 Adjusting maximums to very low (close to the left side) can make blendshapes constantly max out, but it **COULD** also allow to properly pick up blendshapes that are very weakly detected.
 :::
 
-## Example of possible calibration:
+#### Example of possible calibration:
 
 If you're having issues with your tracking quality, for example, your jaw is constantly opened, adjust the minimum (left side of the slider) of JawOpen until the red dot is located and dormant at the left side of the slider.
 
@@ -82,9 +84,9 @@ The best way to calibrate is to open up the game of your choice and tweak values
 ![FTDebugPicture](@site/static/img/CalibrationGuideImages/FTDebug.png)
 :::
 
-# Trouble shooting
+## Troubleshooting
 
-### If you're having issues with some expressions not being picked up:
+#### If you're having issues with some expressions not being picked up:
 
 Check if your tracker is **properly positioned** and if the image is properly **cropped** and **centered**. Make sure your face is **properly, uniformly lit** and exposed so that the tracker can correctly pick up your movements.
 You can also refer to the [Troubleshooting and FAQs](docs/FAQs.mdx) page.

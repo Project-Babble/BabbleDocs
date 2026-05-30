@@ -8,7 +8,7 @@ import ImageGallery from "@site/src/components/ImageGallery/ImageGallery";
 
 # Babble Tracker Quickstart
 
-This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.  
+This guide applies to the Official Babble Tracker, and should cover DIY versions that use similar hardware/firmware. It will walk you through the complete setup process, from initial connection to calibration and troubleshooting.
 
 :::danger
 For official Babble facial trackers, flashing the firmware is <u>not recommended</u> since they arrive from our warehouse already fully flashed. You should only flash firmware if you know what you're doing and are troubleshooting.
@@ -21,17 +21,17 @@ For official Babble facial trackers, flashing the firmware is <u>not recommended
 **Assemble your tracker**
 
 1. Follow this video for how to assemble your tracker: [Unboxing and Assembling your Babble Tracker](https://www.youtube.com/watch?v=iPRabTew0KU)  
-As a quick reference sheet, this is how it should be assembled.
+   As a quick reference sheet, this is how it should be assembled.
 
 ![Screw Placement](/img/screw_placement_diagram.jpg)
 
 **Plug your tracker into your PC**
 
-1. Connect using the USB port on your tracker.  
-1. Make sure the switch is in the "ON" position, as seen below.  
-1. A bright green/red light should appear on the back of the tracker.  
-1. You should hear a standard USB connection sound on your PC when properly connected.  
-1. The tracker will take about 20 seconds to boot upon receiving power.  
+1. Connect using the USB port on your tracker.
+1. Make sure the switch is in the "ON" position, as seen below.
+1. A bright green/red light should appear on the back of the tracker.
+1. You should hear a standard USB connection sound on your PC when properly connected.
+1. The tracker will take about 20 seconds to boot upon receiving power.
 
 ![ON/OFF Switch Position](/img/on_off_diagram.jpg)
 
@@ -55,16 +55,18 @@ For more detailed instructions and troubleshooting information, head to the [fir
 ### Tracker Mode Selection (Wired or Wireless)
 
 Now that you've got your Babble Tracker plugged in and Babbalonia installed, you'll need to complete device setup.
+
 <details>
-<summmary>Notes for Linux users only</summary>
+<summary>Notes for Linux users only</summary>
 
 :::info
 **Linux Users:** If you are experiencing issues configuring or opening a Babble Tracker camera, there are a few things you can do:
-1) Try the Steam scout 1.0 runtime (not sniper 3.0).
-1) Install `libudev`, building from source, or making/joining the `plugdev` group.
-1) Install the [99-platformio-udev.rules](https://docs.platformio.org/en/stable/core/installation/udev-rules.html).
-1) Run the app via Proton.
-:::
+
+1. Try the Steam scout 1.0 runtime (not sniper 3.0).
+1. Install `libudev`, building from source, or making/joining the `plugdev` group.
+1. Install the [99-platformio-udev.rules](https://docs.platformio.org/en/stable/core/installation/udev-rules.html).
+1. Run the app via Proton.
+   :::
 
 :::warning
 **Linux:** Babble Boards do not support UVC/Serial wired, you **must** use a wireless configuration.
@@ -94,14 +96,18 @@ Upon connecting the tracker, you will have a 20 second window to press 'Refresh'
 4a. Set your tracker into 'Wired' or 'Wireless' mode:
 
 :::warning
-You *must* have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly. 5Ghz doesn't work with the ESP32 series of processors, which is what the Babble Tracker uses.
+You _must_ have 2.4Ghz Wifi network for a Babble Tracker or any ESP32 device to connect wirelessly. 5Ghz doesn't work with the ESP32 series of processors, which is what the Babble Tracker uses.
 :::
 
 :::info
-<u>Wired:</u> Your headset has a dedicated USB port for accessories that connects directly to your PC (e.g. Valve Index frunk USB)  
-<u>Wireless:</u> Your headset connects to your PC via Wi-Fi or doesn’t pass USB data to your PC (e.g. Quest 2/3*)  
-*Quest Link via wired Link Cable **cannot** be used via Wired mode, as Meta Quest Link only streams PCVR *to* the headset. It doesn't let your Babble tracker communicate to the PC when wired streaming is occurring.
-:::
+
+<u>Wired:</u> Your headset has a dedicated USB port for accessories that
+connects directly to your PC (e.g. Valve Index frunk USB)
+<u>Wireless:</u> Your headset connects to your PC via Wi-Fi or doesn’t pass USB
+data to your PC (e.g. Quest 2/3*) *Quest Link via wired Link Cable **cannot** be
+used via Wired mode, as Meta Quest Link only streams PCVR *to* the headset. It
+doesn't let your Babble tracker communicate to the PC when wired streaming is
+occurring. :::
 
 ![mode](@site\static\img\avalonia\firmware\new\mode.png)
 

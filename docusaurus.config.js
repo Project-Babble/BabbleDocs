@@ -82,7 +82,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/Project-Babble/ProjectBabble',
+            href: 'https://github.com/Project-Babble',
             label: 'GitHub',
             position: 'right',
           },
@@ -134,7 +134,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/Project-Babble/ProjectBabble',
+                href: 'https://github.com/Project-Babble',
               },
             ],
           },

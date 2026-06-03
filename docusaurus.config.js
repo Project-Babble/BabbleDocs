@@ -45,7 +45,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/Project-Babble/BabbleDocs/tree/main/',
         },
         blog: {
           blogSidebarCount: 'ALL',
@@ -53,7 +53,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/Project-Babble/BabbleDocs/tree/main/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -83,7 +83,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/Project-Babble/ProjectBabble',
+            href: 'https://github.com/Project-Babble',
             label: 'GitHub',
             position: 'right',
           },
@@ -105,7 +105,7 @@ const config = {
               },
               {
                 label: 'Data Privacy',
-                to: '/docs/dataprivacy',
+                to: '/docs/dataPrivacy',
               },
             ],
           },
@@ -135,7 +135,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/Project-Babble/ProjectBabble',
+                href: 'https://github.com/Project-Babble',
               },
             ],
           },

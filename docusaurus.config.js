@@ -105,7 +105,7 @@ const config = {
               },
               {
                 label: 'Data Privacy',
-                to: '/docs/dataprivacy',
+                to: '/docs/dataPrivacy',
               },
             ],
           },

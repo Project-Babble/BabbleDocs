@@ -3,6 +3,7 @@ title: How Babble's face tracking works
 description: Thoughts and reflections on leading a open-source software project
 authors: dfgHiatus
 hide_table_of_contents: false
+date: 2026-02-04T10:00
 ---
 
 import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
@@ -13,7 +14,7 @@ import ImageGallery from '@site/src/components/ImageGallery/ImageGallery';
 Portions of this blog post are paraphrased from the presentation we gave at [Furality](https://furality.org/) Somna 2025. You can view and download a copy of our presentation [here](https://docs.google.com/presentation/d/1ItUqgYrQtBs0QTgc_LZmc4kMKFd_hBsWJcGV5XV3_lM/edit?usp=sharing)
 :::
 
-Previously, I wrote an article describing [how our eye tracking works](blog\eballs.mdx). While we have given [fully-fledged presentations](m) in person and virtually on how our face tracking works, it's only dawning on me that we have never written a blog post on this. Heck!
+Previously, I wrote an article describing [how our eye tracking works](/blog/eballs). While we have given [fully-fledged presentations](https://docs.google.com/presentation/d/1ItUqgYrQtBs0QTgc_LZmc4kMKFd_hBsWJcGV5XV3_lM/edit?usp=sharing) in person and virtually on how our face tracking works, it's only dawning on me that we have never written a blog post on this. Heck!
 
 At a high level, our face model is a heavily modified [EfficentNetv2](https://arxiv.org/abs/2104.00298). Unlike our eye model, which requires a per-user calibration, our face model is a strong generalist model that will work out of the box.
 

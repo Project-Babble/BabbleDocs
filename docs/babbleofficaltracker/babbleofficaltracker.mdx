@@ -18,20 +18,17 @@ For official Babble facial trackers, flashing the firmware is <u>not recommended
 
 ### Hardware Setup
 
-**Assemble your tracker**
+**Plug your tracker into your PC**
+1) Connect using the USB port on your tracker
+1) Make sure the switch is in the "ON" position, as seen below
+1) A bright green OR red light should appear on the back of the tracker
+1) You should hear a connection sound when properly connected
+1) The tracker will take a few seconds to boot upon receiving power
 
 1. Follow this video for how to assemble your tracker: [Unboxing and Assembling your Babble Tracker](https://www.youtube.com/watch?v=iPRabTew0KU)  
    As a quick reference sheet, this is how it should be assembled.
 
 ![Screw Placement](@site/static/img/screw_placement_diagram.jpg)
-
-**Plug your tracker into your PC**
-
-1. Connect using the USB port on your tracker.
-1. Make sure the switch is in the "ON" position, as seen below.
-1. A bright green/red light should appear on the back of the tracker.
-1. You should hear a standard USB connection sound on your PC when properly connected.
-1. The tracker will take about 20 seconds to boot upon receiving power.
 
 ![ON/OFF Switch Position](@site/static/img/on_off_diagram.jpg)
 
@@ -119,17 +116,21 @@ You need to press 'Refresh WiFi Networks' before the tracker can connect to a ne
 
 ![wifi](@site\static\img\avalonia\firmware\new\wifi.png)
 
-5. Unplug and replug your tracker. 20 seconds after being powered on, it will start.
+5. Unplug and replug your tracker. A few seconds after being powered on, it will start.
 
 :::info
-The tracker will now boot into USB camera mode (UVC mode) and function as a USB camera with the device name 'openiristracker'.
+If you selected 'Wired' the tracker will now boot into USB camera mode (UVC mode) and function as a USB camera with the device name 'openiristracker' 
+:::
+
+:::info
+If you selected 'Wireless' the tracker will not boot into Wireless mode and function as an IP camera on the address 'http://openiristracker.local'.
 :::
 
 ### Connect to your tracker
 
 1. Open Baballonia.
 1. Open the dropdown menu.
-1. Select 'openiristracker'.
+1. Select 'openiristracker' or type in 'http://openiristracker.local'.
 1. Click "Start Camera" to connect.
 
 <ImageGallery

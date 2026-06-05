@@ -1,0 +1,89 @@
+---
+title: MIT Reality Hack 2026
+description: Looking back on MIT Reality Hack 2026
+authors: dfgHiatus
+hide_table_of_contents: false
+date: 2026-01-26T10:00
+---
+
+MIT Reality Hack was amazing. I've never been to a hackathon before, let alone place first at one!
+
+For context, Reality Hack is a premier hackathon with a focus on XR hardware/software. My team created [Reboot: Anomaly Holdout](https://devpost-.com/software/anomaly-holdout), someday we might turn this into its own game. Here are some pictures from the event.
+
+{/* truncate */}
+
+It was my first time riding an Amtrak train, it was pretty nice! I left from Albany station and arrived in Boston in the evening.
+
+![name](/blog/mit-reality-hack-2026/20260121_124538.jpg)
+
+It was a 10 minute walk from the train station to our hotel. Boston was about to be hit with a generational storm, we were all bracing ourselves.
+
+![name](/blog/mit-reality-hack-2026/20260121_223528.jpg)
+
+The next day we got ready and took the subway to the MIT campus. It was my first time on, and holy cow it was beautiful.
+
+![name](/blog/mit-reality-hack-2026/20260122_085254.jpg)
+
+![name](/blog/mit-reality-hack-2026/20260122_092940.jpg)
+
+![name](/blog/mit-reality-hack-2026/20260122_094014.jpg)
+
+The first day was a day to network, check out panels and booths. Here's a picture of me in Snapchat's AR [Spectacles](https://www.spectacles.com/):
+
+![name](/blog/mit-reality-hack-2026/20260122_125922.jpg)
+
+![name](/blog/mit-reality-hack-2026/20260122_180451.jpg)
+
+![name](/blog/mit-reality-hack-2026/20260122_180458.jpg)
+
+<video controls height="100%" width="100%">
+    <source src={"/blog/mit-reality-hack-2026/20260122_210953.mp4"} />
+</video>
+
+![name](/blog/mit-reality-hack-2026/20260122_233937.jpg)
+
+Track wise we had opted to take part in the "Hardware" hack. There is also a software track, and so on.  We had a total of 48-ish hours to work on things.
+
+![name](/blog/mit-reality-hack-2026/20260122_204803.jpg)
+
+Gameplay wise we wanted to create a survival horror inspired by the likes of FNAF and Alien. Hardware wise, we were working with the [Samsung Galaxy XR](https://www.samsung.com/us/xr/galaxy-xr/galaxy-xr/). We wanted to composite a real controller into VR, kind of like how [Stop Sign VR](https://store.steampowered.com/app/1196450/Stop_Sign_VR_Tools/) does it.
+
+Here is a photo of compositing working! It's hard to understate how cool this looks on a screen. To achieve this, we drew the passthrough texture to the skybox and used a [depth mask shader](https://discussions.unity.com/t/depth-mask-shader-in-urp/782668) to "punch through" geometry. I handled the bulk of the game programming, we used the Unity engine.
+
+:::note
+Compiling for Android is SO SLOW AGH! I'd be curious to see how Godot stacks up, it _is_ an officially supported game engine.
+:::
+
+It was at this point too I had to overwrite my Framework 13's Fedora install with Windows, turns out you can't compile for the Galaxy XR on Linux :>
+
+![name](/blog/mit-reality-hack-2026/20260123_211333.jpg)
+
+Here is the controller in question. Originally, we had opted to use an [Arduino Uno](https://en.wikipedia.org/wiki/Arduino_Uno), but we were having issues with its boot times - restarting the board would take us the better part of 5 minutes, eventually we scrapped this and used some ESP32's instead. It's alive!
+
+<video controls height="100%" width="100%">
+    <source src={"/blog/mit-reality-hack-2026/20260123_230126.mp4"} />
+</video>
+
+Thus marked the end of day 1.
+
+![name](/blog/mit-reality-hack-2026/20260124_085608.jpg)
+
+Day 2 saw the finalization of the controller, as well as game assets, the trailer, etc.
+
+![name](/blog/mit-reality-hack-2026/20260125_111527.jpg)
+
+Time for demos!
+
+<video controls height="100%" width="100%">
+    <source src={"/blog/mit-reality-hack-2026/20260125_112512.mp4"} />
+</video>
+
+Here's a video of Reboot in use. Fellow hackers and judges loved this:
+
+<video controls height="100%" width="100%">
+    <source src={"/blog/mit-reality-hack-2026/20260125_120306.mp4"} />
+</video>
+
+If I had more time I would added a sound system and more anomalies. The 1-minute gameplay loop is surprisingly addictive - I could see this being a rougelike of sorts.
+
+I'd suggest reading the post we made on [devpost](https://devpost-.com/software/anomaly-holdout) for more details, as well as the contributions of my teammates. Thanks for reading!
